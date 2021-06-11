@@ -1,3 +1,5 @@
+import Channel from "../../classes/Channel";
+
 export type ClientScope =
     | "analytics:read:extensions"
     | "analytics:read:games"
@@ -36,9 +38,19 @@ export interface ClientOptions {
     clientId: string;
     clientSecret: string;
     scope?: ClientScope[];
+    update?: {
+        channels?: boolean;
+    };
+    sweep?: {
+        channels?: number;
+    };
+    debug?: boolean;
+    handleRejections?: boolean;
 }
 
 export interface ClientEvents {
     ready: [];
     debug: [string];
+    destroy: [];
+    channelCreate: [Channel];
 }
