@@ -3,10 +3,15 @@
     "version": "1.0.0",
     "description": "TypeScript Twitch API wrapper, vowed to provide 100% coverage and typed firmly as hell.",
     "main": "dist/index.js",
+    "prettier": {
+        "semi": true,
+        "tabWidth": 4,
+        "printWidth": 80
+    },
     "scripts": {
         "watch": "tsc -w",
         "dev": "nodemon dist/index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -20,7 +25,14 @@
     },
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
     "devDependencies": {
+        "@babel/core": "^7.14.5",
+        "@babel/preset-env": "^7.14.5",
+        "@babel/preset-typescript": "^7.14.5",
+        "@types/jest": "^26.0.23",
         "@types/node": "^15.12.2",
+        "babel-jest": "^27.0.2",
+        "jest": "^27.0.4",
+        "prettier": "^2.3.1",
         "tslib": "^2.2.0",
         "typescript": "^4.3.2"
     }
