@@ -1,5 +1,4 @@
 src/
-tsconfig.json
-
-# README images or something
+tests/
 assets/
+tsconfig.json
