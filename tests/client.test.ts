@@ -1,7 +1,7 @@
-import { assert } from "chai";
+import { assert, expect } from "chai";
 import "dotenv/config";
 import * as Twitch from "../src";
-import { TEST_TYPES } from "./shared";
+import { TEST_TYPES } from "./shared.test";
 
 describe(`${TEST_TYPES.CLASS} Client`, () => {
     const client = new Twitch.Client({
@@ -13,17 +13,18 @@ describe(`${TEST_TYPES.CLASS} Client`, () => {
     it("can log in", async () => {
         await client.login();
 
-        //@ts-ignore
+        // @ts-ignore
         assert(typeof client.accessToken === "string", "client has an access token");
     });
 
     it("can validate its access token", async () => {
-        //@ts-ignore
+        // @ts-ignore
         await client.validate();
     });
 
     it("emits debug messages", async () => {
         client.on("debug", console.log);
+        expect(1 + 1).to.equal(3);
     });
 
     it("can get destroyed", async () => {
