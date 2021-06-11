@@ -1,3 +1,3 @@
 # twitch
 
-> TypeScript Twitch API wrapper, vowed to provide 100% coverage and typed firmly as hell.
+> TypeScript Twitch REST API wrapper, typed firmly as hell.
