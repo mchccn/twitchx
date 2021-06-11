@@ -6,7 +6,7 @@
     "scripts": {
         "watch": "tsc -w",
         "dev": "nodemon dist/index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch"
     },
     "repository": {
         "type": "git",
@@ -20,8 +20,21 @@
     },
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
     "devDependencies": {
+        "@types/chai": "^4.2.18",
+        "@types/long-timeout": "^0.1.0",
+        "@types/mocha": "^8.2.2",
         "@types/node": "^15.12.2",
+        "@types/node-fetch": "^2.5.10",
+        "chai": "^4.3.4",
+        "dotenv": "^10.0.0",
+        "mocha": "^9.0.0",
+        "ts-node": "^10.0.0",
         "tslib": "^2.2.0",
         "typescript": "^4.3.2"
+    },
+    "dependencies": {
+        "chalk": "^4.1.1",
+        "long-timeout": "^0.1.1",
+        "node-fetch": "^2.6.1"
     }
 }
