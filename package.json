@@ -7,7 +7,7 @@
         "watch": "tsc -w",
         "dev": "nodemon dist/index.js",
         "jest": "jest",
-        "test": "TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch"
+        "test": "env TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch"
     },
     "repository": {
         "type": "git",
