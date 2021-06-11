@@ -4,6 +4,8 @@
     "description": "TypeScript Twitch API wrapper, vowed to provide 100% coverage and typed firmly as hell.",
     "main": "dist/index.js",
     "scripts": {
+        "watch": "tsc -w",
+        "dev": "nodemon dist/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
