@@ -1,11 +1,7 @@
 import { assert } from "chai";
-import chalk from "chalk";
 import "dotenv/config";
 import * as Twitch from "../src";
-
-const TEST_TYPES = {
-    CLASS: chalk.blue("class"),
-} as const;
+import { TEST_TYPES } from "./shared";
 
 describe(`${TEST_TYPES.CLASS} Client`, () => {
     const client = new Twitch.Client({
