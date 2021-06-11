@@ -1,7 +1,7 @@
 {
     "name": "@cursorsdottsx/twitch",
     "version": "1.0.0",
-    "description": "TypeScript Twitch API wrapper, vowed to provide 100% coverage and typed firmly as hell.",
+    "description": "TypeScript Twitch REST API wrapper, typed firmly as hell.",
     "main": "dist/index.js",
     "scripts": {
         "watch": "tsc -w",
