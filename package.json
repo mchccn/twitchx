@@ -21,9 +21,6 @@
     },
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
     "devDependencies": {
-        "@babel/core": "^7.14.5",
-        "@babel/preset-env": "^7.14.5",
-        "@babel/preset-typescript": "^7.14.5",
         "@types/chai": "^4.2.18",
         "@types/long-timeout": "^0.1.0",
         "@types/mocha": "^8.2.2",
