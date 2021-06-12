@@ -29,8 +29,8 @@ export default class Client extends EventEmitter {
     public readonly options: Required<ClientOptions>;
     public readonly scope: ClientScope[];
 
-    public readonly channels = new ChannelManager(this);
-    public readonly users = new UserManager(this);
+    public readonly channels: ChannelManager;
+    public readonly users: UserManager;
 
     public constructor(options: ClientOptions) {
         super({
@@ -47,6 +47,9 @@ export default class Client extends EventEmitter {
         };
 
         this.scope = this.options.scope ?? [];
+
+        this.channels = new ChannelManager(this);
+        this.users = new UserManager(this);
     }
 
     public async login() {
