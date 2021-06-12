@@ -65,7 +65,7 @@ export default class Channel extends Base {
 
             if (!data) {
                 if (!this.client.options.handleRejections)
-                    throw new TwitchAPIError(`user was fetched but no data was returned`);
+                    throw new TwitchAPIError(`channel was fetched but no data was returned`);
 
                 return;
             }
