@@ -4,15 +4,9 @@ import Manager from "../base/Manager";
 import { BASE_URL } from "../shared/constants";
 import Channel from "./Channel";
 
-export const CHANNEL_MANAGER_CACHE_ACCESS = new WeakMap<ChannelManager, (channel: Channel) => void>();
-
 export default class ChannelManager extends Manager<Channel> {
-    constructor(protected client: Client) {
+    constructor(public readonly client: Client) {
         super(client);
-
-        CHANNEL_MANAGER_CACHE_ACCESS.set(this, (channel) => {
-            this.cache.set(channel.id, channel);
-        });
     }
 
     public get(id: string) {

@@ -29,7 +29,9 @@ export default class Client extends EventEmitter {
     public readonly channels = new ChannelManager(this);
 
     public constructor(options: ClientOptions) {
-        super({});
+        super({
+            captureRejections: options.handleRejections ?? false,
+        });
 
         this.options = {
             debug: false,

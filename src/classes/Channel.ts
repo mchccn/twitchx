@@ -1,16 +1,13 @@
 import fetch from "node-fetch";
 import Client from "../base/Client";
-import { nullishThrow } from "../shared";
 import { BASE_URL } from "../shared/constants";
 import { ChannelData } from "../types/classes";
-import { CHANNEL_MANAGER_CACHE_ACCESS } from "./ChannelManager";
 
 export default class Channel {
-    public constructor(private client: Client, private data: ChannelData) {
+    public constructor(public readonly client: Client, private data: ChannelData) {
         this.client.emit("channelCreate", this);
 
-        CHANNEL_MANAGER_CACHE_ACCESS.get(client.channels)?.(this) ??
-            nullishThrow(`channel manager unavailable while creating channel`);
+        client.channels.cache.set(this.id, this);
     }
 
     public get id() {

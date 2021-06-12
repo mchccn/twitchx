@@ -1,7 +1,18 @@
 import { assert } from "chai";
-import { client, TEST_TYPES } from "./shared.test";
+import * as Twitch from "../src";
+import { TEST_TYPES } from "./shared.test";
 
 describe(`${TEST_TYPES.CLASS} Client`, () => {
+    const client = new Twitch.Client({
+        clientId: process.env.CLIENT_ID!,
+        clientSecret: process.env.CLIENT_SECRET!,
+        scope: [],
+    });
+
+    before(async () => {
+        await client.login();
+    });
+
     it("can log in", async () => {
         await client.login();
 

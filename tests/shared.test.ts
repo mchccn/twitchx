@@ -1,6 +1,5 @@
 import { blue, cyan, greenBright, magenta, red, yellow } from "chalk";
 import "dotenv/config";
-import * as Twitch from "../src";
 
 export const TEST_TYPES = {
     CLASS: blue("class"),
@@ -10,9 +9,3 @@ export const TEST_TYPES = {
     ISSUE: yellow("issue"),
     ERROR: red("error"),
 } as const;
-
-export const client = new Twitch.Client({
-    clientId: process.env.CLIENT_ID!,
-    clientSecret: process.env.CLIENT_SECRET!,
-    scope: [],
-});
