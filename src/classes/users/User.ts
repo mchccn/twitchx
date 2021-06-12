@@ -65,9 +65,10 @@ export default class User extends Base {
 
         if (!this.client.token) throw new Error("token is not available");
 
-        const response = await fetch(`${BASE_URL}/users`, {
+        const response = await fetch(`${BASE_URL}/users?id=${this.id}`, {
             headers: {
-                Authorization: `OAuth ${this.client.token}`,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         }).catch((e) => {
             throw new HTTPError(e);

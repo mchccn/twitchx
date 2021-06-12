@@ -36,4 +36,24 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
 
         expect(emotes).to.not.be.undefined;
     });
+
+    it("has properties given by its data", () => {
+        expect(channel.gameId).to.be.a.string("");
+
+        expect(channel.gameName).to.be.a.string("");
+
+        expect(channel.id).to.be.a.string("41245072");
+
+        expect(channel.language).to.be.a.string("");
+
+        expect(channel.name).to.be.a.string("");
+
+        expect(channel.title).to.be.a.string("");
+
+        expect(channel.delay).to.equal(0);
+    });
+
+    it("can fetch and update itself", async () => {
+        await channel.update();
+    });
 });
