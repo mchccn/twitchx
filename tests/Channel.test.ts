@@ -39,15 +39,15 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
 
         expect(emotes).to.not.be.undefined;
 
-        expect(emotes).to.be.instanceOf(Array);
+        expect(emotes).to.be.an.instanceOf(Array);
 
         expect(emotes!.length).to.be.greaterThan(0);
 
         const first = emotes![0];
 
-        expect(first).to.be.instanceOf(Twitch.ChannelEmote);
+        expect(first).to.be.an.instanceOf(Twitch.ChannelEmote);
 
-        expect(first.images).to.be.instanceOf(Array);
+        expect(first.images).to.be.an.instanceOf(Array);
 
         expect(first.images[2]).to.be.a.string;
     });

@@ -1,4 +1,4 @@
-import { assert } from "chai";
+import { assert, expect } from "chai";
 import * as Twitch from "../src";
 import { TEST_TYPES } from "./shared.test";
 
@@ -27,6 +27,11 @@ describe(`${TEST_TYPES.CLASS} Client`, () => {
 
     it("emits debug messages", async () => {
         client.on("debug", console.log);
+    });
+
+    it("has managers", async () => {
+        expect(client.channels).to.not.be.undefined;
+        expect(client.users).to.not.be.undefined;
     });
 
     it("can get destroyed", async () => {

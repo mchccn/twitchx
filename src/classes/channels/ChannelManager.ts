@@ -55,7 +55,7 @@ export default class ChannelManager extends Manager<Channel> {
 
             if (!this.client.options.suppressRejections) throw new Error(`unable to fetch channel`);
 
-            return;
+            return undefined;
         } catch (error) {
             if (!this.client.options.suppressRejections)
                 if (controller.signal.aborted) {
