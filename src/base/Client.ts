@@ -3,6 +3,7 @@ import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import ChannelManager from "../classes/ChannelManager";
+import UserManager from "../classes/UserManager";
 import { snakeCasify } from "../shared";
 import {
     ClientEvents,
@@ -27,6 +28,7 @@ export default class Client extends EventEmitter {
     public readonly scope: ClientScope[];
 
     public readonly channels = new ChannelManager(this);
+    public readonly users = new UserManager(this);
 
     public constructor(options: ClientOptions) {
         super({
