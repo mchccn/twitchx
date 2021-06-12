@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Client } from "../base";
 import Manager from "../base/Manager";
 import { BASE_URL } from "../shared/constants";
-import { TwitchAPIError } from "../shared/errors";
+import { HTTPError, TwitchAPIError } from "../shared/errors";
 import Channel from "./Channel";
 
 export default class ChannelManager extends Manager<Channel> {
@@ -45,6 +45,8 @@ export default class ChannelManager extends Manager<Channel> {
             headers: {
                 authorization: `OAuth ${this.client.token}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (response.ok) return new Channel(this.client, await response.json());

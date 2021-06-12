@@ -63,7 +63,9 @@ export default class Client extends EventEmitter {
             {
                 method: "POST",
             }
-        );
+        ).catch((e) => {
+            throw new HTTPError(e);
+        });
 
         if (!response.ok) throw new HTTPError("Unable to login");
 
@@ -96,7 +98,9 @@ export default class Client extends EventEmitter {
                 {
                     method: "POST",
                 }
-            );
+            ).catch((e) => {
+                throw new HTTPError(e);
+            });
 
         for (const timeout of this.timeouts) lt.clearTimeout(timeout);
         for (const interval of this.intervals) lt.clearInterval(interval);
@@ -120,6 +124,8 @@ export default class Client extends EventEmitter {
             headers: {
                 authorization: `OAuth ${this.accessToken}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (!response.ok) {

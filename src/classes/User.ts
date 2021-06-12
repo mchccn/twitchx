@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import Client from "../base/Client";
 import { BASE_URL } from "../shared/constants";
-import { InternalError } from "../shared/errors";
+import { HTTPError, InternalError } from "../shared/errors";
 import { UserData } from "../types/classes";
 
 export default class User {
@@ -72,6 +72,8 @@ export default class User {
             headers: {
                 Authorization: `OAuth ${this.client.token}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (res.ok) return void (this.data = await res.json());

@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import Client from "../base/Client";
 import { BASE_URL } from "../shared/constants";
-import { InternalError, TwitchAPIError } from "../shared/errors";
+import { HTTPError, InternalError, TwitchAPIError } from "../shared/errors";
 import { ChannelData } from "../types/classes";
 
 export default class Channel {
@@ -54,6 +54,8 @@ export default class Channel {
             headers: {
                 authorization: `OAuth ${this.client.token}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (response.ok) return void (this.data = await response.json());

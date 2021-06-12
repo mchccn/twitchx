@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Client } from "../base";
 import Manager from "../base/Manager";
 import { BASE_URL } from "../shared/constants";
-import { TwitchAPIError } from "../shared/errors";
+import { HTTPError, TwitchAPIError } from "../shared/errors";
 import User from "./User";
 
 export default class UserManager extends Manager<User> {
@@ -45,6 +45,8 @@ export default class UserManager extends Manager<User> {
             headers: {
                 Authorization: `OAuth ${this.client.token}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (res.ok) return new User(this.client, await res.json());
