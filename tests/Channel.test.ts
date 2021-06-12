@@ -29,4 +29,11 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
     it("has a client instance", () => {
         expect(channel.client).to.not.be.undefined;
     });
+
+    it("has emotes", async () => {
+        const emotes = await channel.fetchEmotes();
+        console.log(emotes);
+
+        expect(emotes).to.not.be.undefined;
+    });
 });

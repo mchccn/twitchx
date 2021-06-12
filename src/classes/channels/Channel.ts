@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError } from "../../shared/errors";
+import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 
 export default class Channel extends Base {
@@ -65,5 +65,20 @@ export default class Channel extends Base {
         if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);
 
         return;
+    }
+
+    public async fetchEmotes() {
+        if (!this.client.token) throw new InternalError("Token is not available");
+
+        const res = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
+            headers: {
+                Authorization: `OAuth ${this.client.token}`,
+            },
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (res.ok) return res.json();
+        if (!this.client.options.handleRejections) throw new TwitchAPIError("Unable to fetch emotes");
     }
 }
