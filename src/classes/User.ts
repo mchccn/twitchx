@@ -1,17 +1,12 @@
 import fetch from "node-fetch";
 import Client from "../base/Client";
-import { nullishThrow } from "../shared";
 import { BASE_URL } from "../shared/constants";
 import { InternalError } from "../shared/errors";
 import { UserData } from "../types/classes";
-import { USER_MANAGER_CACHE_ACCESS } from "./UserManager";
 
 export default class User {
-    public constructor(private client: Client, private data: UserData) {
+    public constructor(public readonly client: Client, private data: UserData) {
         this.client.emit("userCreate", this);
-
-        USER_MANAGER_CACHE_ACCESS.get(client.users)?.(this) ??
-            nullishThrow("User manager unavailable when creating user");
     }
 
     public get id() {

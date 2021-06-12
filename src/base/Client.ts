@@ -32,7 +32,9 @@ export default class Client extends EventEmitter {
     public readonly users = new UserManager(this);
 
     public constructor(options: ClientOptions) {
-        super({});
+        super({
+            captureRejections: options.handleRejections ?? false,
+        });
 
         this.options = {
             debug: false,
