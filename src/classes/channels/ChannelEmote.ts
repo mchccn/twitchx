@@ -1,8 +1,7 @@
 import fetch from "node-fetch";
-import { Client } from "../..";
-import { BASE_URL } from "../../shared/constants";
-import { InternalError, TwitchAPIError } from "../../shared/errors";
-import { ChannelEmoteData } from "../../types/classes/channelEmote";
+import type { Client } from "../..";
+import { BASE_URL, InternalError, TwitchAPIError } from "../../shared/";
+import type { ChannelEmoteData } from "../../types/classes/";
 import Emote from "../emotes/Emote";
 
 export default class ChannelEmote extends Emote {
@@ -49,7 +48,7 @@ export default class ChannelEmote extends Emote {
             this.data = current;
         }
 
-        if (!this.client.options.handleRejections) throw new TwitchAPIError("unable to udpate emote");
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to udpate emote");
 
         return;
     }

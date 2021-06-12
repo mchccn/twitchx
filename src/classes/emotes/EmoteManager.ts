@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import { Client, EmoteData, Manager } from "../..";
-import { BASE_URL, MILLISECONDS } from "../../shared/constants";
-import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
+import type { Client, EmoteData } from "../..";
+import { Manager } from "../../";
+import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from "../../shared/";
 import Emote from "./Emote";
 
 export default class EmoteManager extends Manager<Emote> {
@@ -38,7 +38,7 @@ export default class EmoteManager extends Manager<Emote> {
             return current;
         }
 
-        if (!this.client.options.handleRejections) throw new TwitchAPIError("unable to udpate emote");
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to udpate emote");
 
         return;
     }

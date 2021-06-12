@@ -1,8 +1,9 @@
 import fetch from "node-fetch";
-import { Base, Client } from "../../base";
-import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
-import { EmoteData } from "../../types";
+import type { Client } from "../../base";
+import { Base } from "../../base";
+import { HTTPError, InternalError, TwitchAPIError } from "../../shared";
+import { BASE_URL } from "../../shared/";
+import type { EmoteData } from "../../types";
 
 export default class Emote extends Base {
     constructor(public readonly client: Client, protected data: EmoteData) {
@@ -38,6 +39,6 @@ export default class Emote extends Base {
             this.data = current;
         }
 
-        if (!this.client.options.handleRejections) throw new TwitchAPIError("unable to udpate emote");
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to udpate emote");
     }
 }

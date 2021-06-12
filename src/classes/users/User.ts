@@ -1,9 +1,9 @@
 import fetch from "node-fetch";
 import { Base } from "../../base";
-import Client from "../../base/Client";
-import { BASE_URL } from "../../shared/constants";
-import { HTTPError, TwitchAPIError } from "../../shared/errors";
-import { UserData } from "../../types/classes";
+import type Client from "../../base/Client";
+import { HTTPError, TwitchAPIError } from "../../shared";
+import { BASE_URL } from "../../shared/";
+import type { UserData } from "../../types/classes";
 
 export default class User extends Base {
     public constructor(public readonly client: Client, private data: UserData) {

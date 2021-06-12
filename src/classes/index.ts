@@ -1,7 +1,9 @@
 import Channel from "./channels/Channel";
-import ChannelManager from "./channels/ChannelManager";
 import ChannelEmote from "./channels/ChannelEmote";
+import ChannelManager from "./channels/ChannelManager";
+import Emote from "./emotes/Emote";
+import EmoteManager from "./emotes/EmoteManager";
 import User from "./users/User";
 import UserManager from "./users/UserManager";
 
-export { Channel, ChannelManager, User, UserManager, ChannelEmote };
+export { Channel, ChannelManager, User, UserManager, ChannelEmote, Emote, EmoteManager };

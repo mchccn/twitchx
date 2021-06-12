@@ -2,21 +2,17 @@ import EventEmitter from "events";
 import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
-import ChannelManager from "../classes/channels/ChannelManager";
-import EmoteManager from "../classes/emotes/EmoteManager";
-import UserManager from "../classes/users/UserManager";
-import { snakeCasify } from "../shared";
-import { MILLISECONDS } from "../shared/constants";
-import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../shared/errors";
-import {
+import { ChannelManager, EmoteManager, UserManager } from "../classes/";
+import { ExternalError, HTTPError, InternalError, MILLISECONDS, snakeCasify, TwitchAPIError } from "../shared";
+import type {
+    Awaited,
     ClientEvents,
     ClientOptions,
     ClientScope,
     ErrorResponse,
     LoginResponse,
     ValidateResponse,
-} from "../types/base";
-import { Awaited } from "../types/utils";
+} from "../types";
 
 export default class Client extends EventEmitter {
     private accessToken?: string;

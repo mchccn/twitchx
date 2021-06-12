@@ -1,10 +1,8 @@
 import fetch from "node-fetch";
 import { Base } from "../../base";
-import Client from "../../base/Client";
-import { BASE_URL } from "../../shared/constants";
-import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
-import { ChannelData } from "../../types/classes";
-import { ChannelEmoteData } from "../../types/classes/channelEmote";
+import type Client from "../../base/Client";
+import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
+import type { ChannelData, ChannelEmoteData } from "../../types/classes";
 import ChannelEmote from "./ChannelEmote";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 
@@ -84,10 +82,10 @@ export default class Channel extends Base {
         return;
     }
 
-    public async fetchEmotes(): Promise<ChannelEmote[] | undefined> {
+    public async fetchEmotes() {
         if (!this.client.token) throw new InternalError("Token is not available");
 
-        const res = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
+        const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
             headers: {
                 Authorization: `Bearer ${this.client.token}`,
                 "Client-Id": this.client.options.clientId,
@@ -96,9 +94,13 @@ export default class Channel extends Base {
             throw new HTTPError(e);
         });
 
-        if (res.ok)
-            return (await res.json()).data.map((e: ChannelEmoteData) => new ChannelEmote(this.client, e, this.id));
-        if (!this.client.options.handleRejections) throw new TwitchAPIError("Unable to fetch emotes");
+        if (response.ok) {
+            const data = (await response.json())?.data as ChannelEmoteData[];
+
+            return data.map((e: ChannelEmoteData) => new ChannelEmote(this.client, e, this.id));
+        }
+
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to fetch emotes");
 
         return;
     }

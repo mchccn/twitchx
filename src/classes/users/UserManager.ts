@@ -1,11 +1,10 @@
 import Collection from "@discordjs/collection";
 import AbortController from "abort-controller";
 import fetch from "node-fetch";
-import { Client } from "../../base";
-import Manager from "../../base/Manager";
-import { BASE_URL, MILLISECONDS } from "../../shared/constants";
-import { UserData } from "../../types";
-import { SinglePartial } from "../../types/utils";
+import type { Client } from "../../base";
+import { Manager } from "../../base";
+import { BASE_URL, MILLISECONDS } from "../../shared";
+import type { SinglePartial, UserData } from "../../types";
 import User from "./User";
 
 export default class UserManager extends Manager<User> {

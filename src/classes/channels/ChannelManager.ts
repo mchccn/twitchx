@@ -1,8 +1,8 @@
 import AbortController from "abort-controller";
 import fetch from "node-fetch";
-import { Client } from "../../base";
-import Manager from "../../base/Manager";
-import { BASE_URL, MILLISECONDS } from "../../shared/constants";
+import type { Client } from "../../base";
+import { Manager } from "../../base";
+import { BASE_URL, MILLISECONDS } from "../../shared";
 import Channel from "./Channel";
 
 export default class ChannelManager extends Manager<Channel> {
