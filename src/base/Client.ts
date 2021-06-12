@@ -6,7 +6,7 @@ import ChannelManager from "../classes/channels/ChannelManager";
 import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
 import { MILLISECONDS } from "../shared/constants";
-import { HTTPError, TwitchAPIError } from "../shared/errors";
+import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../shared/errors";
 import {
     ClientEvents,
     ClientOptions,
@@ -19,6 +19,7 @@ import { Awaited } from "../types/utils";
 
 export default class Client extends EventEmitter {
     private accessToken?: string;
+    private refreshToken?: string;
 
     private loginTimeout?: lt.Timeout;
     private validateInterval?: lt.Interval;
@@ -26,11 +27,17 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
-    public readonly options: Required<Omit<ClientOptions, "redirectUri">> & { redirectUri?: string };
+    public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
+        redirectUri?: string;
+        forceVerify?: boolean;
+        state?: string;
+    };
     public readonly scope: ClientScope[];
 
     public readonly channels: ChannelManager;
     public readonly users: UserManager;
+
+    private authType?: "app" | "user";
 
     public constructor(options: ClientOptions) {
         super({
@@ -52,44 +59,138 @@ export default class Client extends EventEmitter {
         this.users = new UserManager(this);
     }
 
-    public async login() {
-        const { clientId, clientSecret } = this.options;
+    public async login(): Promise<void>;
+    public async login(oauth: "implicit"): Promise<{ url: string; callback: (token: string) => Promise<void> }>;
+    public async login(oauth: "authorization"): Promise<{ url: string; callback: (code: string) => Promise<void> }>;
+    public async login(
+        oauth?: "implicit" | "authorization"
+    ): Promise<
+        | void
+        | { url: string; callback: (token: string) => Promise<void> }
+        | { url: string; callback: (code: string) => Promise<void> }
+    > {
+        if (typeof oauth === "undefined") {
+            const { clientId, clientSecret } = this.options;
 
-        const response = await fetch(
-            `https://id.twitch.tv/oauth2/token?${new URLSearchParams(
-                snakeCasify({
-                    clientId,
-                    clientSecret,
-                    scope: this.scope.join(" "),
-                    grantType: "client_credentials",
-                })
-            ).toString()}`,
-            {
-                method: "POST",
-            }
-        ).catch((e) => {
-            throw new HTTPError(e);
-        });
+            const response = await fetch(
+                `https://id.twitch.tv/oauth2/token?${new URLSearchParams(
+                    snakeCasify({
+                        clientId,
+                        clientSecret,
+                        scope: this.scope.join(" "),
+                        grantType: "client_credentials",
+                    })
+                ).toString()}`,
+                {
+                    method: "POST",
+                }
+            ).catch((e) => {
+                throw new HTTPError(e);
+            });
 
-        if (!response.ok) throw new HTTPError("Unable to login");
+            if (!response.ok) throw new HTTPError("unable to login");
 
-        const data: LoginResponse & ErrorResponse = await response.json();
+            const data: LoginResponse & ErrorResponse = await response.json();
 
-        if (data.status && data.status !== 200)
-            throw new TwitchAPIError(`(${data.status}) ${data.message ?? `unable to login`}`);
+            if (data.status && data.status !== 200)
+                throw new TwitchAPIError(`(${data.status}) ${data.message ?? `unable to login`}`);
 
-        if (!data.access_token) throw new TwitchAPIError(`unable to obtain access token`);
+            if (!data.access_token) throw new TwitchAPIError(`unable to obtain access token`);
 
-        this.accessToken = data.access_token;
+            this.accessToken = data.access_token;
 
-        this.loginTimeout = lt.setTimeout(this.login.bind(this), (data.expires_in ?? 3600) * 1000 * 0.9);
-        this.validateInterval = lt.setInterval(this.validate.bind(this), 3600 * 1000 * 0.9);
+            this.loginTimeout = lt.setTimeout(this.login.bind(this), (data.expires_in ?? 3600) * 1000 * 0.9);
+            this.validateInterval = lt.setInterval(this.validate.bind(this), 3600 * 1000 * 0.9);
 
-        this.emit("ready");
+            this.emit("ready");
 
-        return;
+            this.authType = "app";
+
+            return;
+        }
+
+        if (oauth === "implicit") {
+            if (!this.options.redirectUri) throw new ExternalError(`no redirect uri provided`);
+
+            this.authType = "user";
+
+            return {
+                url: `https://id.twitch.tv/oauth2/authorize?client_id=${new URLSearchParams(
+                    snakeCasify({
+                        clientId: this.options.clientId,
+                        redirectUri: this.options.redirectUri,
+                        responseType: "token",
+                        scope: this.options.scope.join(" "),
+                        forceVerify:
+                            typeof this.options.forceVerify !== "undefined"
+                                ? this.options.forceVerify?.toString()
+                                : undefined,
+                        state: this.options.state,
+                    })
+                ).toString()}`,
+                callback: async (token: string) => {
+                    if (!(await this.validate({ token }))) throw new ExternalError(`invalid token provided`);
+
+                    this.accessToken = token;
+
+                    return;
+                },
+            };
+        }
+
+        if (oauth === "authorization") {
+            this.authType = "user";
+
+            return {
+                url: `https://id.twitch.tv/oauth2/authorize?client_id=${new URLSearchParams(
+                    snakeCasify({
+                        clientId: this.options.clientId,
+                        redirectUri: this.options.redirectUri,
+                        responseType: "code",
+                        scope: this.options.scope.join(" "),
+                        forceVerify:
+                            typeof this.options.forceVerify !== "undefined"
+                                ? this.options.forceVerify?.toString()
+                                : undefined,
+                        state: this.options.state,
+                    })
+                ).toString()}`,
+                callback: async (code: string) => {
+                    const response = await fetch(
+                        `https://id.twitch.tv/oauth2/token?${new URLSearchParams(
+                            snakeCasify({
+                                clientId: this.options.clientId,
+                                clientSecret: this.options.clientSecret,
+                                code,
+                                grantType: "authorization_code",
+                                redirectUri: this.options.redirectUri,
+                            })
+                        ).toString()}`,
+                        {
+                            method: "POST",
+                        }
+                    ).catch((e) => {
+                        throw new HTTPError(e);
+                    });
+
+                    const data: LoginResponse & ErrorResponse = await response.json();
+
+                    if (!response.ok || data.status !== 200 || data.message)
+                        throw new HTTPError(`unable to retrieve token with authorization code`);
+
+                    this.accessToken = data.access_token;
+                    this.refreshToken = data.refresh_token;
+
+                    this.validateInterval = lt.setInterval(
+                        this.refresh.bind(this),
+                        (data.expires_in ?? 3600) * 1000 * 0.9
+                    );
+                },
+            };
+        }
+
+        throw new Error(`invalid oauth type; valid types are 'implicit' and 'authorization'`);
     }
-
     public async destroy() {
         if (this.accessToken)
             await fetch(
@@ -123,10 +224,52 @@ export default class Client extends EventEmitter {
         this.emit("destroy");
     }
 
-    private async validate() {
+    private async refresh() {
+        if (!this.refreshToken) {
+            if (!this.options.suppressRejections)
+                throw new InternalError(`attempted to refresh access token when no refresh token was available`);
+
+            return;
+        }
+
+        const response = await fetch(
+            `https://id.twitch.tv/oauth2/token?${new URLSearchParams(
+                snakeCasify({
+                    clientId: this.options.clientId,
+                    clientSecret: this.options.clientSecret,
+                    grantType: "refresh_token",
+                    refreshToken: this.refreshToken,
+                })
+            ).toString()}`,
+            {
+                method: "POST",
+            }
+        ).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (!response.ok) throw new HTTPError("unable to login");
+
+        const data: LoginResponse & ErrorResponse = await response.json();
+
+        if (data.status && data.status !== 200)
+            throw new TwitchAPIError(`(${data.status}) ${data.message ?? `unable to login`}`);
+
+        if (!data.access_token) throw new TwitchAPIError(`unable to obtain access token`);
+
+        this.clearTimeout(this.loginTimeout!);
+        this.clearInterval(this.validateInterval!);
+
+        this.accessToken = data.access_token;
+        this.refreshToken = data.refresh_token;
+
+        return;
+    }
+
+    private async validate({ relogin, token }: { relogin?: boolean; token?: string } = {}) {
         const response = await fetch(`https://id.twitch.tv/oauth2/validate`, {
             headers: {
-                authorization: `OAuth ${this.accessToken}`,
+                authorization: `OAuth ${token ?? this.accessToken}`,
             },
         }).catch((e) => {
             throw new HTTPError(e);
@@ -135,21 +278,23 @@ export default class Client extends EventEmitter {
         if (!response.ok) {
             if (!this.options.suppressRejections) throw new TwitchAPIError(`unable to validate access token`);
 
-            return;
+            return false;
         }
 
         const data: ValidateResponse & ErrorResponse = await response.json();
 
-        if (data.status && data.status !== 200) {
+        if (data.status && data.status !== 200 && (relogin ?? true)) {
             this.emit("debug", `[Client] Access token validation failed. Retrying login...`);
 
-            lt.clearTimeout(this.loginTimeout!);
-            lt.clearInterval(this.validateInterval!);
+            this.clearTimeout(this.loginTimeout!);
+            this.clearInterval(this.validateInterval!);
 
             await this.login();
+
+            return false;
         }
 
-        return;
+        return true;
     }
 
     public get token() {
@@ -186,6 +331,10 @@ export default class Client extends EventEmitter {
         this.timeouts.delete(...args);
 
         return;
+    }
+
+    public get type() {
+        return this.authType;
     }
 
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;

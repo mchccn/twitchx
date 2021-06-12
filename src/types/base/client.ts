@@ -41,6 +41,8 @@ export interface ClientOptions {
     clientId: string;
     clientSecret: string;
     redirectUri?: string;
+    forceVerify?: boolean;
+    state?: string;
     scope?: ClientScope[];
     update?: {
         users?: boolean | number;
