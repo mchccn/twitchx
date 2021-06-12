@@ -17,30 +17,6 @@ export default class UserManager extends Manager<User> {
         return this.cache.get(id);
     }
 
-    public clear() {
-        return this.cache.clear();
-    }
-
-    public has(id: string) {
-        return this.cache.has(id);
-    }
-
-    public keys() {
-        return this.cache.keys();
-    }
-
-    public values() {
-        return this.cache.values();
-    }
-
-    public entries() {
-        return this.cache.entries();
-    }
-
-    public get size() {
-        return this.cache.size;
-    }
-
     public async fetch(
         query: SinglePartial<{
             ids: string[];
@@ -59,7 +35,7 @@ export default class UserManager extends Manager<User> {
         force?: boolean
     ) {
         if (typeof query === "string") {
-            if (this.has(query) && !force) return this.get(query);
+            if (this.cache.has(query) && !force) return this.get(query);
 
             const controller = new AbortController();
 
@@ -114,6 +90,7 @@ export default class UserManager extends Manager<User> {
                 .map((id, i) => (cached.ids[i] && !force ? undefined : `id=${encodeURIComponent(id)}`))
                 .filter(($) => typeof $ !== "undefined")
                 .join("&");
+
             const logins = (query.logins ?? [])
                 .map((login, i) => (cached.logins[i] && !force ? undefined : `login=${encodeURIComponent(login)}`))
                 .filter(($) => typeof $ !== "undefined")

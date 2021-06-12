@@ -14,32 +14,8 @@ export default class ChannelManager extends Manager<Channel> {
         return this.cache.get(id);
     }
 
-    public clear() {
-        return this.cache.clear();
-    }
-
-    public has(id: string) {
-        return this.cache.has(id);
-    }
-
-    public keys() {
-        return this.cache.keys();
-    }
-
-    public values() {
-        return this.cache.values();
-    }
-
-    public entries() {
-        return this.cache.entries();
-    }
-
-    public get size() {
-        return this.cache.size;
-    }
-
     public async fetch(id: string, force?: boolean) {
-        if (this.has(id) && !force) return this.get(id);
+        if (this.cache.has(id) && !force) return this.get(id);
 
         const controller = new AbortController();
 
