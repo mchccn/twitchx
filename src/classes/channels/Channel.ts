@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
+import { HTTPError, InternalError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 
 export default class Channel {
@@ -41,21 +42,25 @@ export default class Channel {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
+                // FIXME: add proper error type
                 throw new Error(`updating channels was disabled but was still attempted`);
 
             return;
         }
 
-        if (!this.client.token) throw new Error(`token is not available`);
+        if (!this.client.token) throw new InternalError(`token is not available`);
 
         const response = await fetch(`${BASE_URL}/channels`, {
             headers: {
                 authorization: `OAuth ${this.client.token}`,
             },
+        }).catch((e) => {
+            throw new HTTPError(e);
         });
 
         if (response.ok) return void (this.data = await response.json());
 
+        // FIXME: add proper error type
         if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);
 
         return;

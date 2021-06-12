@@ -20,6 +20,11 @@
         "url": "https://github.com/cursorsdottsx/twitch/issues"
     },
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
+    "dependencies": {
+        "chalk": "^4.1.1",
+        "long-timeout": "^0.1.1",
+        "node-fetch": "^2.6.1"
+    },
     "devDependencies": {
         "@discordjs/collection": "^0.1.6",
         "@types/chai": "^4.2.18",
@@ -33,11 +38,5 @@
         "ts-node": "^10.0.0",
         "tslib": "^2.2.0",
         "typescript": "^4.3.2"
-    },
-    "dependencies": {
-        "abort-controller": "^3.0.0",
-        "chalk": "^4.1.1",
-        "long-timeout": "^0.1.1",
-        "node-fetch": "^2.6.1"
     }
 }
