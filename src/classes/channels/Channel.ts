@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError } from "../../shared/errors";
+import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 
 export default class Channel extends Base {
@@ -61,7 +61,16 @@ export default class Channel extends Base {
         });
 
         if (response.ok) {
-            this.data = await response.json();
+            const data = (await response.json())?.data[0];
+
+            if (!data) {
+                if (!this.client.options.handleRejections)
+                    throw new TwitchAPIError(`user was fetched but no data was returned`);
+
+                return;
+            }
+
+            this.data = data;
 
             return;
         }
