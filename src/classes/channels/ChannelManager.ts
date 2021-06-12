@@ -69,4 +69,63 @@ export default class ChannelManager extends Manager<Channel> {
             clearTimeout(timeout);
         }
     }
+
+    public async modify(
+        id: string,
+        options: {
+            game?: string;
+            language?: string;
+            title?: string;
+            delay?: number;
+        }
+    ) {
+        if (!options || (!options.game && !options.language && !options.title && !options.delay)) throw new Error("no options were provided");
+        
+        const controller = new AbortController();
+
+        const timeout = setTimeout(() => {
+            controller.abort();
+        }, 1000);
+
+        try {
+
+        const { 
+            game,
+            language,
+            title,
+            delay
+        } = options
+
+        let send = {}
+        if (game) send = { ...send, game_id: game }
+        if (language) send = { ...send, broadcaster_language: language }
+        if (title) send = { ...send, title }
+        if (delay) send = { ...send, delay }
+
+        const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${id}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+                "Content-Type": 'application/json'
+            },
+            signal: controller.signal,
+            body: JSON.stringify(send)
+        });
+
+        if (!response) return undefined 
+        return response
+
+    } catch (error) {
+        if (!this.client.options.suppressRejections)
+                if (controller.signal.aborted) {
+                    throw new Error(`request to modify channel was aborted`);
+                } else {
+                    throw new Error(`failed to modify the channel`);
+                }
+
+            return undefined;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
 }
