@@ -18,7 +18,5 @@ export default abstract class Manager<V extends { update(): Awaited<void> }> ext
         this.cache = new Cache(options);
     }
 
-    abstract get(id: string): V | undefined;
-
     abstract fetch(id: string): Awaited<V | undefined>;
 }

@@ -16,10 +16,6 @@ export default class UserManager extends Manager<User> {
         });
     }
 
-    public get(id: string) {
-        return this.cache.get(id);
-    }
-
     public async fetch(
         query: SinglePartial<{
             ids: string[];
@@ -41,7 +37,7 @@ export default class UserManager extends Manager<User> {
         }
     ) {
         if (typeof query === "string") {
-            if (this.cache.has(query) && !options?.force) return this.get(query);
+            if (this.cache.has(query) && !options?.force) return this.cache.get(query);
 
             const controller = new AbortController();
 

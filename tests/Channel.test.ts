@@ -36,6 +36,7 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
 
     it("has emotes", async () => {
         const emotes = await channel.fetchEmotes();
+
         console.log(emotes);
 
         expect(emotes).to.not.be.undefined;
