@@ -79,11 +79,11 @@ export default class UserManager extends Manager<User> {
                     return user;
                 }
 
-                if (!this.client.options.handleRejections) throw new Error("unable to fetch user");
+                if (!this.client.options.suppressRejections) throw new Error("unable to fetch user");
 
                 return undefined;
             } catch (error) {
-                if (!this.client.options.handleRejections)
+                if (!this.client.options.suppressRejections)
                     if (controller.signal.aborted) {
                         throw new Error(`request to fetch user was aborted`);
                     } else {
@@ -140,11 +140,11 @@ export default class UserManager extends Manager<User> {
                 return users;
             }
 
-            if (!this.client.options.handleRejections) throw new Error("unable to fetch users");
+            if (!this.client.options.suppressRejections) throw new Error("unable to fetch users");
 
             return undefined;
         } catch (error) {
-            if (!this.client.options.handleRejections)
+            if (!this.client.options.suppressRejections)
                 if (controller.signal.aborted) {
                     throw new Error(`request to fetch users was aborted`);
                 } else {

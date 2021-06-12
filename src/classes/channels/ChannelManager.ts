@@ -53,11 +53,11 @@ export default class ChannelManager extends Manager<Channel> {
                 return channel;
             }
 
-            if (!this.client.options.handleRejections) throw new Error(`unable to fetch channel`);
+            if (!this.client.options.suppressRejections) throw new Error(`unable to fetch channel`);
 
             return;
         } catch (error) {
-            if (!this.client.options.handleRejections)
+            if (!this.client.options.suppressRejections)
                 if (controller.signal.aborted) {
                     throw new Error(`request to fetch channel was aborted`);
                 } else {

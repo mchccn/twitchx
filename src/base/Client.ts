@@ -26,7 +26,7 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
-    public readonly options: Required<ClientOptions>;
+    public readonly options: Required<Omit<ClientOptions, "redirectUri">> & { redirectUri?: string };
     public readonly scope: ClientScope[];
 
     public readonly channels: ChannelManager;
@@ -34,13 +34,13 @@ export default class Client extends EventEmitter {
 
     public constructor(options: ClientOptions) {
         super({
-            captureRejections: options.handleRejections ?? false,
+            captureRejections: options.suppressRejections ?? false,
         });
 
         this.options = {
             debug: false,
             scope: [],
-            handleRejections: false,
+            suppressRejections: false,
             update: { users: MILLISECONDS.DAY, channels: MILLISECONDS.HOUR },
             ttl: { users: MILLISECONDS.WEEK, channels: MILLISECONDS.DAY },
             ...options,
@@ -133,7 +133,7 @@ export default class Client extends EventEmitter {
         });
 
         if (!response.ok) {
-            if (!this.options.handleRejections) throw new TwitchAPIError(`unable to validate access token`);
+            if (!this.options.suppressRejections) throw new TwitchAPIError(`unable to validate access token`);
 
             return;
         }

@@ -40,6 +40,7 @@ export type ClientScope =
 export interface ClientOptions {
     clientId: string;
     clientSecret: string;
+    redirectUri?: string;
     scope?: ClientScope[];
     update?: {
         users?: boolean | number;
@@ -50,7 +51,7 @@ export interface ClientOptions {
         channels?: number;
     };
     debug?: boolean;
-    handleRejections?: boolean;
+    suppressRejections?: boolean;
 }
 
 export interface ClientEvents {

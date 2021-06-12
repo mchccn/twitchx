@@ -61,7 +61,7 @@ export default class User extends Base {
 
     public async update() {
         if (!this.client.options.update.channels) {
-            if (!this.client.options.handleRejections)
+            if (!this.client.options.suppressRejections)
                 throw new Error(`updating users was disabled but was still attempted`);
 
             return;
@@ -82,7 +82,7 @@ export default class User extends Base {
             const data = (await response.json())?.data[0];
 
             if (!data) {
-                if (!this.client.options.handleRejections)
+                if (!this.client.options.suppressRejections)
                     throw new TwitchAPIError(`user was fetched but no data was returned`);
 
                 return;
@@ -93,7 +93,7 @@ export default class User extends Base {
             return;
         }
 
-        if (!this.client.options.handleRejections) throw new Error("unable to update user");
+        if (!this.client.options.suppressRejections) throw new Error("unable to update user");
 
         return;
     }
