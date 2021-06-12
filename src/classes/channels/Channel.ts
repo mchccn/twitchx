@@ -47,7 +47,7 @@ export default class Channel extends Base {
 
     public async update() {
         if (!this.client.options.update.channels) {
-            if (!this.client.options.handleRejections)
+            if (!this.client.options.suppressRejections)
                 throw new ExternalError(`updating channels was disabled but was still attempted`);
 
             return;
@@ -68,7 +68,7 @@ export default class Channel extends Base {
             const data = (await response.json())?.data[0];
 
             if (!data) {
-                if (!this.client.options.handleRejections)
+                if (!this.client.options.suppressRejections)
                     throw new TwitchAPIError(`channel was fetched but no data was returned`);
 
                 return;
@@ -79,7 +79,7 @@ export default class Channel extends Base {
             return;
         }
 
-        if (!this.client.options.handleRejections) throw new ExternalError(`unable to update channel`);
+        if (!this.client.options.suppressRejections) throw new ExternalError(`unable to update channel`);
 
         return;
     }

@@ -6,6 +6,7 @@ import ChannelManager from "../classes/channels/ChannelManager";
 import EmoteManager from "../classes/emotes/EmoteManager";
 import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
+import { MILLISECONDS } from "../shared/constants";
 import { HTTPError, TwitchAPIError } from "../shared/errors";
 import {
     ClientEvents,
@@ -26,28 +27,32 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
-    public readonly options: Required<ClientOptions>;
+    public readonly options: Required<Omit<ClientOptions, "redirectUri">> & { redirectUri?: string };
     public readonly scope: ClientScope[];
 
-    public readonly channels = new ChannelManager(this);
-    public readonly users = new UserManager(this);
-    public readonly emotes = new EmoteManager(this);
+    public readonly channels: ChannelManager;
+    public readonly users: UserManager;
+    public readonly emotes: EmoteManager;
 
     public constructor(options: ClientOptions) {
         super({
-            captureRejections: options.handleRejections ?? false,
+            captureRejections: options.suppressRejections ?? false,
         });
 
         this.options = {
             debug: false,
             scope: [],
-            handleRejections: false,
-            update: { channels: true },
-            sweep: { channels: 1000 * 60 * 30 },
+            suppressRejections: false,
+            update: { users: MILLISECONDS.DAY, channels: MILLISECONDS.HOUR },
+            ttl: { users: MILLISECONDS.WEEK, channels: MILLISECONDS.DAY },
             ...options,
         };
 
         this.scope = this.options.scope ?? [];
+
+        this.channels = new ChannelManager(this);
+        this.users = new UserManager(this);
+        this.emotes = new EmoteManager(this);
     }
 
     public async login() {
@@ -131,7 +136,7 @@ export default class Client extends EventEmitter {
         });
 
         if (!response.ok) {
-            if (!this.options.handleRejections) throw new TwitchAPIError(`unable to validate access token`);
+            if (!this.options.suppressRejections) throw new TwitchAPIError(`unable to validate access token`);
 
             return;
         }

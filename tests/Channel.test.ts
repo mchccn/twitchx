@@ -57,12 +57,6 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         expect(channel.delay).to.equal(0);
     });
 
-    it("can fetch emotes", async () => {
-        const emotes = await channel.fetchEmotes();
-
-        expect(emotes).to.not.be.undefined;
-    });
-
     it("can fetch and update itself", async () => {
         await channel.update();
 

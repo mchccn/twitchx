@@ -18,8 +18,8 @@ export default class ChannelEmote extends Emote {
         return this.data.name;
     }
 
-    public get images(): [string, string, string] {
-        return [...(Object.values(this.data.images) as [string, string, string])];
+    public get images() {
+        return [...Object.values(this.data.images)] as [string, string, string];
     }
 
     public get tier() {
