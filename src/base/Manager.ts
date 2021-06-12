@@ -1,11 +1,22 @@
-import Collection from "@discordjs/collection";
 import { Awaited } from "../types/utils";
+import Base from "./Base";
+import Cache from "./Cache";
 import Client from "./Client";
 
-export default abstract class Manager<V> {
-    public readonly cache = new Collection<string, V>();
+export default abstract class Manager<V extends { update(): Awaited<void> }> extends Base {
+    public readonly cache: Cache<V>;
 
-    constructor(public readonly client: Client) {}
+    constructor(
+        public readonly client: Client,
+        public readonly options: {
+            update: number;
+            ttl: number;
+        }
+    ) {
+        super(client);
+
+        this.cache = new Cache(options);
+    }
 
     abstract get(id: string): V | undefined;
 

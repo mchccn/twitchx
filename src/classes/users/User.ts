@@ -1,11 +1,14 @@
 import fetch from "node-fetch";
+import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
 import { HTTPError } from "../../shared/errors";
 import { UserData } from "../../types/classes";
 
-export default class User {
+export default class User extends Base {
     public constructor(public readonly client: Client, private data: UserData) {
+        super(client);
+
         this.client.emit("userCreate", this);
     }
 
@@ -29,21 +32,12 @@ export default class User {
         return this.data.broadcaster_type;
     }
 
-    public get profileImageURL() {
-        return this.data.profile_image_url;
-    }
-
-    public get offlineImageURL() {
-        return this.data.offline_image_url;
-    }
-
     public get viewCount() {
         return this.data.view_count;
     }
 
     /**
-     * Returns the email of the user.
-     * Will be undefined if scope `user:read:email` is not provided.
+     * Returns the email of the user (scope `user:read:email` is required).
      */
     public get email() {
         return this.data.email;
@@ -55,6 +49,10 @@ export default class User {
 
     public get createdTimestamp() {
         return new Date(this.data.created_at).getTime();
+    }
+
+    public avatarURL(options?: { offline?: boolean }) {
+        return options?.offline ? this.data.offline_image_url : this.data.profile_image_url;
     }
 
     public async update() {

@@ -1,14 +1,15 @@
 import fetch from "node-fetch";
+import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
 import { HTTPError, InternalError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 
-export default class Channel {
+export default class Channel extends Base {
     public constructor(public readonly client: Client, private data: ChannelData) {
-        this.client.emit("channelCreate", this);
+        super(client);
 
-        client.channels.cache.set(this.id, this);
+        this.client.emit("channelCreate", this);
     }
 
     public get id() {

@@ -3,14 +3,17 @@ import AbortController from "abort-controller";
 import fetch from "node-fetch";
 import { Client } from "../../base";
 import Manager from "../../base/Manager";
-import { BASE_URL } from "../../shared/constants";
+import { BASE_URL, MILLISECONDS } from "../../shared/constants";
 import { UserData } from "../../types";
 import { SinglePartial } from "../../types/utils";
 import User from "./User";
 
 export default class UserManager extends Manager<User> {
     constructor(public readonly client: Client) {
-        super(client);
+        super(client, {
+            update: MILLISECONDS.DAY,
+            ttl: MILLISECONDS.WEEK,
+        });
     }
 
     public get(id: string) {
@@ -47,18 +50,27 @@ export default class UserManager extends Manager<User> {
             }, 1000);
 
             try {
-                const res = await fetch(`${BASE_URL}/users?${options?.type ?? "id"}=${encodeURIComponent(query)}`, {
-                    headers: {
-                        Authorization: `OAuth ${this.client.token}`,
-                    },
-                    signal: controller.signal,
-                });
+                const response = await fetch(
+                    `${BASE_URL}/users?${options?.type ?? "id"}=${encodeURIComponent(query)}`,
+                    {
+                        headers: {
+                            Authorization: `OAuth ${this.client.token}`,
+                        },
+                        signal: controller.signal,
+                    }
+                );
 
-                const data = (await res.json())?.data[0];
+                const data = (await response.json())?.data[0];
 
                 if (!data) return undefined;
 
-                if (res.ok) return new User(this.client, data);
+                if (response.ok) {
+                    const user = new User(this.client, data);
+
+                    this.cache.set(user.id, user);
+
+                    return user;
+                }
 
                 if (!this.client.options.handleRejections) throw new Error("unable to fetch user");
 
@@ -101,18 +113,24 @@ export default class UserManager extends Manager<User> {
                 .filter(($) => typeof $ !== "undefined")
                 .join("&");
 
-            const res = await fetch(`${BASE_URL}/users?${ids}${ids && logins ? "&" : ""}${logins}`, {
+            const response = await fetch(`${BASE_URL}/users?${ids}${ids && logins ? "&" : ""}${logins}`, {
                 headers: {
                     Authorization: `OAuth ${this.client.token}`,
                 },
                 signal: controller.signal,
             });
 
-            const data: UserData[] = (await res.json())?.data;
+            const data: UserData[] = (await response.json())?.data;
 
             if (!data) return undefined;
 
-            if (res.ok) return new Collection(data.map((data) => [data.id, new User(this.client, data)]));
+            if (response.ok) {
+                const users = new Collection(data.map((data) => [data.id, new User(this.client, data)]));
+
+                users.forEach((user) => this.cache.set(user.id, user));
+
+                return users;
+            }
 
             if (!this.client.options.handleRejections) throw new Error("unable to fetch users");
 

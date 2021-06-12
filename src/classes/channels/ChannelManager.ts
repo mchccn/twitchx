@@ -2,12 +2,15 @@ import AbortController from "abort-controller";
 import fetch from "node-fetch";
 import { Client } from "../../base";
 import Manager from "../../base/Manager";
-import { BASE_URL } from "../../shared/constants";
+import { BASE_URL, MILLISECONDS } from "../../shared/constants";
 import Channel from "./Channel";
 
 export default class ChannelManager extends Manager<Channel> {
     constructor(public readonly client: Client) {
-        super(client);
+        super(client, {
+            update: MILLISECONDS.HOUR,
+            ttl: MILLISECONDS.DAY,
+        });
     }
 
     public get(id: string) {
@@ -35,7 +38,13 @@ export default class ChannelManager extends Manager<Channel> {
 
             if (!data) return undefined;
 
-            if (response.ok) return new Channel(this.client, data);
+            if (response.ok) {
+                const channel = new Channel(this.client, data);
+
+                this.cache.set(channel.id, channel);
+
+                return channel;
+            }
 
             if (!this.client.options.handleRejections) throw new Error(`unable to fetch channel`);
 
