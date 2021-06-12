@@ -4,15 +4,9 @@ import Manager from "../base/Manager";
 import { BASE_URL } from "../shared/constants";
 import User from "./User";
 
-export const USER_MANAGER_CACHE_ACCESS = new WeakMap<UserManager, (user: User) => void>();
-
 export default class UserManager extends Manager<User> {
-    constructor(protected client: Client) {
+    constructor(public readonly client: Client) {
         super(client);
-
-        USER_MANAGER_CACHE_ACCESS.set(this, (user) => {
-            this.cache.set(user.id, user);
-        });
     }
 
     public get(id: string) {

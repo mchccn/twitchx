@@ -8,6 +8,6 @@ export interface UserData {
     profile_image_url: string;
     offline_image_url: string;
     view_count: number;
-    email: string | undefined; // requires user:read:email
+    email?: string;
     created_at: string;
 }

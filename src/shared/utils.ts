@@ -9,7 +9,3 @@ export function snakeCasify<T extends { [key: string]: string }>(object: T): T {
         ])
     ) as T;
 }
-
-export function nullishThrow(message?: string) {
-    throw new Error(message);
-}
