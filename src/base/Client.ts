@@ -5,6 +5,7 @@ import { URLSearchParams } from "url";
 import ChannelManager from "../classes/channels/ChannelManager";
 import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
+import { MILLISECONDS } from "../shared/constants";
 import { HTTPError, TwitchAPIError } from "../shared/errors";
 import {
     ClientEvents,
@@ -40,8 +41,8 @@ export default class Client extends EventEmitter {
             debug: false,
             scope: [],
             handleRejections: false,
-            update: { channels: true },
-            sweep: { channels: 1000 * 60 * 30 },
+            update: { users: MILLISECONDS.DAY, channels: MILLISECONDS.HOUR },
+            ttl: { users: MILLISECONDS.WEEK, channels: MILLISECONDS.DAY },
             ...options,
         };
 

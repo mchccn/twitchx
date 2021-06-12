@@ -11,8 +11,18 @@ import User from "./User";
 export default class UserManager extends Manager<User> {
     constructor(public readonly client: Client) {
         super(client, {
-            update: MILLISECONDS.DAY,
-            ttl: MILLISECONDS.WEEK,
+            update:
+                typeof client.options.update.users === "boolean"
+                    ? client.options.update.users
+                        ? MILLISECONDS.DAY
+                        : MILLISECONDS.NEVER
+                    : client.options.update.users ?? MILLISECONDS.DAY,
+            ttl:
+                typeof client.options.ttl.users === "boolean"
+                    ? client.options.ttl.users
+                        ? MILLISECONDS.WEEK
+                        : MILLISECONDS.NEVER
+                    : client.options.ttl.users ?? MILLISECONDS.WEEK,
         });
     }
 

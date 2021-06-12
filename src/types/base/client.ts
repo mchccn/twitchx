@@ -27,7 +27,9 @@ export type ClientScope =
     | "moderator:manage:automod"
     | "user:edit"
     | "user:edit:follows"
+    | "user:edit:broadcast"
     | "user:manage:blocked_users"
+    | "user:read:email"
     | "user:read:blocked_users"
     | "user:read:broadcast"
     | "user:read:follows"
@@ -40,9 +42,11 @@ export interface ClientOptions {
     clientSecret: string;
     scope?: ClientScope[];
     update?: {
-        channels?: boolean;
+        users?: boolean | number;
+        channels?: boolean | number;
     };
-    sweep?: {
+    ttl?: {
+        users?: number;
         channels?: number;
     };
     debug?: boolean;

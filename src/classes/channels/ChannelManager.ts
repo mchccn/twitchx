@@ -8,8 +8,18 @@ import Channel from "./Channel";
 export default class ChannelManager extends Manager<Channel> {
     constructor(public readonly client: Client) {
         super(client, {
-            update: MILLISECONDS.HOUR,
-            ttl: MILLISECONDS.DAY,
+            update:
+                typeof client.options.update.channels === "boolean"
+                    ? client.options.update.channels
+                        ? MILLISECONDS.HOUR
+                        : MILLISECONDS.NEVER
+                    : client.options.update.channels ?? MILLISECONDS.HOUR,
+            ttl:
+                typeof client.options.ttl.channels === "boolean"
+                    ? client.options.ttl.channels
+                        ? MILLISECONDS.DAY
+                        : MILLISECONDS.NEVER
+                    : client.options.ttl.channels ?? MILLISECONDS.DAY,
         });
     }
 
