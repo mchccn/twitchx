@@ -13,12 +13,8 @@ export default class ChannelManager extends Manager<Channel> {
         });
     }
 
-    public get(id: string) {
-        return this.cache.get(id);
-    }
-
     public async fetch(id: string, force?: boolean) {
-        if (this.cache.has(id) && !force) return this.get(id);
+        if (this.cache.has(id) && !force) return this.cache.get(id);
 
         const controller = new AbortController();
 

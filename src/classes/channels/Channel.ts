@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
+import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 import { ChannelEmoteData } from "../../types/classes/channelEmote";
 import ChannelEmote from "./ChannelEmote";
@@ -45,8 +45,7 @@ export default class Channel extends Base {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
-                // FIXME: add proper error type
-                throw new Error(`updating channels was disabled but was still attempted`);
+                throw new ExternalError(`updating channels was disabled but was still attempted`);
 
             return;
         }
@@ -67,7 +66,7 @@ export default class Channel extends Base {
 
             if (!data) {
                 if (!this.client.options.handleRejections)
-                    throw new TwitchAPIError(`user was fetched but no data was returned`);
+                    throw new TwitchAPIError(`channel was fetched but no data was returned`);
 
                 return;
             }
@@ -77,8 +76,7 @@ export default class Channel extends Base {
             return;
         }
 
-        // FIXME: add proper error type
-        if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);
+        if (!this.client.options.handleRejections) throw new ExternalError(`unable to update channel`);
 
         return;
     }
@@ -86,7 +84,7 @@ export default class Channel extends Base {
     public async fetchEmotes(): Promise<ChannelEmote[] | undefined> {
         if (!this.client.token) throw new InternalError("Token is not available");
 
-        const res = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
+        const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
             headers: {
                 Authorization: `Bearer ${this.client.token}`,
                 "Client-Id": this.client.options.clientId,

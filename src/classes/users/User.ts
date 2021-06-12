@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
-import { HTTPError } from "../../shared/errors";
+import { HTTPError, TwitchAPIError } from "../../shared/errors";
 import { UserData } from "../../types/classes";
 
 export default class User extends Base {
@@ -43,6 +43,10 @@ export default class User extends Base {
         return this.data.email;
     }
 
+    public get description() {
+        return this.data.description;
+    }
+
     public get createdAt() {
         return new Date(this.data.created_at);
     }
@@ -74,7 +78,20 @@ export default class User extends Base {
             throw new HTTPError(e);
         });
 
-        if (response.ok) return void (this.data = await response.json());
+        if (response.ok) {
+            const data = (await response.json())?.data[0];
+
+            if (!data) {
+                if (!this.client.options.handleRejections)
+                    throw new TwitchAPIError(`user was fetched but no data was returned`);
+
+                return;
+            }
+
+            this.data = data;
+
+            return;
+        }
 
         if (!this.client.options.handleRejections) throw new Error("unable to update user");
 

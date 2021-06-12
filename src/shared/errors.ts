@@ -1,5 +1,6 @@
 export class HTTPError extends Error {
     public name = this.constructor.name;
+
     public constructor(public message: string) {
         super(message);
     }
@@ -7,6 +8,7 @@ export class HTTPError extends Error {
 
 export class InternalError extends Error {
     public name = this.constructor.name;
+
     public constructor(public message: string) {
         super(message);
     }
@@ -14,6 +16,7 @@ export class InternalError extends Error {
 
 export class TwitchAPIError extends Error {
     public name = this.constructor.name;
+
     public constructor(public message: string) {
         super(message);
     }
@@ -21,6 +24,15 @@ export class TwitchAPIError extends Error {
 
 export class AssertionError extends Error {
     public name = this.constructor.name;
+
+    public constructor(public message: string) {
+        super(message);
+    }
+}
+
+export class ExternalError extends Error {
+    public name = this.constructor.name;
+
     public constructor(public message: string) {
         super(message);
     }
