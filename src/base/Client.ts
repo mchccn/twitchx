@@ -3,6 +3,7 @@ import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import ChannelManager from "../classes/channels/ChannelManager";
+import EmoteManager from "../classes/emotes/EmoteManager";
 import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
 import { HTTPError, TwitchAPIError } from "../shared/errors";
@@ -30,6 +31,7 @@ export default class Client extends EventEmitter {
 
     public readonly channels = new ChannelManager(this);
     public readonly users = new UserManager(this);
+    public readonly emotes = new EmoteManager(this);
 
     public constructor(options: ClientOptions) {
         super({
