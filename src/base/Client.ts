@@ -184,7 +184,7 @@ export default class Client extends EventEmitter {
         return;
     }
 
-    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<void>): this;
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     public on<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>
@@ -192,7 +192,7 @@ export default class Client extends EventEmitter {
         return super.on(event, listener);
     }
 
-    public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<void>): this;
+    public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     public once<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>

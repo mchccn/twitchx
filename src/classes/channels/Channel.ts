@@ -61,7 +61,16 @@ export default class Channel extends Base {
         });
 
         if (response.ok) {
-            this.data = await response.json();
+            const data = (await response.json())?.data[0];
+
+            if (!data) {
+                if (!this.client.options.handleRejections)
+                    throw new TwitchAPIError(`user was fetched but no data was returned`);
+
+                return;
+            }
+
+            this.data = data;
 
             return;
         }

@@ -10,8 +10,12 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         scope: [],
     });
 
+    let events = 0;
+
     before(async () => {
         await client.login();
+
+        client.on("channelCreate", () => events++);
 
         channel = new Twitch.Channel(client, {
             broadcaster_id: "41245072",
@@ -38,11 +42,11 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
     });
 
     it("has properties given by its data", () => {
+        expect(channel.id).to.be.a.string("41245072");
+
         expect(channel.gameId).to.be.a.string("");
 
         expect(channel.gameName).to.be.a.string("");
-
-        expect(channel.id).to.be.a.string("41245072");
 
         expect(channel.language).to.be.a.string("");
 
@@ -55,5 +59,23 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
 
     it("can fetch and update itself", async () => {
         await channel.update();
+
+        expect(channel.id).to.be.a.string("41245072");
+
+        expect(channel.gameId).to.not.be.undefined;
+
+        expect(channel.gameName).to.not.be.undefined;
+
+        expect(channel.language).to.not.be.undefined;
+
+        expect(channel.name).to.not.be.undefined;
+
+        expect(channel.title).to.not.be.undefined;
+
+        expect(channel.delay).to.not.be.undefined;
+    });
+
+    it("triggers the channelCreate event once", () => {
+        expect(events).to.equal(1);
     });
 });
