@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "Run Mocha Tests",
+            "request": "launch",
+            "command": "yarn run test",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

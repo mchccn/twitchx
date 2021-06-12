@@ -34,6 +34,13 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         expect(channel.client).to.not.be.undefined;
     });
 
+    it("has emotes", async () => {
+        const emotes = await channel.fetchEmotes();
+        console.log(emotes);
+
+        expect(emotes).to.not.be.undefined;
+    });
+
     it("has properties given by its data", () => {
         expect(channel.id).to.be.a.string("41245072");
 
