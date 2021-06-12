@@ -54,7 +54,8 @@ export default class UserManager extends Manager<User> {
                     `${BASE_URL}/users?${options?.type ?? "id"}=${encodeURIComponent(query)}`,
                     {
                         headers: {
-                            Authorization: `OAuth ${this.client.token}`,
+                            authorization: `Bearer ${this.client.token}`,
+                            "client-id": this.client.options.clientId,
                         },
                         signal: controller.signal,
                     }
@@ -115,7 +116,8 @@ export default class UserManager extends Manager<User> {
 
             const response = await fetch(`${BASE_URL}/users?${ids}${ids && logins ? "&" : ""}${logins}`, {
                 headers: {
-                    Authorization: `OAuth ${this.client.token}`,
+                    authorization: `Bearer ${this.client.token}`,
+                    "client-id": this.client.options.clientId,
                 },
                 signal: controller.signal,
             });

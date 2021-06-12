@@ -51,15 +51,20 @@ export default class Channel extends Base {
 
         if (!this.client.token) throw new InternalError(`token is not available`);
 
-        const response = await fetch(`${BASE_URL}/channels`, {
+        const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${this.id}`, {
             headers: {
-                authorization: `OAuth ${this.client.token}`,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         }).catch((e) => {
             throw new HTTPError(e);
         });
 
-        if (response.ok) return void (this.data = await response.json());
+        if (response.ok) {
+            this.data = await response.json();
+
+            return;
+        }
 
         // FIXME: add proper error type
         if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);

@@ -27,9 +27,10 @@ export default class ChannelManager extends Manager<Channel> {
         }, 1000);
 
         try {
-            const response = await fetch(`${BASE_URL}/channels`, {
+            const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${id}`, {
                 headers: {
-                    authorization: `OAuth ${this.client.token}`,
+                    authorization: `Bearer ${this.client.token}`,
+                    "client-id": this.client.options.clientId,
                 },
                 signal: controller.signal,
             });
