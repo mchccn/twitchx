@@ -10,6 +10,7 @@ export function snakeCasify<T extends { [key: string]: string }>(object: T): T {
     ) as T;
 }
 
-export function nullishThrow(message?: string) {
+export function nullishThrow(message?: string): never {
+    // FIXME: proper error type
     throw new Error(message);
 }

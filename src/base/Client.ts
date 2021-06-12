@@ -5,6 +5,7 @@ import { URLSearchParams } from "url";
 import ChannelManager from "../classes/ChannelManager";
 import UserManager from "../classes/UserManager";
 import { snakeCasify } from "../shared";
+import { HTTPError, TwitchAPIError } from "../shared/errors";
 import {
     ClientEvents,
     ClientOptions,
@@ -62,14 +63,14 @@ export default class Client extends EventEmitter {
             }
         );
 
-        if (!response.ok) throw new Error(`unable to login`);
+        if (!response.ok) throw new HTTPError("Unable to login");
 
         const data: LoginResponse & ErrorResponse = await response.json();
 
         if (data.status && data.status !== 200)
-            throw new Error(`(${data.status}) ${data.message ?? `unable to login`}`);
+            throw new TwitchAPIError(`(${data.status}) ${data.message ?? `unable to login`}`);
 
-        if (!data.access_token) throw new Error(`unable to obtain access token`);
+        if (!data.access_token) throw new TwitchAPIError(`unable to obtain access token`);
 
         this.accessToken = data.access_token;
 
@@ -120,7 +121,7 @@ export default class Client extends EventEmitter {
         });
 
         if (!response.ok) {
-            if (!this.options.handleRejections) throw new Error(`unable to validate access token`);
+            if (!this.options.handleRejections) throw new TwitchAPIError(`unable to validate access token`);
 
             return;
         }

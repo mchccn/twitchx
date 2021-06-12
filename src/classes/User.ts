@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import Client from "../base/Client";
 import { nullishThrow } from "../shared";
 import { BASE_URL } from "../shared/constants";
+import { InternalError } from "../shared/errors";
 import { UserData } from "../types/classes";
 import { USER_MANAGER_CACHE_ACCESS } from "./UserManager";
 
@@ -64,12 +65,13 @@ export default class User {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
+                // FIXME: add proper error type
                 throw new Error("Updating users was disabled but was still attempted");
 
             return;
         }
 
-        if (!this.client.token) throw new Error("Token unavailable");
+        if (!this.client.token) throw new InternalError("Token unavailable");
 
         const res = await fetch(`${BASE_URL}/users`, {
             headers: {
@@ -79,6 +81,7 @@ export default class User {
 
         if (res.ok) return void (this.data = await res.json());
 
+        // FIXME: add proper error type
         if (!this.client.options.handleRejections) throw new Error("Unable to update user");
 
         return;

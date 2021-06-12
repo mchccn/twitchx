@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { Client } from "../base";
 import Manager from "../base/Manager";
 import { BASE_URL } from "../shared/constants";
+import { TwitchAPIError } from "../shared/errors";
 import Channel from "./Channel";
 
 export const CHANNEL_MANAGER_CACHE_ACCESS = new WeakMap<ChannelManager, (channel: Channel) => void>();
@@ -54,7 +55,7 @@ export default class ChannelManager extends Manager<Channel> {
 
         if (response.ok) return new Channel(this.client, await response.json());
 
-        if (!this.client.options.handleRejections) throw new Error(`unable to fetch channel`);
+        if (!this.client.options.handleRejections) throw new TwitchAPIError(`unable to fetch channel`);
 
         return;
     }

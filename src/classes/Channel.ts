@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import Client from "../base/Client";
 import { nullishThrow } from "../shared";
 import { BASE_URL } from "../shared/constants";
+import { InternalError, TwitchAPIError } from "../shared/errors";
 import { ChannelData } from "../types/classes";
 import { CHANNEL_MANAGER_CACHE_ACCESS } from "./ChannelManager";
 
@@ -44,12 +45,13 @@ export default class Channel {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
+                // FIXME: add proper error type
                 throw new Error(`updating channels was disabled but was still attempted`);
 
             return;
         }
 
-        if (!this.client.token) throw new Error(`token is not available`);
+        if (!this.client.token) throw new InternalError(`token is not available`);
 
         const response = await fetch(`${BASE_URL}/channels`, {
             headers: {
@@ -59,6 +61,7 @@ export default class Channel {
 
         if (response.ok) return void (this.data = await response.json());
 
+        // FIXME: add proper error type
         if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);
 
         return;
