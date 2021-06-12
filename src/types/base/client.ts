@@ -1,3 +1,4 @@
+import { User } from "../../classes";
 import Channel from "../../classes/Channel";
 
 export type ClientScope =
@@ -53,4 +54,5 @@ export interface ClientEvents {
     debug: [string];
     destroy: [];
     channelCreate: [Channel];
+    userCreate: [User];
 }
