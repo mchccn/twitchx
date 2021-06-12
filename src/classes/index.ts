@@ -1,6 +1,6 @@
-import Channel from "./Channel";
-import ChannelManager from "./ChannelManager";
-import User from "./User";
-import UserManager from "./UserManager";
+import Channel from "./channels/Channel";
+import ChannelManager from "./channels/ChannelManager";
+import User from "./users/User";
+import UserManager from "./users/UserManager";
 
 export { Channel, ChannelManager, User, UserManager };

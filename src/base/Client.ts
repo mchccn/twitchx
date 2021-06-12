@@ -2,8 +2,8 @@ import EventEmitter from "events";
 import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
-import ChannelManager from "../classes/ChannelManager";
-import UserManager from "../classes/UserManager";
+import ChannelManager from "../classes/channels/ChannelManager";
+import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
 import {
     ClientEvents,

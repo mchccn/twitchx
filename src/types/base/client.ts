@@ -1,5 +1,5 @@
 import { User } from "../../classes";
-import Channel from "../../classes/Channel";
+import Channel from "../../classes/channels/Channel";
 
 export type ClientScope =
     | "analytics:read:extensions"

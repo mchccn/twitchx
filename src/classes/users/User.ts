@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import Client from "../base/Client";
-import { BASE_URL } from "../shared/constants";
-import { UserData } from "../types/classes";
+import Client from "../../base/Client";
+import { BASE_URL } from "../../shared/constants";
+import { UserData } from "../../types/classes";
 
 export default class User {
     public constructor(public readonly client: Client, private data: UserData) {
@@ -59,22 +59,22 @@ export default class User {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
-                throw new Error("Updating users was disabled but was still attempted");
+                throw new Error(`updating users was disabled but was still attempted`);
 
             return;
         }
 
-        if (!this.client.token) throw new Error("Token unavailable");
+        if (!this.client.token) throw new Error("token is not available");
 
-        const res = await fetch(`${BASE_URL}/users`, {
+        const response = await fetch(`${BASE_URL}/users`, {
             headers: {
                 Authorization: `OAuth ${this.client.token}`,
             },
         });
 
-        if (res.ok) return void (this.data = await res.json());
+        if (response.ok) return void (this.data = await response.json());
 
-        if (!this.client.options.handleRejections) throw new Error("Unable to update user");
+        if (!this.client.options.handleRejections) throw new Error("unable to update user");
 
         return;
     }

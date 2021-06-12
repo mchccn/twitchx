@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import Client from "../base/Client";
-import { BASE_URL } from "../shared/constants";
-import { ChannelData } from "../types/classes";
+import Client from "../../base/Client";
+import { BASE_URL } from "../../shared/constants";
+import { ChannelData } from "../../types/classes";
 
 export default class Channel {
     public constructor(public readonly client: Client, private data: ChannelData) {

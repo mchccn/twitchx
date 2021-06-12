@@ -1,8 +1,9 @@
+import Collection from "@discordjs/collection";
 import { Awaited } from "../types/utils";
 import Client from "./Client";
 
 export default abstract class Manager<V> {
-    public readonly cache = new Map<string, V>();
+    public readonly cache = new Collection<string, V>();
 
     constructor(public readonly client: Client) {}
 
