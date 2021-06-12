@@ -3,6 +3,7 @@ import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import ChannelManager from "../classes/channels/ChannelManager";
+import EmoteManager from "../classes/emotes/EmoteManager";
 import UserManager from "../classes/users/UserManager";
 import { snakeCasify } from "../shared";
 import { MILLISECONDS } from "../shared/constants";
@@ -36,6 +37,7 @@ export default class Client extends EventEmitter {
 
     public readonly channels: ChannelManager;
     public readonly users: UserManager;
+    public readonly emotes: EmoteManager;
 
     private authType?: "app" | "user";
 
@@ -57,6 +59,7 @@ export default class Client extends EventEmitter {
 
         this.channels = new ChannelManager(this);
         this.users = new UserManager(this);
+        this.emotes = new EmoteManager(this);
     }
 
     public async login(): Promise<void>;

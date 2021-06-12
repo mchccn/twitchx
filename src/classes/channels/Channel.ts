@@ -6,8 +6,11 @@ import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../s
 import { ChannelData } from "../../types/classes";
 import { ChannelEmoteData } from "../../types/classes/channelEmote";
 import ChannelEmote from "./ChannelEmote";
+import ChannelEmoteManager from "./ChannelEmoteManager";
 
 export default class Channel extends Base {
+    public emotes = new ChannelEmoteManager(this.client, this);
+
     public constructor(public readonly client: Client, private data: ChannelData) {
         super(client);
 
@@ -93,8 +96,9 @@ export default class Channel extends Base {
             throw new HTTPError(e);
         });
 
-        if (res.ok) return (await res.json()).data.map((e: ChannelEmoteData) => new ChannelEmote(this.client, e));
-        if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to fetch emotes");
+        if (res.ok)
+            return (await res.json()).data.map((e: ChannelEmoteData) => new ChannelEmote(this.client, e, this.id));
+        if (!this.client.options.handleRejections) throw new TwitchAPIError("Unable to fetch emotes");
 
         return;
     }

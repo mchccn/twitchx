@@ -34,22 +34,11 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         expect(channel.client).to.not.be.undefined;
     });
 
-    it("can fetch emotes", async () => {
-        const emotes = await channel.fetchEmotes();
+    it("has emotes", async () => {
+        const emotes = await channel.emotes.fetch();
 
-        expect(emotes).to.not.be.undefined;
-
-        expect(emotes).to.be.an.instanceOf(Array);
-
-        expect(emotes!.length).to.be.greaterThan(0);
-
-        const first = emotes![0];
-
-        expect(first).to.be.an.instanceOf(Twitch.ChannelEmote);
-
-        expect(first.images).to.be.an.instanceOf(Array);
-
-        expect(first.images[2]).to.be.a.string;
+        expect(emotes).to.be.instanceOf(Map);
+        expect(emotes.size).to.be.greaterThan(0);
     });
 
     it("has properties given by its data", () => {
