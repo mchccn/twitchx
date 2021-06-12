@@ -34,14 +34,6 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         expect(channel.client).to.not.be.undefined;
     });
 
-    it("has emotes", async () => {
-        const emotes = await channel.fetchEmotes();
-
-        console.log(emotes);
-
-        expect(emotes).to.not.be.undefined;
-    });
-
     it("has properties given by its data", () => {
         expect(channel.id).to.be.a.string("41245072");
 
@@ -56,6 +48,12 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
         expect(channel.title).to.be.a.string("");
 
         expect(channel.delay).to.equal(0);
+    });
+
+    it("can fetch emotes", async () => {
+        const emotes = await channel.fetchEmotes();
+
+        expect(emotes).to.not.be.undefined;
     });
 
     it("can fetch and update itself", async () => {

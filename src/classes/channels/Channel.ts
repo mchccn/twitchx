@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { Base } from "../../base";
 import Client from "../../base/Client";
 import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
+import { ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
 import { ChannelData } from "../../types/classes";
 
 export default class Channel extends Base {
@@ -43,8 +43,7 @@ export default class Channel extends Base {
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.handleRejections)
-                // FIXME: add proper error type
-                throw new Error(`updating channels was disabled but was still attempted`);
+                throw new ExternalError(`updating channels was disabled but was still attempted`);
 
             return;
         }
@@ -75,8 +74,7 @@ export default class Channel extends Base {
             return;
         }
 
-        // FIXME: add proper error type
-        if (!this.client.options.handleRejections) throw new Error(`unable to update channel`);
+        if (!this.client.options.handleRejections) throw new ExternalError(`unable to update channel`);
 
         return;
     }
