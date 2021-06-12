@@ -22,9 +22,9 @@ export default class UserManager extends Manager<User> {
             ids: string[];
             logins: string[];
         }>,
-        force?: boolean
+        options?: { force?: boolean }
     ): Promise<Collection<string, User>>;
-    public async fetch(id: string, force?: boolean): Promise<User | undefined>;
+    public async fetch(query: string, options?: { type?: "id" | "login"; force?: boolean }): Promise<User | undefined>;
     public async fetch(
         query:
             | string
@@ -32,10 +32,13 @@ export default class UserManager extends Manager<User> {
                   ids?: string[];
                   logins?: string[];
               }>,
-        force?: boolean
+        options?: {
+            type?: "id" | "login";
+            force?: boolean;
+        }
     ) {
         if (typeof query === "string") {
-            if (this.cache.has(query) && !force) return this.get(query);
+            if (this.cache.has(query) && !options?.force) return this.get(query);
 
             const controller = new AbortController();
 
@@ -44,7 +47,7 @@ export default class UserManager extends Manager<User> {
             }, 1000);
 
             try {
-                const res = await fetch(`${BASE_URL}/users?id=${encodeURIComponent(query)}`, {
+                const res = await fetch(`${BASE_URL}/users?${options?.type ?? "id"}=${encodeURIComponent(query)}`, {
                     headers: {
                         Authorization: `OAuth ${this.client.token}`,
                     },
@@ -87,12 +90,14 @@ export default class UserManager extends Manager<User> {
 
         try {
             const ids = (query.ids ?? [])
-                .map((id, i) => (cached.ids[i] && !force ? undefined : `id=${encodeURIComponent(id)}`))
+                .map((id, i) => (cached.ids[i] && !options?.force ? undefined : `id=${encodeURIComponent(id)}`))
                 .filter(($) => typeof $ !== "undefined")
                 .join("&");
 
             const logins = (query.logins ?? [])
-                .map((login, i) => (cached.logins[i] && !force ? undefined : `login=${encodeURIComponent(login)}`))
+                .map((login, i) =>
+                    cached.logins[i] && !options?.force ? undefined : `login=${encodeURIComponent(login)}`
+                )
                 .filter(($) => typeof $ !== "undefined")
                 .join("&");
 
