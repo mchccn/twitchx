@@ -84,7 +84,7 @@ export default class Channel extends Base {
     public async fetchEmotes(): Promise<ChannelEmote[] | undefined> {
         if (!this.client.token) throw new InternalError("Token is not available");
 
-        const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
+        const res = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.id}`, {
             headers: {
                 Authorization: `Bearer ${this.client.token}`,
                 "Client-Id": this.client.options.clientId,
