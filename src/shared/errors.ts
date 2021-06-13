@@ -37,3 +37,11 @@ export class ExternalError extends Error {
         super(message);
     }
 }
+
+export class WebSocketError extends Error {
+    public name = this.constructor.name;
+
+    public constructor(public message: string) {
+        super(message);
+    }
+}

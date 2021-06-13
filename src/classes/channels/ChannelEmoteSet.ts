@@ -4,7 +4,6 @@ import { Channel, ChannelEmoteData, Client, ChannelEmote } from "../..";
 import { InternalError, BASE_URL, HTTPError, TwitchAPIError } from "../../shared";
 
 export type SetEmoteData = ChannelEmoteData & { owner_id: string };
-
 export default class ChannelEmoteSet {
     public readonly emotes = new Collection<string, ChannelEmote>();
     public readonly channelID: string;

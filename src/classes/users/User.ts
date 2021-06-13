@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
+import { ExternalError, HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
 import { BASE_URL } from "../../shared/";
 import type { UserData } from "../../types/classes";
 
@@ -99,39 +99,58 @@ export default class User extends Base {
         return;
     }
 
-    public async block({ reason, sourceContext }: { reason: "caht"|"whisper", sourceContext: "spam"|"harassment"|"other" }): Promise<boolean> {
-        const res = await fetch(`${BASE_URL}/users/blocks?${new URLSearchParams(snakeCasify({
-            target_user_id: this.id,
-            reason,
-            sourceContext
-        })).toString()}`, {
+    public async block(options?: { reason?: "chat" | "whisper"; sourceContext?: "spam" | "harassment" | "other" }) {
+        if (!this.client.scope.includes("user:manage:blocked_users"))
+            throw new ExternalError(`scope 'user:manage:blocked_users' is required to block users`);
+
+        const { reason, sourceContext } = options ?? {};
+
+        const response = await fetch(
+            `${BASE_URL}/users/blocks?${new URLSearchParams(
+                snakeCasify({
+                    targetUserId: this.id,
+                    reason,
+                    sourceContext,
+                })
+            ).toString()}`,
+            {
+                headers: {
+                    authorization: `Bearer ${this.client.token}`,
+                    "client-id": this.client.options.clientId,
+                },
+                method: "PUT",
+            }
+        ).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (response.ok) return true;
+
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError(`unable to block user`);
+
+        return false;
+    }
+
+    public async unblock() {
+        if (!this.client.scope.includes("user:manage:blocked_users"))
+            throw new ExternalError(`scope 'user:manage:blocked_users' is required to unblock users`);
+
+        const response = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
+            method: "DELETE",
             headers: {
                 authorization: `Bearer ${this.client.token}`,
                 "client-id": this.client.options.clientId,
-            }, method: 'put'
+            },
         }).catch((e) => {
             throw new HTTPError(e);
         });
 
-        if (res.ok) return true;
-        throw new HTTPError(res.statusText);
+        if (response.ok) return true;
+
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError(`unable to unblock user`);
+
+        return false;
     }
 
-    public async unBlock(): Promise<boolean> {
-        const res = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
-            headers: {
-                authorization: `Bearer ${this.client.token}`,
-                "client-id": this.client.options.clientId,
-            }, method: 'delete'
-        }).catch((e) => {
-            throw new HTTPError(e);
-        });
-
-        if (res.ok) return true;
-        throw new HTTPError(res.statusText);
-    }
-
-    public async fetchBlocks() {
-
-    }
+    public async fetchBlocks() {}
 }
