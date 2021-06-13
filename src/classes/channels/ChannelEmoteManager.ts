@@ -7,8 +7,6 @@ import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from
 import ChannelEmote from "./ChannelEmote";
 
 export default class ChannelEmoteManager extends Manager<ChannelEmote> {
-    private lastFetched?: number;
-
     public constructor(public readonly client: Client, public readonly channel: Channel) {
         super(client, {
             update:
