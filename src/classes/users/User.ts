@@ -97,4 +97,32 @@ export default class User extends Base {
 
         return;
     }
+
+    public async block(): Promise<boolean> {
+        const res = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+            }, method: 'put'
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (res.ok) return true;
+        throw new HTTPError(res.statusText);
+    }
+
+    public async unBlock(): Promise<boolean> {
+        const res = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+            }, method: 'delete'
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (res.ok) return true;
+        throw new HTTPError(res.statusText);
+    }
 }
