@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
+import { URLSearchParams } from "url";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { HTTPError, TwitchAPIError } from "../../shared";
+import { HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
 import { BASE_URL } from "../../shared/";
 import type { UserData } from "../../types/classes";
 
@@ -98,8 +99,12 @@ export default class User extends Base {
         return;
     }
 
-    public async block(): Promise<boolean> {
-        const res = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
+    public async block({ reason, sourceContext }: { reason: "caht"|"whisper", sourceContext: "spam"|"harassment"|"other" }): Promise<boolean> {
+        const res = await fetch(`${BASE_URL}/users/blocks?${new URLSearchParams(snakeCasify({
+            target_user_id: this.id,
+            reason,
+            sourceContext
+        })).toString()}`, {
             headers: {
                 authorization: `Bearer ${this.client.token}`,
                 "client-id": this.client.options.clientId,
@@ -124,5 +129,9 @@ export default class User extends Base {
 
         if (res.ok) return true;
         throw new HTTPError(res.statusText);
+    }
+
+    public async fetchBlocks() {
+
     }
 }
