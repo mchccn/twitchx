@@ -103,7 +103,7 @@ export default class User extends Base {
         const res = await fetch(`${BASE_URL}/users/blocks?${new URLSearchParams(snakeCasify({
             target_user_id: this.id,
             reason,
-            source_context: sourceContext
+            sourceContext
         })).toString()}`, {
             headers: {
                 authorization: `Bearer ${this.client.token}`,
