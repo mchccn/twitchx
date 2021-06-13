@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import type { Channel, ChannelEmoteData } from "../..";
 import type { Client } from "../../base";
-import { Manager } from "../../base";
+import { Manager } from "../../base/internal";
 import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from "../../shared/";
 import ChannelEmote from "./ChannelEmote";
 

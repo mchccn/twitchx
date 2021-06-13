@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import type { Client, EmoteData } from "../..";
-import { Manager } from "../../";
+import { Manager } from "../../base/internal";
 import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from "../../shared/";
 import Emote from "./Emote";
 

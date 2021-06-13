@@ -1,7 +1,7 @@
 import AbortController from "abort-controller";
 import fetch from "node-fetch";
 import type { Client } from "../../base";
-import { Manager } from "../../base";
+import { Manager } from "../../base/internal";
 import { BASE_URL, MILLISECONDS } from "../../shared";
 import Channel from "./Channel";
 
