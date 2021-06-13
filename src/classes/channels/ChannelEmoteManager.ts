@@ -31,52 +31,41 @@ export default class ChannelEmoteManager extends Manager<ChannelEmote> {
     public async fetch(id?: string) {
         if (!this.client.token) throw new InternalError("token not available");
 
-        const emotes = await this.fetchEmotes();
+        const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.channel.id}`, {
+            headers: {
+                Authorization: `Bearer ${this.client.token}`,
+                "Client-Id": this.client.options.clientId,
+            },
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
 
-        if (!id) {
-            await this.fetchEmotes(true);
+        if (response.ok) {
+            const data = await response.json();
 
-            const current = new Collection<string, ChannelEmote>();
+            if (!id) {
+                const collection = new Collection<string, ChannelEmote>();
 
-            emotes?.forEach((e) => current.set(e.name, e));
+                (data.data as ChannelEmoteData[]).forEach((e) => {
+                    const emote = new ChannelEmote(this.client, e, this.channel.id);
+
+                    this.cache.set(e.id, emote);
+                    collection.set(e.name, emote);
+                });
+
+                return collection;
+            }
+
+            const current = new ChannelEmote(
+                this.client,
+                data.data.find((e: ChannelEmoteData) => e.id === id),
+                this.channel.id
+            );
 
             return current;
         }
 
-        const current = emotes?.find((e) => e.id === id);
-
-        return current;
-    }
-
-    private async fetchEmotes(force?: boolean) {
-        if (typeof this.lastFetched === "undefined" || Date.now() - this.lastFetched > MILLISECONDS.MINUTE || force) {
-            if (!this.client.token) throw new InternalError("token not available");
-
-            const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.channel.id}`, {
-                headers: {
-                    Authorization: `Bearer ${this.client.token}`,
-                    "Client-Id": this.client.options.clientId,
-                },
-            }).catch((e) => {
-                throw new HTTPError(e);
-            });
-
-            if (response.ok) {
-                const emotes = (await response.json()).data.map(
-                    (data: ChannelEmoteData) => new ChannelEmote(this.client, data, this.channel.id)
-                ) as ChannelEmote[];
-
-                emotes.forEach((emote) => this.cache.set(emote.id, emote));
-
-                this.lastFetched = Date.now();
-
-                return emotes;
-            }
-
-            if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to fetch emote");
-
-            return;
-        }
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to fetch channel emotes");
 
         return;
     }
