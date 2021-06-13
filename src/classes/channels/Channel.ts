@@ -1,11 +1,9 @@
-import Collection from "@discordjs/collection";
 import fetch from "node-fetch";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
 import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
-import ChannelEmoteSet, { SetEmoteData } from "./ChannelEmoteSet";
 
 export default class Channel extends Base {
     public emotes = new ChannelEmoteManager(this.client, this);
