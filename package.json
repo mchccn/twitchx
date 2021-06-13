@@ -1,5 +1,5 @@
 {
-    "name": "@cursorsdottsx/twitch",
+    "name": "twitchx",
     "version": "1.0.0",
     "description": "TypeScript Twitch REST API wrapper, typed firmly as hell.",
     "main": "dist/index.js",
