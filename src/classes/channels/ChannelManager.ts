@@ -4,6 +4,8 @@ import { Client } from "../../base";
 import Manager from "../../base/Manager";
 import { BASE_URL, MILLISECONDS } from "../../shared/constants";
 import Channel from "./Channel";
+import { snakeCasify } from "../../shared/utils"
+import type { Awaited } from "../../types/utils"
 
 export default class ChannelManager extends Manager<Channel> {
     constructor(public readonly client: Client) {
@@ -23,7 +25,7 @@ export default class ChannelManager extends Manager<Channel> {
         });
     }
 
-    public async fetch(id: string, force?: boolean) {
+    public async fetch(id: Readonly<string>, force?: Readonly<boolean>) {
         if (this.cache.has(id) && !force) return this.cache.get(id);
 
         const controller = new AbortController();
@@ -70,16 +72,21 @@ export default class ChannelManager extends Manager<Channel> {
         }
     }
 
+    /**
+     * 
+     * @param id channel id
+     * @param options what to change
+     */
     public async modify(
-        id: string,
+        id: Readonly<string>,
         options: {
-            game?: string;
-            language?: string;
+            gameId?: string;
+            broadcasterLanguage?: string;
             title?: string;
-            delay?: number;
+            delay?: number | string;
         }
     ) {
-        if (!options || (!options.game && !options.language && !options.title && !options.delay)) throw new Error("no options were provided");
+        if (!options || (!options.gameId && !options.broadcasterLanguage && !options.title && !options.delay)) throw new Error("no options were provided");
         
         const controller = new AbortController();
 
@@ -89,31 +96,28 @@ export default class ChannelManager extends Manager<Channel> {
 
         try {
 
-        const { 
-            game,
-            language,
-            title,
-            delay
-        } = options
-
-        let send = {}
-        if (game) send = { ...send, game_id: game }
-        if (language) send = { ...send, broadcaster_language: language }
-        if (title) send = { ...send, title }
-        if (delay) send = { ...send, delay }
-
         const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${id}`, {
             headers: {
                 authorization: `Bearer ${this.client.token}`,
                 "client-id": this.client.options.clientId,
                 "Content-Type": 'application/json'
             },
+            method: "PATCH",
             signal: controller.signal,
-            body: JSON.stringify(send)
+            body: JSON.stringify(snakeCasify(options as {
+                gameId?: string;
+                broadcasterLanguage?: string;
+                title?: string;
+                delay?: string;
+            }))
         });
 
         if (!response) return undefined 
-        return response
+
+        const data = await response.json();
+
+        if (!data) return undefined;
+        else return data;
 
     } catch (error) {
         if (!this.client.options.suppressRejections)

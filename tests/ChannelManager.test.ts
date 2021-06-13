@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import * as Twitch from "../src";
 import { TEST_TYPES } from "./shared.test";
+import fetch from "node-fetch";
 
 describe(`${TEST_TYPES.CLASS} ChannelManager`, () => {
     const client = new Twitch.Client({
@@ -19,6 +20,8 @@ describe(`${TEST_TYPES.CLASS} ChannelManager`, () => {
 
     it("can fetch a channel", async () => {
         const channel = await client.channels.fetch("41245072");
+
+        console.log(fetch)
 
         expect(channel).to.not.be.undefined;
 

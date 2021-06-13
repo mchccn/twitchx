@@ -7,3 +7,4 @@ export interface ChannelData {
     title: string;
     delay: number;
 }
+

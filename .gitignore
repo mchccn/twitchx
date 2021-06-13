@@ -119,3 +119,4 @@ dist
 
 # OS X shit
 .DS_Store
+tests/cannon.ts
