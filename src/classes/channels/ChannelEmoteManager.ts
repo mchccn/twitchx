@@ -7,6 +7,8 @@ import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from
 import ChannelEmote from "./ChannelEmote";
 
 export default class ChannelEmoteManager extends Manager<ChannelEmote> {
+    private lastFetched?: number;
+
     public constructor(public readonly client: Client, public readonly channel: Channel) {
         super(client, {
             update:
@@ -29,9 +31,11 @@ export default class ChannelEmoteManager extends Manager<ChannelEmote> {
     public async fetch(id?: string) {
         if (!this.client.token) throw new InternalError("token not available");
 
-        const emotes = await this.fetchEmotes().catch();
+        const emotes = await this.fetchEmotes();
 
         if (!id) {
+            await this.fetchEmotes(true);
+
             const current = new Collection<string, ChannelEmote>();
 
             emotes?.forEach((e) => current.set(e.name, e));
@@ -44,27 +48,35 @@ export default class ChannelEmoteManager extends Manager<ChannelEmote> {
         return current;
     }
 
-    private async fetchEmotes(): Promise<ChannelEmote[] | undefined> {
-        if (!this.client.token) throw new InternalError("token not available");
+    private async fetchEmotes(force?: boolean) {
+        if (typeof this.lastFetched === "undefined" || Date.now() - this.lastFetched > MILLISECONDS.MINUTE || force) {
+            if (!this.client.token) throw new InternalError("token not available");
 
-        const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.channel.id}`, {
-            headers: {
-                Authorization: `Bearer ${this.client.token}`,
-                "Client-Id": this.client.options.clientId,
-            },
-        }).catch((e) => {
-            throw new HTTPError(e);
-        });
+            const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.channel.id}`, {
+                headers: {
+                    Authorization: `Bearer ${this.client.token}`,
+                    "Client-Id": this.client.options.clientId,
+                },
+            }).catch((e) => {
+                throw new HTTPError(e);
+            });
 
-        if (response.ok) {
-            const emotes = (await response.json()).data.map(
-                (data: ChannelEmoteData) => new ChannelEmote(this.client, data, this.channel.id)
-            );
+            if (response.ok) {
+                const emotes = (await response.json()).data.map(
+                    (data: ChannelEmoteData) => new ChannelEmote(this.client, data, this.channel.id)
+                ) as ChannelEmote[];
 
-            return emotes;
+                emotes.forEach((emote) => this.cache.set(emote.id, emote));
+
+                this.lastFetched = Date.now();
+
+                return emotes;
+            }
+
+            if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to fetch emote");
+
+            return;
         }
-
-        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to fetch emote");
 
         return;
     }
