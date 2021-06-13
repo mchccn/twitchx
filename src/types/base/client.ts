@@ -1,5 +1,5 @@
-import { User } from "../../classes";
-import Channel from "../../classes/channels/Channel";
+import type { ChannelEmote, User } from "../../classes";
+import type Channel from "../../classes/channels/Channel";
 
 export type ClientScope =
     | "analytics:read:extensions"
@@ -47,10 +47,14 @@ export interface ClientOptions {
     update?: {
         users?: boolean | number;
         channels?: boolean | number;
+        emotes?: boolean | number;
+        channelEmotes?: boolean | number;
     };
     ttl?: {
         users?: number;
         channels?: number;
+        emotes?: number;
+        channelEmotes?: number;
     };
     debug?: boolean;
     suppressRejections?: boolean;
@@ -62,4 +66,5 @@ export interface ClientEvents {
     destroy: [];
     channelCreate: [Channel];
     userCreate: [User];
+    channelEmoteCreate: [ChannelEmote];
 }

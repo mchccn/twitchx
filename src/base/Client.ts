@@ -46,8 +46,18 @@ export default class Client extends EventEmitter {
             debug: false,
             scope: [],
             suppressRejections: false,
-            update: { users: MILLISECONDS.DAY, channels: MILLISECONDS.HOUR },
-            ttl: { users: MILLISECONDS.WEEK, channels: MILLISECONDS.DAY },
+            update: {
+                users: MILLISECONDS.DAY,
+                channels: MILLISECONDS.HOUR,
+                emotes: MILLISECONDS.HOUR,
+                channelEmotes: MILLISECONDS.HOUR,
+            },
+            ttl: {
+                users: MILLISECONDS.WEEK,
+                channels: MILLISECONDS.DAY,
+                emotes: MILLISECONDS.DAY,
+                channelEmotes: MILLISECONDS.DAY,
+            },
             ...options,
         };
 

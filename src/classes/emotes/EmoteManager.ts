@@ -7,8 +7,18 @@ import Emote from "./Emote";
 export default class EmoteManager extends Manager<Emote> {
     public constructor(public readonly client: Client) {
         super(client, {
-            update: MILLISECONDS.HOUR,
-            ttl: MILLISECONDS.DAY,
+            update:
+                typeof client.options.update.emotes === "boolean"
+                    ? client.options.update.emotes
+                        ? MILLISECONDS.HOUR
+                        : MILLISECONDS.NEVER
+                    : client.options.update.emotes ?? MILLISECONDS.HOUR,
+            ttl:
+                typeof client.options.ttl.emotes === "boolean"
+                    ? client.options.ttl.emotes
+                        ? MILLISECONDS.DAY
+                        : MILLISECONDS.NEVER
+                    : client.options.ttl.emotes ?? MILLISECONDS.DAY,
         });
     }
 
@@ -17,9 +27,9 @@ export default class EmoteManager extends Manager<Emote> {
     }
 
     public async fetch(id: string) {
-        if (!this.client.token) throw new InternalError("Token not available");
+        if (!this.client.token) throw new InternalError("token not available");
 
-        const res = await fetch(`${BASE_URL}/chat/emotes/global`, {
+        const response = await fetch(`${BASE_URL}/chat/emotes/global`, {
             headers: {
                 Authorization: `Bearer ${this.client.token}`,
                 "Client-Id": this.client.options.clientId,
@@ -28,17 +38,18 @@ export default class EmoteManager extends Manager<Emote> {
             throw new HTTPError(e);
         });
 
-        if (res.ok) {
+        if (response.ok) {
             const current = new Emote(
                 this.client,
-                (await res.json()).data.find((e: EmoteData) => e.id === id)
+                (await response.json()).data.find((e: EmoteData) => e.id === id)
             );
+
             this.cache.set(current.name, current);
 
             return current;
         }
 
-        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to udpate emote");
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to fetch emotes");
 
         return;
     }
