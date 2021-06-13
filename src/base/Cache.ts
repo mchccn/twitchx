@@ -1,6 +1,6 @@
 import lt from "long-timeout";
-import { MILLISECONDS } from "../shared/constants";
-import { Awaited } from "../types/utils";
+import { MILLISECONDS } from "../shared";
+import type { Awaited } from "../types";
 
 export default class Cache<V extends { update(): Awaited<void> }> extends Map<string, V> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();

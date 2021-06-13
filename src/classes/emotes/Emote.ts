@@ -1,8 +1,9 @@
 import fetch from "node-fetch";
-import { Base, Client } from "../../base";
-import { BASE_URL } from "../../shared/constants";
-import { HTTPError, InternalError, TwitchAPIError } from "../../shared/errors";
-import { EmoteData } from "../../types";
+import type { Client } from "../../base";
+import { Base } from "../../base";
+import { HTTPError, InternalError, TwitchAPIError } from "../../shared";
+import { BASE_URL } from "../../shared/";
+import type { EmoteData } from "../../types";
 
 export default class Emote extends Base {
     constructor(public readonly client: Client, protected data: EmoteData) {
@@ -24,20 +25,23 @@ export default class Emote extends Base {
     public async update() {
         if (!this.client.token) throw new InternalError("Token not available");
 
-        const res = await fetch(`${BASE_URL}/chat/emotes/global`, {
+        const response = await fetch(`${BASE_URL}/chat/emotes/global`, {
             headers: {
-                Authorization: `Bearer ${this.client.token}`,
-                "Client-Id": this.client.options.clientId,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         }).catch((e) => {
             throw new HTTPError(e);
         });
 
-        if (res.ok) {
-            const current = (await res.json()).data.find((e: EmoteData) => e.id === this.id);
-            this.data = current;
+        if (response.ok) {
+            const data = (await response.json()).data.find((e: EmoteData) => e.id === this.id);
+
+            this.data = data;
+
+            return;
         }
 
-        if (!this.client.options.handleRejections) throw new TwitchAPIError("unable to udpate emote");
+        if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to update emote");
     }
 }

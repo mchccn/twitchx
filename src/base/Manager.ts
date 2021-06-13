@@ -1,7 +1,7 @@
-import { Awaited } from "../types/utils";
+import type { Awaited } from "../types";
 import Base from "./Base";
 import Cache from "./Cache";
-import Client from "./Client";
+import type Client from "./Client";
 
 export default abstract class Manager<V extends { update(): Awaited<void> }> extends Base {
     public readonly cache: Cache<V>;

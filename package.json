@@ -1,5 +1,5 @@
 {
-    "name": "@cursorsdottsx/twitch",
+    "name": "twitchx",
     "version": "1.0.0",
     "description": "TypeScript Twitch REST API wrapper, typed firmly as hell.",
     "main": "dist/index.js",
@@ -24,7 +24,8 @@
         "abort-controller": "^3.0.0",
         "chalk": "^4.1.1",
         "long-timeout": "^0.1.1",
-        "node-fetch": "^2.6.1"
+        "node-fetch": "^2.6.1",
+        "ws": "^7.4.6"
     },
     "devDependencies": {
         "@discordjs/collection": "^0.1.6",
@@ -33,6 +34,7 @@
         "@types/mocha": "^8.2.2",
         "@types/node": "^15.12.2",
         "@types/node-fetch": "^2.5.10",
+        "@types/ws": "^7.4.4",
         "chai": "^4.3.4",
         "dotenv": "^10.0.0",
         "mocha": "^9.0.0",

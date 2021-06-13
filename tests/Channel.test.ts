@@ -1,3 +1,4 @@
+import Collection from "@discordjs/collection";
 import { expect } from "chai";
 import "dotenv/config";
 import * as Twitch from "../src";
@@ -37,7 +38,8 @@ describe(`${TEST_TYPES.CLASS} Channel`, () => {
     it("has emotes", async () => {
         const emotes = await channel.emotes.fetch();
 
-        expect(emotes).to.be.instanceOf(Map);
+        expect(emotes).to.be.an.instanceOf(Collection);
+
         expect(emotes.size).to.be.greaterThan(0);
     });
 
