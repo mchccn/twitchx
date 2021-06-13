@@ -1,3 +1,4 @@
+import Collection from "@discordjs/collection";
 import { expect } from "chai";
 import * as Twitch from "../src";
 import { TEST_TYPES } from "./shared.test";
@@ -39,6 +40,18 @@ describe(`${TEST_TYPES.CLASS} ChannelEmoteManager`, () => {
         expect(emote).to.not.be.undefined;
 
         expect(emote).to.be.an.instanceOf(Twitch.ChannelEmote);
+    });
+
+    it("can fetch all emotes in the channel", async () => {
+        const emotes = await manager.fetch();
+
+        expect(emotes).to.not.be.undefined;
+
+        expect(emotes).to.be.instanceOf(Collection);
+
+        expect(emotes.size).to.be.greaterThan(0);
+
+        expect(emotes.first()).to.be.instanceOf(Twitch.ChannelEmote);
     });
 
     it("returns an emote for cached items", () => {
