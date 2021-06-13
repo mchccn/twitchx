@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
+import { ExternalError, HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
 import { BASE_URL } from "../../shared/";
 import type { UserData } from "../../types/classes";
 
@@ -100,6 +100,9 @@ export default class User extends Base {
     }
 
     public async block(options?: { reason?: "chat" | "whisper"; sourceContext?: "spam" | "harassment" | "other" }) {
+        if (!this.client.scope.includes("user:manage:blocked_users"))
+            throw new ExternalError(`scope 'user:manage:blocked_users' is required to block users`);
+
         const { reason, sourceContext } = options ?? {};
 
         const response = await fetch(
@@ -129,6 +132,9 @@ export default class User extends Base {
     }
 
     public async unblock() {
+        if (!this.client.scope.includes("user:manage:blocked_users"))
+            throw new ExternalError(`scope 'user:manage:blocked_users' is required to unblock users`);
+
         const response = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
             method: "DELETE",
             headers: {
