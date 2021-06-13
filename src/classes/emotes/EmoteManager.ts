@@ -1,3 +1,4 @@
+import Collection from "@discordjs/collection";
 import fetch from "node-fetch";
 import type { Client, EmoteData } from "../..";
 import { Manager } from "../../base/internal";
@@ -26,7 +27,9 @@ export default class EmoteManager extends Manager<Emote> {
         return this.cache.get(id);
     }
 
-    public async fetch(id: string) {
+    public async fetch(): Promise<Collection<string, Emote>>;
+    public async fetch(id: string): Promise<Emote>;
+    public async fetch(id?: string) {
         if (!this.client.token) throw new InternalError("token not available");
 
         const response = await fetch(`${BASE_URL}/chat/emotes/global`, {
@@ -39,9 +42,24 @@ export default class EmoteManager extends Manager<Emote> {
         });
 
         if (response.ok) {
+            const data = await response.json();
+
+            if (!id) {
+                const collection = new Collection<string, Emote>();
+
+                (data.data as EmoteData[]).forEach((e) => {
+                    const emote = new Emote(this.client, e);
+
+                    this.cache.set(e.id, emote);
+                    collection.set(e.name, emote);
+                });
+
+                return collection;
+            }
+
             const current = new Emote(
                 this.client,
-                (await response.json()).data.find((e: EmoteData) => e.id === id)
+                data.data.find((e: EmoteData) => e.id === id)
             );
 
             this.cache.set(current.name, current);
