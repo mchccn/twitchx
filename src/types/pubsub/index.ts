@@ -9,3 +9,8 @@ export type ClientPubSubResponse = {
 export type ServerPubSubResponse = {
     type: "PONG";
 };
+
+export interface PubSubOptions {
+    suppressRejections?: boolean;
+    ws?: import("ws").ClientOptions;
+}
