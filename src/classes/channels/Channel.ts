@@ -89,8 +89,8 @@ export default class Channel extends Base {
 
         const response = await fetch(`${BASE_URL}/chat/emotes/set?emote_set_id=${id}`, {
             headers: {
-                Authorization: `Bearer ${this.client.token}`,
-                "Client-Id": this.client.options.clientId,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         }).catch((e) => {
             throw new HTTPError(e);

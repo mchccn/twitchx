@@ -1,5 +1,7 @@
 import Collection from "@discordjs/collection";
-import { Channel, ChannelEmoteData, Client, ChannelEmote } from "../..";
+import { Client } from "../../base/internal";
+import type { ChannelEmoteData } from "../../types/classes";
+import { Channel, ChannelEmote } from "../internal";
 
 export type SetEmoteData = ChannelEmoteData & { owner_id: string };
 

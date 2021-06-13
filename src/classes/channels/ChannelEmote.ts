@@ -40,8 +40,8 @@ export default class ChannelEmote extends Emote {
 
         const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.broadcasterId}`, {
             headers: {
-                Authorization: `Bearer ${this.client.token}`,
-                "Client-Id": this.client.options.clientId,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         });
 

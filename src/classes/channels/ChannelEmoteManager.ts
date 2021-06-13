@@ -33,8 +33,8 @@ export default class ChannelEmoteManager extends Manager<ChannelEmote> {
 
         const response = await fetch(`${BASE_URL}/chat/emotes?broadcaster_id=${this.channel.id}`, {
             headers: {
-                Authorization: `Bearer ${this.client.token}`,
-                "Client-Id": this.client.options.clientId,
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
             },
         }).catch((e) => {
             throw new HTTPError(e);
