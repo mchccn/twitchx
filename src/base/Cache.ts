@@ -8,16 +8,25 @@ import type { Awaited } from "../types";
  * @class
  * @template Value
  */
-export default class Cache<Value extends { update(): Awaited<void> }> extends Map<string, Value> {
+export default class Cache<Value extends { update(): Awaited<unknown> }> extends Map<string, Value> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();
     private intervals = new Map<string, { interval: lt.Interval; timestamp: number }>();
+
+    public readonly options;
 
     /**
      * Creates a new cache.
      * @param options Options to configure the caching behaviour.
+     * @constructor
      */
-    constructor(public readonly options: { update: number; ttl: number }) {
+    public constructor(options: { update: number; ttl: number }) {
         super();
+
+        /**
+         * Options the cache was given.
+         * @type {CacheOptions}
+         */
+        this.options = options;
     }
 
     /**
@@ -141,3 +150,9 @@ export default class Cache<Value extends { update(): Awaited<void> }> extends Ma
         return lt.clearTimeout(...args);
     }
 }
+
+/**
+ * @typedef {object} CacheOptions
+ * @prop {number} update Milliseconds between each entity update.
+ * @prop {number} ttl Milliseconds for an entity to live in the cache.
+ */

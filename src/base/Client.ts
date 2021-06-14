@@ -19,7 +19,7 @@ import type {
  * Supports app and user access tokens and is configurable.
  * Delegates API endpoints to different managers.
  * @class
- * @extends EventEmitter
+ * @extends {EventEmitter}
  */
 export default class Client extends EventEmitter {
     private accessToken?: string;
@@ -31,38 +31,16 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
-    /**
-     * Options given to the client.
-     * @readonly
-     */
     public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
         redirectUri?: string;
         forceVerify?: boolean;
         state?: string;
     };
 
-    /**
-     * Client's token's current scopes.
-     * @readonly
-     */
     public readonly scope: ClientScope[];
 
-    /**
-     * Client's channel manager.
-     * @readonly
-     */
     public readonly channels: ChannelManager;
-
-    /**
-     * Client's user manager.
-     * @readonly
-     */
     public readonly users: UserManager;
-
-    /**
-     * Client's emote manager.
-     * @readonly
-     */
     public readonly emotes: EmoteManager;
 
     private authType?: "app" | "user";
@@ -70,12 +48,18 @@ export default class Client extends EventEmitter {
     /**
      * Creates a new client to interact with the Twitch API.
      * @param options Options for the client.
+     * @constructor
      */
     public constructor(options: ClientOptions) {
         super({
             captureRejections: options.suppressRejections ?? false,
         });
 
+        /**
+         * Options given to the client.
+         * @type {ClientOptions}
+         * @readonly
+         */
         this.options = {
             debug: false,
             scope: [],
@@ -95,10 +79,32 @@ export default class Client extends EventEmitter {
             ...options,
         };
 
+        /**
+         * Client's token's current scopes.
+         * @type {string[]}
+         * @readonly
+         */
         this.scope = this.options.scope ?? [];
 
+        /**
+         * Client's channel manager.
+         * @type {ChannelManager}
+         * @readonly
+         */
         this.channels = new ChannelManager(this);
+
+        /**
+         * Client's user manager.
+         * @type {UserManager}
+         * @readonly
+         */
         this.users = new UserManager(this);
+
+        /**
+         * Client's emote manager.
+         * @type {EmoteManager}
+         * @readonly
+         */
         this.emotes = new EmoteManager(this);
     }
 
@@ -147,6 +153,14 @@ export default class Client extends EventEmitter {
      * ```
      */
     public async login(oauth: "authorization"): Promise<{ url: string; callback: (code: string) => Promise<void> }>;
+    /**
+     * Logs in the client and retrieves an app access token.
+     *
+     * @example
+     * ```js
+     * const token = await client.login();
+     * ```
+     */
     public async login(
         oauth?: "implicit" | "authorization"
     ): Promise<
@@ -390,6 +404,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Current token being used.
+     * @type {string}
      */
     public get token() {
         return this.accessToken;
@@ -397,6 +412,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Authentication type; either `"app"` or `"user"`.
+     * @type {string}
      */
     public get type() {
         return this.authType;
@@ -404,6 +420,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Sets an interval to be managed by the client.
+     * @private
      */
     public setInterval(...args: Parameters<typeof lt.setInterval>) {
         const interval = lt.setInterval(...args);
@@ -415,6 +432,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Sets a timeout to be managed by the client.
+     * @private
      */
     public setTimeout(...args: Parameters<typeof lt.setTimeout>) {
         const timeout = lt.setTimeout(...args);
@@ -426,6 +444,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Clears an interval managed by the client.
+     * @private
      */
     public clearInterval(...args: Parameters<typeof lt.clearInterval>) {
         lt.clearInterval(...args);
@@ -437,6 +456,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Clears a timeout managed by the client.
+     * @private
      */
     public clearTimeout(...args: Parameters<typeof lt.clearTimeout>) {
         lt.clearTimeout(...args);
@@ -450,8 +470,15 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client.
      * @param event Event to listen to.
      * @param listener Callback for the event.
+     * @returns {this}
      */
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
+    /**
+     * Adds an event listener to the client.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     * @returns {this}
+     */
     public on<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>
@@ -463,8 +490,15 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
      * @param event Event to listen to.
      * @param listener Callback for the event.
+     * @returns {this}
      */
     public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
+    /**
+     * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     * @returns {this}
+     */
     public once<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>
@@ -476,8 +510,15 @@ export default class Client extends EventEmitter {
      * Emits a new event on the client to be captured by its listeners.
      * @param event Event to emit.
      * @param args Data for the event.
+     * @returns {boolean}
      */
     public emit<K extends keyof ClientEvents>(event: K, ...args: ClientEvents[K]): boolean;
+    /**
+     * Emits a new event on the client to be captured by its listeners.
+     * @param event Event to emit.
+     * @param args Data for the event.
+     * @returns {boolean}
+     */
     public emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean {
         return super.emit(event, ...args);
     }
