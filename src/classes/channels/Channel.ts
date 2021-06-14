@@ -1,8 +1,11 @@
 import fetch from "node-fetch";
+import { URLSearchParams } from "url";
+import { isAnyArrayBuffer } from "util/types";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
+import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchAPIError } from "../../shared";
 import type { ChannelData } from "../../types/classes";
+import User from "../users/User";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
 
@@ -82,5 +85,24 @@ export default class Channel extends Base {
         if (!this.client.options.suppressRejections) throw new ExternalError(`unable to update channel`);
 
         return;
+    }
+
+    public async follow(user: User | string): Promise<this> {
+        
+        if (!this.client.token) throw new InternalError(`token is not available`);
+        const id = (user instanceof User ? user.id : user); //?? this.client.id;
+
+        const res = await fetch(`${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ from_id: id, to_id: this.id }))}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+            }, method: 'post'
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (!res.ok) throw new HTTPError(res.statusText);
+
+        return this;
     }
 }
