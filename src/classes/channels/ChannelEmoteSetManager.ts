@@ -1,7 +1,9 @@
 import fetch from "node-fetch";
-import { Channel, ChannelEmoteSet, Client, Manager } from "../..";
+import { Client, Manager } from "../../base/internal";
 import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from "../../shared";
-import { SetEmoteData } from "./ChannelEmoteSet";
+import { Channel } from "../internal";
+import type { SetEmoteData } from "./ChannelEmoteSet";
+import ChannelEmoteSet from "./ChannelEmoteSet";
 
 export default class ChannelEmoteSetManager extends Manager<ChannelEmoteSet> {
     public constructor(public readonly client: Client, public readonly channel: Channel) {

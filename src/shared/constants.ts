@@ -1,5 +1,7 @@
 export const BASE_URL = "https://api.twitch.tv/helix";
 
+export const NONCE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
 export const MILLISECONDS = {
     MILLISECOND: 1,
     SECOND: 1000,

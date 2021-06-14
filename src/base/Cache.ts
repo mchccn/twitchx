@@ -2,14 +2,28 @@ import lt from "long-timeout";
 import { MILLISECONDS } from "../shared";
 import type { Awaited } from "../types";
 
-export default class Cache<V extends { update(): Awaited<void> }> extends Map<string, V> {
+/**
+ * Implements some sort of LFU cache with a few utility methods.
+ * Built specifically for entity managers.
+ * @class
+ * @template Value
+ */
+export default class Cache<Value extends { update(): Awaited<void> }> extends Map<string, Value> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();
     private intervals = new Map<string, { interval: lt.Interval; timestamp: number }>();
 
+    /**
+     * Creates a new cache.
+     * @param options Options to configure the caching behaviour.
+     */
     constructor(public readonly options: { update: number; ttl: number }) {
         super();
     }
 
+    /**
+     * Clears the entire cache.
+     * @returns {void}
+     */
     public clear() {
         super.clear();
 
@@ -20,6 +34,11 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         this.timeouts.clear();
     }
 
+    /**
+     * Retrieves a value from the cache.
+     * @param {string} key Key to retrieve.
+     * @returns {Value | undefined}
+     */
     public get(key: string) {
         const value = super.get(key);
 
@@ -42,7 +61,13 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return undefined;
     }
 
-    public set(key: string, value: V) {
+    /**
+     * Sets or updates a key to a new value.
+     * @param {string} key Key to set or update.
+     * @param {Value} value New value to store.
+     * @returns {this}
+     */
+    public set(key: string, value: Value) {
         super.set(key, value);
 
         this.timeouts.set(key, {
@@ -62,6 +87,11 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return this;
     }
 
+    /**
+     * Deletes a key from the cache.
+     * @param key Key to delete
+     * @returns {Value}
+     */
     public delete(key: string) {
         const value = super.delete(key);
 
@@ -76,11 +106,22 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return value;
     }
 
+    /**
+     * Returns true if the cache holds the key.
+     * @param {string} key Key to check.
+     * @returns {boolean}
+     */
     public has(key: string) {
         return super.has(key);
     }
 
-    public find(predicate: (item: V, index: number, array: V[]) => unknown, thisArg?: any) {
+    /**
+     * Performs a search operation on the cache's values.
+     * @param {Function} predicate Callback function to execute.
+     * @param {any | undefined} thisArg Optional `this` context for the callback.
+     * @returns {Value | undefined}
+     */
+    public find(predicate: (item: Value, index: number, array: Value[]) => unknown, thisArg?: any) {
         return [...this.values()].find(predicate, thisArg);
     }
 

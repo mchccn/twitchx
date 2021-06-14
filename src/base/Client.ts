@@ -14,6 +14,13 @@ import type {
     ValidateResponse,
 } from "../types";
 
+/**
+ * The main client to interact with the Twitch API.
+ * Supports app and user access tokens and is configurable.
+ * Delegates API endpoints to different managers.
+ * @class
+ * @extends EventEmitter
+ */
 export default class Client extends EventEmitter {
     private accessToken?: string;
     private refreshToken?: string;
@@ -24,19 +31,46 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
+    /**
+     * Options given to the client.
+     * @readonly
+     */
     public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
         redirectUri?: string;
         forceVerify?: boolean;
         state?: string;
     };
+
+    /**
+     * Client's token's current scopes.
+     * @readonly
+     */
     public readonly scope: ClientScope[];
 
+    /**
+     * Client's channel manager.
+     * @readonly
+     */
     public readonly channels: ChannelManager;
+
+    /**
+     * Client's user manager.
+     * @readonly
+     */
     public readonly users: UserManager;
+
+    /**
+     * Client's emote manager.
+     * @readonly
+     */
     public readonly emotes: EmoteManager;
 
     private authType?: "app" | "user";
 
+    /**
+     * Creates a new client to interact with the Twitch API.
+     * @param options Options for the client.
+     */
     public constructor(options: ClientOptions) {
         super({
             captureRejections: options.suppressRejections ?? false,
@@ -68,13 +102,55 @@ export default class Client extends EventEmitter {
         this.emotes = new EmoteManager(this);
     }
 
-    public async login(): Promise<void>;
+    /**
+     * Logs in the client and retrieves an app access token.
+     *
+     * @example
+     * ```js
+     * const token = await client.login();
+     * ```
+     */
+    public async login(): Promise<string>;
+    /**
+     * Uses the OAuth implicit credentials flow to generate a URL and callback.
+     * @param oauth Must be `"implicit"` to use the implicit credentials flow.
+     *
+     * @example
+     * ```js
+     * const { url, callback } = await client.login("implicit");
+     *
+     * app.get("/auth/twitch", (req, res) => {
+     *     res.redirect(url);
+     * });
+     *
+     * app.get("/auth/twitch/callback", (req, res) => {
+     *     callback(new URL(req.protocol + '://' + req.get('host') + req.originalUrl).hash.slice("access_token=".length + 1));
+     * });
+     * ```
+     */
     public async login(oauth: "implicit"): Promise<{ url: string; callback: (token: string) => Promise<void> }>;
+    /**
+     * Uses the OAuth authorization credentials flow to generate a URL and callback.
+     * @param oauth Must be `"authorization"` to use the authorization credentials flow.
+     *
+     * @example
+     * ```js
+     * const { url, callback } = await client.login("authorization");
+     *
+     * app.get("/auth/twitch", (req, res) => {
+     *     res.redirect(url);
+     * });
+     *
+     * app.get("/auth/twitch/callback", (req, res) => {
+     *     callback(new URL(req.protocol + '://' + req.get('host') + req.originalUrl).searchParams.get("code"));
+     * });
+     * ```
+     */
     public async login(oauth: "authorization"): Promise<{ url: string; callback: (code: string) => Promise<void> }>;
     public async login(
         oauth?: "implicit" | "authorization"
     ): Promise<
-        | void
+        | string
         | { url: string; callback: (token: string) => Promise<void> }
         | { url: string; callback: (code: string) => Promise<void> }
     > {
@@ -115,7 +191,7 @@ export default class Client extends EventEmitter {
 
             this.authType = "app";
 
-            return;
+            return this.accessToken;
         }
 
         if (oauth === "implicit") {
@@ -200,6 +276,12 @@ export default class Client extends EventEmitter {
 
         throw new Error(`invalid oauth type; valid types are 'implicit' and 'authorization'`);
     }
+
+    /**
+     * Destroys the client and revokes its access token.
+     *
+     * TODO: Add a destroy method on managers as well and call it here.
+     */
     public async destroy() {
         if (this.accessToken)
             await fetch(
@@ -306,10 +388,23 @@ export default class Client extends EventEmitter {
         return true;
     }
 
+    /**
+     * Current token being used.
+     */
     public get token() {
         return this.accessToken;
     }
 
+    /**
+     * Authentication type; either `"app"` or `"user"`.
+     */
+    public get type() {
+        return this.authType;
+    }
+
+    /**
+     * Sets an interval to be managed by the client.
+     */
     public setInterval(...args: Parameters<typeof lt.setInterval>) {
         const interval = lt.setInterval(...args);
 
@@ -318,6 +413,9 @@ export default class Client extends EventEmitter {
         return interval;
     }
 
+    /**
+     * Sets a timeout to be managed by the client.
+     */
     public setTimeout(...args: Parameters<typeof lt.setTimeout>) {
         const timeout = lt.setTimeout(...args);
 
@@ -326,6 +424,9 @@ export default class Client extends EventEmitter {
         return timeout;
     }
 
+    /**
+     * Clears an interval managed by the client.
+     */
     public clearInterval(...args: Parameters<typeof lt.clearInterval>) {
         lt.clearInterval(...args);
 
@@ -334,6 +435,9 @@ export default class Client extends EventEmitter {
         return;
     }
 
+    /**
+     * Clears a timeout managed by the client.
+     */
     public clearTimeout(...args: Parameters<typeof lt.clearTimeout>) {
         lt.clearTimeout(...args);
 
@@ -342,10 +446,11 @@ export default class Client extends EventEmitter {
         return;
     }
 
-    public get type() {
-        return this.authType;
-    }
-
+    /**
+     * Adds an event listener to the client.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     */
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     public on<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
@@ -354,6 +459,11 @@ export default class Client extends EventEmitter {
         return super.on(event, listener);
     }
 
+    /**
+     * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     */
     public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     public once<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
@@ -362,6 +472,11 @@ export default class Client extends EventEmitter {
         return super.once(event, listener);
     }
 
+    /**
+     * Emits a new event on the client to be captured by its listeners.
+     * @param event Event to emit.
+     * @param args Data for the event.
+     */
     public emit<K extends keyof ClientEvents>(event: K, ...args: ClientEvents[K]): boolean;
     public emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean {
         return super.emit(event, ...args);

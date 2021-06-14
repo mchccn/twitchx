@@ -1,0 +1,23 @@
+repo: 
+- ./*
+
+tests:
+- ./tests/*
+
+docs:
+- ./docs/**/*
+
+base:
+- ./src/base/**/*
+
+classes:
+- ./src/classes/**/*
+
+pubsub:
+- ./src/pubsub/**/*
+
+events:
+- ./src/events/**/*
+
+types:
+- ./src/types/**/*

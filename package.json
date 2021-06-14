@@ -7,6 +7,7 @@
         "watch": "tsc -w",
         "dev": "nodemon dist/index.js",
         "test": "env TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch .",
+        "docs": "yarn build && chokidar \"src/**/*.ts\" -c \"ts-docgen --source dist/ --output docs/data.json && prettier --write docs/data.json\"",
         "build": "tsc"
     },
     "repository": {
@@ -28,7 +29,9 @@
         "ws": "^7.4.6"
     },
     "devDependencies": {
+        "@cursorsdottsx/docgen": "^1.0.1",
         "@discordjs/collection": "^0.1.6",
+        "@discordjs/docgen": "^0.10.0",
         "@types/chai": "^4.2.18",
         "@types/long-timeout": "^0.1.0",
         "@types/mocha": "^8.2.2",
@@ -36,8 +39,10 @@
         "@types/node-fetch": "^2.5.10",
         "@types/ws": "^7.4.4",
         "chai": "^4.3.4",
+        "chokidar-cli": "^2.1.0",
         "dotenv": "^10.0.0",
         "mocha": "^9.0.0",
+        "prettier": "^2.3.1",
         "ts-node": "^10.0.0",
         "tslib": "^2.2.0",
         "typescript": "^4.3.2"

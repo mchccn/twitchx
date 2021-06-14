@@ -4,10 +4,12 @@ import type Client from "../../base/Client";
 import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
+import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
 
 export default class Channel extends Base {
-    public emotes = new ChannelEmoteManager(this.client, this);
-    public readonly emoteSets = new ChannelEmoteManager(this.client, this);
+    public readonly emotes = new ChannelEmoteManager(this.client, this);
+
+    public readonly emoteSets = new ChannelEmoteSetManager(this.client, this);
 
     public constructor(public readonly client: Client, private data: ChannelData) {
         super(client);
