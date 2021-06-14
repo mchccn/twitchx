@@ -26,6 +26,18 @@ export type ServerPubSubResponse =
       };
 
 export interface PubSubOptions {
+    /**
+     * Suppresses any rejections coming from the PubSub instance.
+     */
     suppressRejections?: boolean;
+    /**
+     * Options for the websocket.
+     */
     ws?: import("ws").ClientOptions;
 }
+
+/**
+ * @typedef {object} PubSubOptions
+ * @prop {boolean | undefined} suppressRejections Suppresses any rejections coming from the PubSub instance.
+ * @prop {WebSocketClientOptions | undefined} ws  Options for the websocket.
+ */

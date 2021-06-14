@@ -119,3 +119,6 @@ dist
 
 # OS X shit
 .DS_Store
+
+# Ignore or else will destroy the TS percentage.
+docs/data.json

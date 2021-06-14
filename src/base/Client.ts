@@ -15,10 +15,11 @@ import type {
 } from "../types";
 
 /**
- * The main client to interact with thw Twitch API.
+ * The main client to interact with the Twitch API.
  * Supports app and user access tokens and is configurable.
  * Delegates API endpoints to different managers.
  * @class
+ * @extends EventEmitter
  */
 export default class Client extends EventEmitter {
     private accessToken?: string;
@@ -32,6 +33,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Options given to the client.
+     * @readonly
      */
     public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
         redirectUri?: string;
@@ -41,21 +43,25 @@ export default class Client extends EventEmitter {
 
     /**
      * Client's token's current scopes.
+     * @readonly
      */
     public readonly scope: ClientScope[];
 
     /**
      * Client's channel manager.
+     * @readonly
      */
     public readonly channels: ChannelManager;
 
     /**
      * Client's user manager.
+     * @readonly
      */
     public readonly users: UserManager;
 
     /**
      * Client's emote manager.
+     * @readonly
      */
     public readonly emotes: EmoteManager;
 
