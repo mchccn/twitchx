@@ -37,7 +37,7 @@ export default class ChannelManager extends Manager<Channel> {
         try {
             const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${id}`, {
                 headers: {
-                    authorization: `Bearer ${this.client.token}`,
+                    authorization: `Bearer ${this.client.token!}`,
                     "client-id": this.client.options.clientId,
                 },
                 signal: controller.signal,
