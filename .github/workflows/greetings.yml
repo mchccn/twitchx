@@ -3,14 +3,14 @@ name: Greetings
 on: [pull_request, issues]
 
 jobs:
-  greeting:
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-    steps:
-    - uses: actions/first-interaction@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: 'Hi! Make sure to follow the issue template, and help others help you! Thank you for contributing!'
-        pr-message: 'Hi! Make sure to follow the pull request template, and help others help you! Thank you for contributing!'
+    greeting:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+            pull-requests: write
+        steps:
+            - uses: actions/first-interaction@v1
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  issue-message: "Hi! Make sure to follow the issue template, and help others help you! Thank you for contributing!"
+                  pr-message: "Hi! Make sure to follow the pull request template, and help others help you! Thank you for contributing!"

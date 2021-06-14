@@ -152,5 +152,29 @@ export default class User extends Base {
         return false;
     }
 
-    public async fetchBlocks() {}
+    public async fetchBlocks({ first, after }: { first: number, after: string }) {
+
+         const res = await fetch(`${BASE_URL}/users/blocks?${new URLSearchParams(snakeCasify({ broadcaster_id: this.id, after, first }).toString())}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+            }, method: 'delete'
+        }).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (!res.ok) throw new HTTPError(res.statusText);
+
+        const { data }: { data: any[] } = await res.json();
+        
+        let users: User[] = [];
+
+        data.forEach(u => {
+            let usr = new User(this.client, u);
+            users.push(usr)
+            this.client.users.cache.set(usr.id, usr);
+        })
+
+        return users;
+    }
 }
