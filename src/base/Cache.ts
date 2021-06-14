@@ -2,14 +2,26 @@ import lt from "long-timeout";
 import { MILLISECONDS } from "../shared";
 import type { Awaited } from "../types";
 
+/**
+ * Implements some sort of LFU cache with a few utility methods.
+ * Built specifically for entity managers.
+ * @class
+ */
 export default class Cache<V extends { update(): Awaited<void> }> extends Map<string, V> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();
     private intervals = new Map<string, { interval: lt.Interval; timestamp: number }>();
 
+    /**
+     * Creates a new cache.
+     * @param options Options to configure the caching behaviour.
+     */
     constructor(public readonly options: { update: number; ttl: number }) {
         super();
     }
 
+    /**
+     * Clears the entire cache.
+     */
     public clear() {
         super.clear();
 
@@ -20,6 +32,10 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         this.timeouts.clear();
     }
 
+    /**
+     * Retrieves a value from the cache.
+     * @param key Key to retrieve.
+     */
     public get(key: string) {
         const value = super.get(key);
 
@@ -42,6 +58,11 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return undefined;
     }
 
+    /**
+     * Sets or updates a key to a new value.
+     * @param key Key to set or update.
+     * @param value New value to store.
+     */
     public set(key: string, value: V) {
         super.set(key, value);
 
@@ -62,6 +83,10 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return this;
     }
 
+    /**
+     * Deletes a key from the cache.
+     * @param key Key to delete
+     */
     public delete(key: string) {
         const value = super.delete(key);
 
@@ -76,10 +101,19 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
         return value;
     }
 
+    /**
+     * Returns true if the cache holds the key.
+     * @param key Key to check.
+     */
     public has(key: string) {
         return super.has(key);
     }
 
+    /**
+     * Performs a search operation on the cache's values.
+     * @param predicate Callback function to execute.
+     * @param thisArg Optional `this` context for the callback.
+     */
     public find(predicate: (item: V, index: number, array: V[]) => unknown, thisArg?: any) {
         return [...this.values()].find(predicate, thisArg);
     }
