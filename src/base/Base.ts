@@ -8,12 +8,14 @@ import type Client from "./Client";
 export default abstract class Base {
     /**
      * Client that instantiated this entity.
+     * @type {Client}
+     * @readonly
      */
     public readonly client: Client;
 
     /**
      * Constructs a new base prototype.
-     * @param client Client that instantiated this entity.
+     * @param {Client} client Client that instantiated this entity.
      */
     constructor(client: Client) {
         this.client = client;

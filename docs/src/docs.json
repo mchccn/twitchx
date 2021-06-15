@@ -1,0 +1,10 @@
+[
+    {
+        "name": "General",
+        "pages": [
+            { "name": "Welcome", "content": "<h1>Welcome!</h1>\n" },
+            { "name": "Changelog", "content": "<h1>Changelog</h1>\n" },
+            { "name": "FAQ", "content": "<h1>Frequently Asked Questions</h1>\n" }
+        ]
+    }
+]

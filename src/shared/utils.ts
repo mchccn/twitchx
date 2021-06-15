@@ -18,11 +18,15 @@ type KeysToHyphenCase<T> = {
     [K in keyof T as CamelToHyphenCase<string & K>]: T[K];
 };
 
+type StringValues<T> = {
+    [K in keyof T]: string;
+}
+
 /**
  * Amazingly useful to create readable code for parameterizing API requests.
  * @param object Object to snake-casify.
  */
-export function snakeCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToSnakeCase<T> {
+export function snakeCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToSnakeCase<StringValues<T>> {
     return Object.fromEntries(
         Object.entries(object)
             .map(([k, v]) => [
@@ -34,14 +38,14 @@ export function snakeCasify<T extends Partial<Record<string, unknown>>>(object: 
                 v,
             ])
             .filter(([, v]) => typeof v !== "undefined")
-    ) as KeysToSnakeCase<T>;
+    ) as KeysToSnakeCase<StringValues<T>>;
 }
 
 /**
  * Amazingly useful to create readable code for Twitch API events.
  * @param object Object to hyphen-casify.
  */
-export function hyphenCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToHyphenCase<T> {
+export function hyphenCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToHyphenCase<StringValues<T>> {
     return Object.fromEntries(
         Object.entries(object)
             .map(([k, v]) => [
@@ -53,5 +57,5 @@ export function hyphenCasify<T extends Partial<Record<string, unknown>>>(object:
                 v,
             ])
             .filter(([, v]) => typeof v !== "undefined")
-    ) as KeysToHyphenCase<T>;
+    ) as KeysToHyphenCase<StringValues<T>>;
 }

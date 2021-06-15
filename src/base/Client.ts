@@ -15,10 +15,11 @@ import type {
 } from "../types";
 
 /**
- * The main client to interact with thw Twitch API.
+ * The main client to interact with the Twitch API.
  * Supports app and user access tokens and is configurable.
  * Delegates API endpoints to different managers.
  * @class
+ * @extends EventEmitter
  */
 export default class Client extends EventEmitter {
     private accessToken?: string;
@@ -32,6 +33,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Options given to the client.
+     * @readonly
      */
     public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
         redirectUri?: string;
@@ -41,21 +43,25 @@ export default class Client extends EventEmitter {
 
     /**
      * Client's token's current scopes.
+     * @readonly
      */
     public readonly scope: ClientScope[];
 
     /**
      * Client's channel manager.
+     * @readonly
      */
     public readonly channels: ChannelManager;
 
     /**
      * Client's user manager.
+     * @readonly
      */
     public readonly users: UserManager;
 
     /**
      * Client's emote manager.
+     * @readonly
      */
     public readonly emotes: EmoteManager;
 
@@ -141,6 +147,16 @@ export default class Client extends EventEmitter {
      * ```
      */
     public async login(oauth: "authorization"): Promise<{ url: string; callback: (code: string) => Promise<void> }>;
+    /**
+     * Logs in the client and retrieves an app access token.
+     *
+     * @example
+     * ```js
+     * const token = await client.login();
+     * ```
+     *
+     * @returns {Promise<string | object>} The new access token or OAuth details object.
+     */
     public async login(
         oauth?: "implicit" | "authorization"
     ): Promise<
@@ -275,6 +291,7 @@ export default class Client extends EventEmitter {
      * Destroys the client and revokes its access token.
      *
      * TODO: Add a destroy method on managers as well and call it here.
+     * @returns {Promise<void>} Nothing.
      */
     public async destroy() {
         if (this.accessToken)
@@ -384,6 +401,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Current token being used.
+     * @type {string}
+     * @readonly
      */
     public get token() {
         return this.accessToken;
@@ -391,6 +410,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Authentication type; either `"app"` or `"user"`.
+     * @type {string}
+     * @readonly
      */
     public get type() {
         return this.authType;
@@ -444,8 +465,15 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client.
      * @param event Event to listen to.
      * @param listener Callback for the event.
+     * @returns {Client} The client instance.
      */
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
+    /**
+     * Adds an event listener to the client.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     * @returns {Client} The client instance.
+     */
     public on<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>
@@ -457,8 +485,15 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
      * @param event Event to listen to.
      * @param listener Callback for the event.
+     * @returns {Client} The client instance.
      */
     public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
+    /**
+     * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
+     * @param event Event to listen to.
+     * @param listener Callback for the event.
+     * @returns {Client} The client instance.
+     */
     public once<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
         listener: (...args: any[]) => Awaited<void>

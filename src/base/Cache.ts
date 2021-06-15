@@ -6,8 +6,9 @@ import type { Awaited } from "../types";
  * Implements some sort of LFU cache with a few utility methods.
  * Built specifically for entity managers.
  * @class
+ * @template Value
  */
-export default class Cache<V extends { update(): Awaited<void> }> extends Map<string, V> {
+export default class Cache<Value extends { update(): Awaited<void> }> extends Map<string, Value> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();
     private intervals = new Map<string, { interval: lt.Interval; timestamp: number }>();
 
@@ -21,6 +22,7 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
 
     /**
      * Clears the entire cache.
+     * @returns {void}
      */
     public clear() {
         super.clear();
@@ -34,7 +36,8 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
 
     /**
      * Retrieves a value from the cache.
-     * @param key Key to retrieve.
+     * @param {string} key Key to retrieve.
+     * @returns {Value | undefined}
      */
     public get(key: string) {
         const value = super.get(key);
@@ -60,10 +63,11 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
 
     /**
      * Sets or updates a key to a new value.
-     * @param key Key to set or update.
-     * @param value New value to store.
+     * @param {string} key Key to set or update.
+     * @param {Value} value New value to store.
+     * @returns {this}
      */
-    public set(key: string, value: V) {
+    public set(key: string, value: Value) {
         super.set(key, value);
 
         this.timeouts.set(key, {
@@ -86,6 +90,7 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
     /**
      * Deletes a key from the cache.
      * @param key Key to delete
+     * @returns {Value}
      */
     public delete(key: string) {
         const value = super.delete(key);
@@ -103,7 +108,8 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
 
     /**
      * Returns true if the cache holds the key.
-     * @param key Key to check.
+     * @param {string} key Key to check.
+     * @returns {boolean}
      */
     public has(key: string) {
         return super.has(key);
@@ -111,10 +117,11 @@ export default class Cache<V extends { update(): Awaited<void> }> extends Map<st
 
     /**
      * Performs a search operation on the cache's values.
-     * @param predicate Callback function to execute.
-     * @param thisArg Optional `this` context for the callback.
+     * @param {Function} predicate Callback function to execute.
+     * @param {any | undefined} thisArg Optional `this` context for the callback.
+     * @returns {Value | undefined}
      */
-    public find(predicate: (item: V, index: number, array: V[]) => unknown, thisArg?: any) {
+    public find(predicate: (item: Value, index: number, array: Value[]) => unknown, thisArg?: any) {
         return [...this.values()].find(predicate, thisArg);
     }
 

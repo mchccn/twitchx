@@ -7,7 +7,16 @@ import { BASE_URL, MILLISECONDS } from "../../shared";
 import type { SinglePartial, UserData } from "../../types";
 import User from "./User";
 
+/**
+ * Manages the client's users.
+ * @extends Manager<User>
+ */
 export default class UserManager extends Manager<User> {
+    /**
+     * Constructs a UserManager with the given client.
+     * @param client The client that this UserManager belongs to
+     * @constructor
+     */
     constructor(public readonly client: Client) {
         super(client, {
             update:
@@ -25,6 +34,12 @@ export default class UserManager extends Manager<User> {
         });
     }
 
+    /**
+     * Fetch for users from the API, you can fetch by ID or login
+     * @param query query for users from Twitch
+     * @param options options for the request
+     * @returns {Promise<User|undefined>|Promise<Collection<string, user>>} the results from the query
+     */
     public async fetch(
         query: SinglePartial<{
             ids: string[];

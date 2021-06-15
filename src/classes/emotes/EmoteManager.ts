@@ -5,7 +5,16 @@ import { Manager } from "../../base/internal";
 import { BASE_URL, HTTPError, InternalError, MILLISECONDS, TwitchAPIError } from "../../shared/";
 import Emote from "./Emote";
 
+/**
+ * Manages global emotes.
+ * @class
+ * @extends {Manager<Emote>}
+ */
 export default class EmoteManager extends Manager<Emote> {
+    /**
+     * Constructs an EmoteManager for the client.
+     * @param {Client} client The client that this manager belongs to
+     */
     public constructor(public readonly client: Client) {
         super(client, {
             update:
@@ -23,10 +32,20 @@ export default class EmoteManager extends Manager<Emote> {
         });
     }
 
-    public get(id: string) {
+    /**
+     * Returns the emote with the given ID in cache or undefined.
+     * @param id the ID of the emote to get
+     * @returns {Emote|undefined} the emote with the given ID
+     */
+    public get(id: string): Emote | undefined {
         return this.cache.get(id);
     }
 
+    /**
+     * Fetches (a) global emote(s) from Twitch.
+     * @param {string|undefined} id if provided, the ID of the emote to fetch
+     * @returns {Promise<Emote>|Promise<Collection<string, Emote>>} the emote(s) fetched
+     */
     public async fetch(): Promise<Collection<string, Emote>>;
     public async fetch(id: string): Promise<Emote>;
     public async fetch(id?: string) {
