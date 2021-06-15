@@ -1,59 +1,120 @@
 import fetch from "node-fetch";
-import { URLSearchParams } from "url";
-import { isAnyArrayBuffer } from "util/types";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchAPIError } from "../../shared";
+import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
 import type { ChannelData } from "../../types/classes";
-import User from "../users/User";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
 
+/**
+ * Twitch API's channel entity represented in a class.
+ * @class
+ * @extends {Base}
+ */
 export default class Channel extends Base {
-    public readonly emotes = new ChannelEmoteManager(this.client, this);
+    public readonly client;
 
-    public readonly emoteSets = new ChannelEmoteSetManager(this.client, this);
+    public readonly emotes;
 
-    public constructor(public readonly client: Client, private data: ChannelData) {
+    public readonly emoteSets;
+
+    /**
+     * Creates a new channel.
+     * @param client Client that instantiated this channel.
+     * @param data Channel data.
+     * @constructor
+     */
+    public constructor(client: Client, private data: ChannelData) {
         super(client);
+
+        /**
+         * Client that instantiated this channel.
+         */
+        this.client = client;
+
+        /**
+         * Manages this channel's emotes.
+         * @type {ChannelEmoteManager}
+         * @readonly
+         */
+        this.emotes = new ChannelEmoteManager(this.client, this);
+
+        /**
+         * Manages this channel's emote sets.
+         * @type {ChannelEmoteSetManager}
+         * @readonly
+         */
+        this.emoteSets = new ChannelEmoteSetManager(this.client, this);
 
         this.client.emit("channelCreate", this);
     }
 
+    /**
+     * Broadcaster ID of the channel.
+     * @type {string}
+     */
     public get id() {
         return this.data.broadcaster_id;
     }
 
+    /**
+     * Main language of the channel.
+     * @type {string}
+     */
     public get language() {
         return this.data.broadcaster_language;
     }
 
+    /**
+     * Name of the channel.
+     * @type {string}
+     */
     public get name() {
         return this.data.broadcaster_name;
     }
 
+    /**
+     * Current game name.
+     * @type {string}
+     */
     public get gameName() {
         return this.data.game_name;
     }
 
+    /**
+     * Current game ID.
+     * @type {string}
+     */
     public get gameId() {
         return this.data.game_id;
     }
 
+    /**
+     * Title of the channel.
+     * @type {string}
+     */
     public get title() {
         return this.data.title;
     }
 
+    /**
+     * Delay of the channel.
+     * @type {number}
+     */
     public get delay() {
         return this.data.delay;
     }
 
+    /**
+     * Updates this instance with newly fetched data.
+     * @returns {Promise<boolean>} True if the update was successful.
+     */
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.suppressRejections)
                 throw new ExternalError(`updating channels was disabled but was still attempted`);
 
-            return;
+            return false;
         }
 
         if (!this.client.token) throw new InternalError(`token is not available`);
@@ -74,35 +135,16 @@ export default class Channel extends Base {
                 if (!this.client.options.suppressRejections)
                     throw new TwitchAPIError(`channel was fetched but no data was returned`);
 
-                return;
+                return false;
             }
 
             this.data = data;
 
-            return;
+            return true;
         }
 
         if (!this.client.options.suppressRejections) throw new ExternalError(`unable to update channel`);
 
-        return;
-    }
-
-    public async follow(user: User | string): Promise<this> {
-        
-        if (!this.client.token) throw new InternalError(`token is not available`);
-        const id = (user instanceof User ? user.id : user); //?? this.client.id;
-
-        const res = await fetch(`${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ from_id: id, to_id: this.id }))}`, {
-            headers: {
-                authorization: `Bearer ${this.client.token}`,
-                "client-id": this.client.options.clientId,
-            }, method: 'post'
-        }).catch((e) => {
-            throw new HTTPError(e);
-        });
-
-        if (!res.ok) throw new HTTPError(res.statusText);
-
-        return this;
+        return false;
     }
 }

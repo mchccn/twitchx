@@ -47,9 +47,7 @@ export default class Emote extends Base {
 
     /**
      * Updates this emote's data.
-     * Should not be called because emotes don't update often.
-     * Only here to satify EmoteManager.
-     * @returns A promise that resolves to undefined on success
+     * @returns {Promise<boolean>} True if the update was succesful.
      */
     public async update() {
         if (!this.client.token) throw new InternalError("Token not available");
@@ -68,9 +66,11 @@ export default class Emote extends Base {
 
             this.data = data;
 
-            return;
+            return true;
         }
 
         if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to update emote");
+
+        return false;
     }
 }
