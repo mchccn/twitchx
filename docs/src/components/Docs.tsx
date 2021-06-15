@@ -26,7 +26,10 @@ export default function Docs() {
     return (
         <div className="flex flex-1">
             <Sidebar active={route} />
-            <main className="docs flex-1 px-4 lg:pr-0 py-3 dark:text-white">
+            <main
+                className="docs flex-1 px-4 lg:pr-0 py-3 dark:text-white overflow-y-scroll"
+                style={{ maxHeight: "calc(100vh - 3rem)" }}
+            >
                 {docs.categories.some(({ name }) => route.startsWith(name.toLowerCase())) &&
                 pages
                     .map(({ category, slug }) => ({ category, slug }))

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useWindowWidth from "../lib/useWindowWidth";
 
 export default function Header() {
-    const width = useWindowWidth(50);
+    const width = useWindowWidth(25);
 
     const [dark, setDark] = useState(localStorage.getItem("twitchx-theme") === "dark");
 

@@ -13,6 +13,15 @@ html {
     scroll-behavior: smooth;
 }
 
+.docs::-webkit-scrollbar {
+    display: none;
+}
+
+.docs {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .markdown h1 {
     @apply font-light text-3xl py-2 border-b border-gray-300 dark:border-gray-400;
 }
