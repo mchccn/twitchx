@@ -7,8 +7,7 @@
         "watch": "tsc -w",
         "dev": "nodemon dist/index.js",
         "test": "env TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch .",
-        "docs:watch": "chokidar \"src/**/*.ts\" -c \"ts-docgen --source dist/ --output docs/public/data.json && prettier --write docs/public/data.json\"",
-        "docs": "ts-docgen --source dist/ --output docs/public/data.json && prettier --write docs/public/data.json",
+        "docs": "yarn build && chokidar \"src/**/*.ts\" -c \"ts-docgen --source dist/ --output docs/data.json && prettier --write docs/data.json\"",
         "build": "tsc"
     },
     "repository": {
