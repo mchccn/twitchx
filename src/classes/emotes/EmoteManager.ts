@@ -42,21 +42,12 @@ export default class EmoteManager extends Manager<Emote> {
     }
 
     /**
-     * Fetches global emotes from Twitch.
-     * @returns {Promise<Collection<string, Emote>>} The fetched emotes.
+     * Fetches (a) global emote(s) from Twitch.
+     * @param {string|undefined} id if provided, the ID of the emote to fetch
+     * @returns {Promise<Emote>|Promise<Collection<string, Emote>>} the emote(s) fetched
      */
     public async fetch(): Promise<Collection<string, Emote>>;
-    /**
-     * Fetches a global emote from Twitch.
-     * @param {string} id Fetches the emote with this ID.
-     * @returns {Promise<Emote>} The fetched emote.
-     */
     public async fetch(id: string): Promise<Emote>;
-    /**
-     * Fetches global emotes from Twitch.
-     * @param {string | undefined} id Fetches the emote with this ID.
-     * @returns {Promise<Emote> | Promise<Collection<string, Emote>>} The fetched emotes.
-     */
     public async fetch(id?: string) {
         if (!this.client.token) throw new InternalError("token not available");
 

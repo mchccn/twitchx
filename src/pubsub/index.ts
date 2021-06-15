@@ -3,10 +3,6 @@ import type { Client } from "../base/internal";
 import { ExternalError, InternalError, NONCE_CHARACTERS, TwitchAPIError, WebSocketError } from "../shared";
 import { Awaited, ClientPubSubEvent, PubSubOptions, ServerPubSubResponse } from "../types";
 
-/**
- * Creates a PubSub client with websockets.
- * @class
- */
 export default class PubSub {
     private readonly ws: ws;
     private pingInterval?: NodeJS.Timer;
@@ -19,29 +15,9 @@ export default class PubSub {
         callback: (data: any) => Awaited<void>;
     }[];
 
-    public readonly client;
-
     public readonly options: PubSubOptions;
 
-    /**
-     * Creates a new PubSub client.
-     * @param {Client} client Client that manages this PubSub client.
-     * @param {PubSubOptions} options Options for the client.
-     * @constructor
-     */
-    constructor(client: Client, options?: PubSubOptions) {
-        /**
-         * Client that manages this PubSub client.
-         * @type {Client}
-         * @readonly
-         */
-        this.client = client;
-
-        /**
-         * Options given to the client.
-         * @type {PubSubOptions}
-         * @readonly
-         */
+    constructor(public readonly client: Client, options?: PubSubOptions) {
         this.options = {
             suppressRejections: false,
             ws: {},
@@ -140,44 +116,23 @@ export default class PubSub {
             });
     }
 
-    /**
-     * Pings the websocket server.
-     * @returns {Promise<boolean>} True if the ping was successful.
-     */
     public async ping() {
-        try {
-            await new Promise((resolve, reject) =>
-                this.ws.send(
-                    JSON.stringify({
-                        type: "PING",
-                    }),
-                    (err) => {
-                        if (err) return reject(`unable to send message`);
+        this.ws.send(
+            JSON.stringify({
+                type: "PING",
+            }),
+            (err) => {
+                if (err && !this.options.suppressRejections && !this.client.options.suppressRejections)
+                    throw new WebSocketError(`unable to send message`);
+            }
+        );
 
-                        return resolve(0);
-                    }
-                )
-            );
-
-            this.queue.push({
-                event: "PING",
-                callback() {},
-            });
-
-            return true;
-        } catch (error) {
-            if (!this.options.suppressRejections && !this.client.options.suppressRejections)
-                throw new WebSocketError(error.message);
-
-            return false;
-        }
+        this.queue.push({
+            event: "PING",
+            callback() {},
+        });
     }
 
-    /**
-     * Listens (or stop listening) to the provided topics.
-     * @param topics Topics to listen to.
-     * @param unlisten Stop listening to provided topics.
-     */
     public async listen(topics: string | string[], unlisten?: boolean) {
         if (this.client.type !== "user") throw new ExternalError(`client must have an oauth token to use PubSub`);
 

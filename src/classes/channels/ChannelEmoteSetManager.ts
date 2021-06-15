@@ -5,21 +5,8 @@ import { Channel } from "../internal";
 import type { SetEmoteData } from "./ChannelEmoteSet";
 import ChannelEmoteSet from "./ChannelEmoteSet";
 
-/**
- * Manages emote sets in a channel.
- * @class
- * @extends {Manager<ChannelEmoteSet>}
- */
 export default class ChannelEmoteSetManager extends Manager<ChannelEmoteSet> {
-    public readonly client;
-    public readonly channel;
-
-    /**
-     * Creates a new channel emote set manager.
-     * @param {Client} client Client that instantiated this manager.
-     * @param {Channel} channel Channel this manager belongs to.
-     */
-    public constructor(client: Client, channel: Channel) {
+    public constructor(public readonly client: Client, public readonly channel: Channel) {
         super(client, {
             update:
                 typeof client.options.update.channelEmotes === "boolean"
@@ -34,27 +21,8 @@ export default class ChannelEmoteSetManager extends Manager<ChannelEmoteSet> {
                         : MILLISECONDS.NEVER
                     : client.options.ttl.channelEmotes ?? client.emotes.options.ttl,
         });
-
-        /**
-         * Channel this manager belongs to.
-         * @type {Channel}
-         * @readonly
-         */
-        this.channel = channel;
-
-        /**
-         * Client that instantiated this manager.
-         * @type {Client}
-         * @readonly
-         */
-        this.client = client;
     }
 
-    /**
-     * Fetches an emote set from the API.
-     * @param {string} id ID of the emote set to fetch.
-     * @returns {Promise<ChannelEmoteSet>} The fetched emote set.
-     */
     public async fetch(id: string) {
         if (!this.client.token) throw new InternalError("Token not available");
 

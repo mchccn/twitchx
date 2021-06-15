@@ -12,9 +12,9 @@ import type { EmoteData } from "../../types";
  */
 export default class Emote extends Base {
     /**
-     * Constructs a new global emote.
-     * @param {Client} client The client that instantiated this emote.
-     * @param {EmoteData} data The raw data provided by the Twitch API.
+     * Constructs an Emote from the client and raw data.
+     * @param {Client} client The client this emote belongs to
+     * @param {EmoteData} data The raw data provided by the api
      * @constructor
      */
     constructor(public readonly client: Client, protected data: EmoteData) {
@@ -22,7 +22,7 @@ export default class Emote extends Base {
     }
 
     /**
-     * The emote's ID.
+     * The emote's ID
      * @type {string}
      */
     public get id() {
@@ -30,7 +30,7 @@ export default class Emote extends Base {
     }
 
     /**
-     * The emote's name.
+     * The emote's name
      * @type {string}
      */
     public get name() {
@@ -38,16 +38,18 @@ export default class Emote extends Base {
     }
 
     /**
-     * The emote's image urls.
-     * @type {string[]}
+     * The emote's images
+     * @type {string[]} [1x, 2x, 4x]
      */
     public get images(): [string, string, string] {
         return [...(Object.values(this.data.images) as [string, string, string])];
     }
 
     /**
-     * Updates this emote's data with newly fetched data from the API.
-     * @returns {Promise<boolean>} True if the update was successful.
+     * Updates this emote's data.
+     * Should not be called because emotes don't update often.
+     * Only here to satify EmoteManager.
+     * @returns A promise that resolves to undefined on success
      */
     public async update() {
         if (!this.client.token) throw new InternalError("Token not available");
@@ -66,11 +68,9 @@ export default class Emote extends Base {
 
             this.data = data;
 
-            return true;
+            return;
         }
 
         if (!this.client.options.suppressRejections) throw new TwitchAPIError("unable to update emote");
-
-        return false;
     }
 }

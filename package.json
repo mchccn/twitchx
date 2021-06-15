@@ -32,6 +32,7 @@
     "devDependencies": {
         "@cursorsdottsx/docgen": "^1.0.1",
         "@discordjs/collection": "^0.1.6",
+        "@discordjs/docgen": "^0.10.0",
         "@types/chai": "^4.2.18",
         "@types/long-timeout": "^0.1.0",
         "@types/mocha": "^8.2.2",

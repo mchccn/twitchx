@@ -1,4 +1,4 @@
-import type { ChannelEmote, ChannelEmoteSet, User } from "../../classes";
+import type { ChannelEmote, User } from "../../classes";
 import type Channel from "../../classes/channels/Channel";
 
 export type ClientScope =
@@ -67,7 +67,6 @@ export interface ClientEvents {
     channelCreate: [Channel];
     userCreate: [User];
     channelEmoteCreate: [ChannelEmote];
-    channelEmoteSetCreate: [ChannelEmoteSet];
 }
 
 /**
@@ -98,44 +97,4 @@ export interface ClientEvents {
  * @prop {ClientTTLOptions} ttl
  * @prop {boolean | undefined} debug
  * @prop {boolean | undefined} suppressRejections
- */
-
-/**
- * Emitted when the client has been set up.
- * @event Client#ready
- */
-
-/**
- * Emits general debugging info.
- * @event Client#debug
- * @param {string} info Debugging information emitted.
- */
-
-/**
- * Emitted when the client has been destroyed.
- * @event Client#destroy
- */
-
-/**
- * Emitted when a new Channel instance has been created.
- * @event Client#channelCreate
- * @param {Channel} channel The new channel.
- */
-
-/**
- * Emitted when a new User instance has been created.
- * @event Client#userCreate
- * @param {User} user The new user.
- */
-
-/**
- * Emitted when a new ChannelEmote instance has been created.
- * @event Client#channelEmoteCreate
- * @param {ChannelEmote} emote The new channel emote.
- */
-
-/**
- * Emitted when a new ChannelEmoteSet instance has been created.
- * @event Client#channelEmoteSetCreate
- * @param {ChannelEmoteSet} set The new channel emote set.
  */
