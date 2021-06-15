@@ -78,7 +78,9 @@ export default function App() {
 
     useEffect(() => {
         (async () => {
-            const json = await (await fetch("/data.json")).json();
+            const json = await (
+                await fetch(window.location.host === "cursorsdottsx.github.io" ? `/twitch/data.json` : `/data.json`)
+            ).json();
 
             setData(json);
         })();

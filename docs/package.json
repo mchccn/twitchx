@@ -1,5 +1,5 @@
 {
-    "homepage": "https://twitchxjs.github.io",
+    "homepage": "https://cursorsdottsx.github.io/twitch",
     "name": "docs",
     "version": "1.0.0",
     "private": true,
@@ -14,12 +14,11 @@
     },
     "scripts": {
         "predeploy": "yarn build",
-        "deploy": "gh-pages -b main -d build",
+        "deploy": "gh-pages -d build",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "fuck": "bash a-generic-bash-script.sh"
+        "eject": "react-scripts eject"
     },
     "browserslist": {
         "production": [
