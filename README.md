@@ -1,4 +1,4 @@
-![Banner](twitchx.png)
+![Banner](assets/twitchx.png)
 
 <div align="center">
     <h2>twitchx</h2>
