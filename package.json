@@ -1,7 +1,7 @@
 {
     "name": "twitchx",
     "version": "1.0.0",
-    "description": "TypeScript Twitch REST API wrapper, typed firmly as hell.",
+    "description": "Super-powered TypeScript Twitch REST API wrapper.",
     "main": "dist/index.js",
     "scripts": {
         "watch": "tsc -w",
@@ -25,7 +25,6 @@
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
     "dependencies": {
         "abort-controller": "^3.0.0",
-        "chalk": "^4.1.1",
         "highlight.js": "^11.0.1",
         "long-timeout": "^0.1.1",
         "node-fetch": "^2.6.1",
@@ -43,6 +42,7 @@
         "@types/node-fetch": "^2.5.10",
         "@types/ws": "^7.4.4",
         "chai": "^4.3.4",
+        "chalk": "^4.1.1",
         "chokidar-cli": "^2.1.0",
         "dotenv": "^10.0.0",
         "js-yaml": "^4.1.0",
