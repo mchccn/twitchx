@@ -160,6 +160,8 @@ export default class Client extends EventEmitter {
      * ```js
      * const token = await client.login();
      * ```
+     *
+     * @returns {Promise<string | object>} The new access token or OAuth details object.
      */
     public async login(
         oauth?: "implicit" | "authorization"
@@ -295,6 +297,7 @@ export default class Client extends EventEmitter {
      * Destroys the client and revokes its access token.
      *
      * TODO: Add a destroy method on managers as well and call it here.
+     * @returns {Promise<void>} Nothing.
      */
     public async destroy() {
         if (this.accessToken)
@@ -405,6 +408,7 @@ export default class Client extends EventEmitter {
     /**
      * Current token being used.
      * @type {string}
+     * @readonly
      */
     public get token() {
         return this.accessToken;
@@ -413,6 +417,7 @@ export default class Client extends EventEmitter {
     /**
      * Authentication type; either `"app"` or `"user"`.
      * @type {string}
+     * @readonly
      */
     public get type() {
         return this.authType;
@@ -470,14 +475,14 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client.
      * @param event Event to listen to.
      * @param listener Callback for the event.
-     * @returns {this}
+     * @returns {Client} The client instance.
      */
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     /**
      * Adds an event listener to the client.
      * @param event Event to listen to.
      * @param listener Callback for the event.
-     * @returns {this}
+     * @returns {Client} The client instance.
      */
     public on<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,
@@ -490,14 +495,14 @@ export default class Client extends EventEmitter {
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
      * @param event Event to listen to.
      * @param listener Callback for the event.
-     * @returns {this}
+     * @returns {Client} The client instance.
      */
     public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     /**
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
      * @param event Event to listen to.
      * @param listener Callback for the event.
-     * @returns {this}
+     * @returns {Client} The client instance.
      */
     public once<S extends string | symbol>(
         event: Exclude<S, keyof ClientEvents>,

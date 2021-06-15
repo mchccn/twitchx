@@ -41,3 +41,9 @@ export interface PubSubOptions {
  * @prop {boolean | undefined} suppressRejections Suppresses any rejections coming from the PubSub instance.
  * @prop {WebSocketClientOptions | undefined} ws  Options for the websocket.
  */
+
+/**
+ * Options for the websocket.
+ * @external WebSocketClientOptions
+ * @see https://github.com/DefinitelyTyped/DefinitelyTyped/blob/69e29e847155bd4d845497319116281cb5a384a3/types/ws/index.d.ts#L171-L187
+ */
