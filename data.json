@@ -1,0 +1,1388 @@
+{
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623713301438 },
+    "classes": [
+        {
+            "name": "Base",
+            "description": "Base class for any entity returned by the Twitch API.",
+            "abstract": true,
+            "construct": {
+                "name": "Base",
+                "description": "Constructs a new base prototype.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this entity.", "type": [[["Client"]]] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this entity.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 20, "file": "Base.js", "path": "dist/base" }
+                }
+            ],
+            "meta": { "line": 8, "file": "Base.js", "path": "dist/base" }
+        },
+        {
+            "name": "Cache",
+            "description": "Implements some sort of LFU cache with a few utility methods.\nBuilt specifically for entity managers.",
+            "construct": {
+                "name": "Cache",
+                "description": "Creates a new cache.",
+                "params": [
+                    { "name": "options", "description": "Options to configure the caching behaviour.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "options",
+                    "description": "Options the cache was given.",
+                    "type": [[["CacheOptions"]]],
+                    "meta": { "line": 26, "file": "Cache.js", "path": "dist/base" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "clear",
+                    "description": "Clears the entire cache.",
+                    "returns": [[["void"]]],
+                    "meta": { "line": 32, "file": "Cache.js", "path": "dist/base" }
+                },
+                {
+                    "name": "get",
+                    "description": "Retrieves a value from the cache.",
+                    "params": [{ "name": "key", "description": "Key to retrieve.", "type": [[["string"]]] }],
+                    "returns": [[["Value"]], [["undefined"]]],
+                    "meta": { "line": 46, "file": "Cache.js", "path": "dist/base" }
+                },
+                {
+                    "name": "set",
+                    "description": "Sets or updates a key to a new value.",
+                    "params": [
+                        { "name": "key", "description": "Key to set or update.", "type": [[["string"]]] },
+                        { "name": "value", "description": "New value to store.", "type": [[["Value"]]] }
+                    ],
+                    "returns": [[["this"]]],
+                    "meta": { "line": 68, "file": "Cache.js", "path": "dist/base" }
+                },
+                {
+                    "name": "delete",
+                    "description": "Deletes a key from the cache.",
+                    "params": [{ "name": "key", "description": "Key to delete", "type": [] }],
+                    "returns": [[["Value"]]],
+                    "meta": { "line": 90, "file": "Cache.js", "path": "dist/base" }
+                },
+                {
+                    "name": "has",
+                    "description": "Returns true if the cache holds the key.",
+                    "params": [{ "name": "key", "description": "Key to check.", "type": [[["string"]]] }],
+                    "returns": [[["boolean"]]],
+                    "meta": { "line": 105, "file": "Cache.js", "path": "dist/base" }
+                },
+                {
+                    "name": "find",
+                    "description": "Performs a search operation on the cache's values.",
+                    "params": [
+                        {
+                            "name": "predicate",
+                            "description": "Callback function to execute.",
+                            "type": [[["function"]]]
+                        },
+                        {
+                            "name": "thisArg",
+                            "description": "Optional `this` context for the callback.",
+                            "type": [[["any"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": [[["Value"]], [["undefined"]]],
+                    "meta": { "line": 114, "file": "Cache.js", "path": "dist/base" }
+                }
+            ],
+            "meta": { "line": 12, "file": "Cache.js", "path": "dist/base" }
+        },
+        {
+            "name": "Client",
+            "description": "The main client to interact with the Twitch API.\nSupports app and user access tokens and is configurable.\nDelegates API endpoints to different managers.",
+            "extends": [[["EventEmitter"]]],
+            "construct": {
+                "name": "Client",
+                "description": "Creates a new client to interact with the Twitch API.",
+                "params": [{ "name": "options", "description": "Options for the client.", "type": [] }]
+            },
+            "props": [
+                {
+                    "name": "options",
+                    "description": "Options given to the client.",
+                    "readonly": true,
+                    "type": [[["ClientOptions"]]],
+                    "meta": { "line": 35, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "scope",
+                    "description": "Client's token's current scopes.",
+                    "readonly": true,
+                    "type": [
+                        [
+                            ["Array", "<"],
+                            ["string", ">"]
+                        ]
+                    ],
+                    "meta": { "line": 51, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "channels",
+                    "description": "Client's channel manager.",
+                    "readonly": true,
+                    "type": [[["ChannelManager"]]],
+                    "meta": { "line": 57, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "users",
+                    "description": "Client's user manager.",
+                    "readonly": true,
+                    "type": [[["UserManager"]]],
+                    "meta": { "line": 63, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "emotes",
+                    "description": "Client's emote manager.",
+                    "readonly": true,
+                    "type": [[["EmoteManager"]]],
+                    "meta": { "line": 69, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "token",
+                    "description": "Current token being used.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 266, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "type",
+                    "description": "Authentication type; either `\"app\"` or `\"user\"`.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 274, "file": "Client.js", "path": "dist/base" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "login",
+                    "description": "Logs in the client and retrieves an app access token.",
+                    "examples": ["```js\nconst token = await client.login();\n```"],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<("],
+                                ["string", "|"],
+                                ["object", ")>"]
+                            ]
+                        ],
+                        "description": "The new access token or OAuth details object."
+                    },
+                    "meta": { "line": 81, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "destroy",
+                    "description": "Destroys the client and revokes its access token.\n\nTODO: Add a destroy method on managers as well and call it here.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["void", ">"]
+                            ]
+                        ],
+                        "description": "Nothing."
+                    },
+                    "meta": { "line": 177, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "setInterval",
+                    "description": "Sets an interval to be managed by the client.",
+                    "access": "private",
+                    "meta": { "line": 281, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "setTimeout",
+                    "description": "Sets a timeout to be managed by the client.",
+                    "access": "private",
+                    "meta": { "line": 290, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "clearInterval",
+                    "description": "Clears an interval managed by the client.",
+                    "access": "private",
+                    "meta": { "line": 299, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "clearTimeout",
+                    "description": "Clears a timeout managed by the client.",
+                    "access": "private",
+                    "meta": { "line": 308, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "on",
+                    "description": "Adds an event listener to the client.",
+                    "params": [
+                        { "name": "event", "description": "Event to listen to.", "type": [] },
+                        { "name": "listener", "description": "Callback for the event.", "type": [] }
+                    ],
+                    "returns": { "types": [[["Client"]]], "description": "The client instance." },
+                    "meta": { "line": 319, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "once",
+                    "description": "Adds an event listener to the client, but the listener gets removed as soon as an event is received.",
+                    "params": [
+                        { "name": "event", "description": "Event to listen to.", "type": [] },
+                        { "name": "listener", "description": "Callback for the event.", "type": [] }
+                    ],
+                    "returns": { "types": [[["Client"]]], "description": "The client instance." },
+                    "meta": { "line": 328, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "emit",
+                    "description": "Emits a new event on the client to be captured by its listeners.",
+                    "params": [
+                        { "name": "event", "description": "Event to emit.", "type": [] },
+                        { "name": "args", "description": "Data for the event.", "variable": true, "type": [] }
+                    ],
+                    "returns": [[["boolean"]]],
+                    "meta": { "line": 337, "file": "Client.js", "path": "dist/base" }
+                }
+            ],
+            "events": [
+                {
+                    "name": "ready",
+                    "description": "Emitted when the client has been set up.",
+                    "meta": { "line": 31, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "debug",
+                    "description": "Emits general debugging info.",
+                    "params": [
+                        { "name": "info", "description": "Debugging information emitted.", "type": [[["string"]]] }
+                    ],
+                    "meta": { "line": 35, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "destroy",
+                    "description": "Emitted when the client has been destroyed.",
+                    "meta": { "line": 40, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "channelCreate",
+                    "description": "Emitted when a new Channel instance has been created.",
+                    "params": [{ "name": "channel", "description": "The new channel.", "type": [[["Channel"]]] }],
+                    "meta": { "line": 44, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "userCreate",
+                    "description": "Emitted when a new User instance has been created.",
+                    "params": [{ "name": "user", "description": "The new user.", "type": [[["User"]]] }],
+                    "meta": { "line": 49, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "channelEmoteCreate",
+                    "description": "Emitted when a new ChannelEmote instance has been created.",
+                    "params": [
+                        { "name": "emote", "description": "The new channel emote.", "type": [[["ChannelEmote"]]] }
+                    ],
+                    "meta": { "line": 54, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "channelEmoteSetCreate",
+                    "description": "Emitted when a new ChannelEmoteSet instance has been created.",
+                    "params": [
+                        { "name": "set", "description": "The new channel emote set.", "type": [[["ChannelEmoteSet"]]] }
+                    ],
+                    "meta": { "line": 59, "file": "client.js", "path": "dist/types/base" }
+                }
+            ],
+            "meta": { "line": 17, "file": "Client.js", "path": "dist/base" }
+        },
+        {
+            "name": "Manager",
+            "description": "Manager superclass with a cache and method to fetch entities.",
+            "extends": [[["Base"]]],
+            "abstract": true,
+            "construct": {
+                "name": "Manager",
+                "description": "Creates a new manager.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this manager.", "type": [] },
+                    { "name": "options", "description": "Options for the cache.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this manager.",
+                    "type": [[["Client"]]],
+                    "meta": { "line": 25, "file": "Manager.js", "path": "dist/base" }
+                },
+                {
+                    "name": "options",
+                    "description": "Options given for the cache.",
+                    "type": [[["CacheOptions"]]],
+                    "meta": { "line": 30, "file": "Manager.js", "path": "dist/base" }
+                },
+                {
+                    "name": "cache",
+                    "description": "Data cached by the manager.",
+                    "type": [[["Cache"]]],
+                    "meta": { "line": 35, "file": "Manager.js", "path": "dist/base" }
+                }
+            ],
+            "meta": { "line": 12, "file": "Manager.js", "path": "dist/base" }
+        },
+        {
+            "name": "Channel",
+            "description": "Twitch API's channel entity represented in a class.",
+            "construct": {
+                "name": "Channel",
+                "description": "Creates a new channel.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this channel.", "type": [] },
+                    { "name": "data", "description": "Channel data.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this channel.",
+                    "type": [],
+                    "meta": { "line": 26, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "emotes",
+                    "description": "Manages this channel's emotes.",
+                    "readonly": true,
+                    "type": [[["ChannelEmoteManager"]]],
+                    "meta": { "line": 32, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "emoteSets",
+                    "description": "Manages this channel's emote sets.",
+                    "readonly": true,
+                    "type": [[["ChannelEmoteSetManager"]]],
+                    "meta": { "line": 38, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "id",
+                    "description": "Broadcaster ID of the channel.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 45, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "language",
+                    "description": "Main language of the channel.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 52, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "name",
+                    "description": "Name of the channel.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 59, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "gameName",
+                    "description": "Current game name.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 66, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "gameId",
+                    "description": "Current game ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 73, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "title",
+                    "description": "Title of the channel.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 80, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "delay",
+                    "description": "Delay of the channel.",
+                    "type": [[["number"]]],
+                    "meta": { "line": 87, "file": "Channel.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates this instance with newly fetched data.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 94, "file": "Channel.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 13, "file": "Channel.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelEmote",
+            "description": "An emote used in a channel on Twitch.",
+            "extends": [[["Emote"]]],
+            "construct": {
+                "name": "ChannelEmote",
+                "description": "Creates a new channel emote.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this emote.", "type": [] },
+                    { "name": "data", "description": "Emote data to consume.", "type": [] },
+                    { "name": "broadcasterId", "description": "ID of the broadcaster.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this emote.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 29, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "id",
+                    "description": "This emote's ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 36, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "name",
+                    "description": "This emote's name.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 43, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "images",
+                    "description": "This emote's image urls.",
+                    "type": [
+                        [
+                            ["Array", "<"],
+                            ["string", ">"]
+                        ]
+                    ],
+                    "meta": { "line": 50, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "tier",
+                    "description": "This emote's tier.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 57, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "type",
+                    "description": "This emote's type.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 64, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "setId",
+                    "description": "This emote's set's ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 71, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates this emote with newly fetched data from the API.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 78, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 12, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelEmoteManager",
+            "description": "Manages channel emotes.",
+            "extends": [[["Manager"]]],
+            "construct": {
+                "name": "ChannelEmoteManager",
+                "description": "Constructs a new channel emote manager.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "Client that instantiated this manager.",
+                        "type": [[["Client"]]]
+                    },
+                    {
+                        "name": "channel",
+                        "description": "Channel that instantiated this manager.",
+                        "type": [[["Channel"]]]
+                    }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this manager.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 40, "file": "ChannelEmoteManager.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "options",
+                    "description": "Options given for the cache.",
+                    "type": [[["CacheOptions"]]],
+                    "meta": { "line": 30, "file": "Manager.js", "path": "dist/base" }
+                },
+                {
+                    "name": "cache",
+                    "description": "Data cached by the manager.",
+                    "type": [[["Cache"]]],
+                    "meta": { "line": 35, "file": "Manager.js", "path": "dist/base" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Fetches emotes from the channel.",
+                    "params": [
+                        {
+                            "name": "id",
+                            "description": "Optional ID to fetch.",
+                            "type": [[["string"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": [
+                        [
+                            ["Promise", "<("],
+                            ["ChannelEmote", "|"],
+                            ["undefined", ")>"]
+                        ],
+                        [
+                            ["Promise", "<"],
+                            ["Collection", "<"],
+                            ["string", ", "],
+                            ["ChannelEmote", ">>"]
+                        ]
+                    ],
+                    "meta": { "line": 47, "file": "ChannelEmoteManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 14, "file": "ChannelEmoteManager.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelEmoteSet",
+            "description": "A set of channel emotes.",
+            "extends": [[["Base"]]],
+            "construct": {
+                "name": "ChannelEmoteSet",
+                "description": "Creates a new channel emote set.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this set.", "type": [] },
+                    { "name": "data", "description": "Data for the emote set.", "type": [] },
+                    { "name": "channel", "description": "Channel the set is in.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "channelID",
+                    "description": "Parent channel's ID.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 31, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "id",
+                    "description": "Emote set's ID.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 37, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "emotes",
+                    "description": "The set of emotes in this set.",
+                    "readonly": true,
+                    "type": [
+                        [
+                            ["Collection", "<"],
+                            ["string", ", "],
+                            ["ChannelEmote", ">"]
+                        ]
+                    ],
+                    "meta": { "line": 47, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this set.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 53, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates this instance with new data from the API.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 60, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 14, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelEmoteSetManager",
+            "description": "Manages emote sets in a channel.",
+            "extends": [
+                [
+                    ["Manager", "<"],
+                    ["ChannelEmoteSet", ">"]
+                ]
+            ],
+            "construct": {
+                "name": "ChannelEmoteSetManager",
+                "description": "Creates a new channel emote set manager.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "Client that instantiated this manager.",
+                        "type": [[["Client"]]]
+                    },
+                    { "name": "channel", "description": "Channel this manager belongs to.", "type": [[["Channel"]]] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "channel",
+                    "description": "Channel this manager belongs to.",
+                    "readonly": true,
+                    "type": [[["Channel"]]],
+                    "meta": { "line": 38, "file": "ChannelEmoteSetManager.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this manager.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 44, "file": "ChannelEmoteSetManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Fetches an emote set from the API.",
+                    "params": [
+                        { "name": "id", "description": "ID of the emote set to fetch.", "type": [[["string"]]] }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["ChannelEmoteSet", ">"]
+                            ]
+                        ],
+                        "description": "The fetched emote set."
+                    },
+                    "meta": { "line": 51, "file": "ChannelEmoteSetManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 13, "file": "ChannelEmoteSetManager.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelManager",
+            "description": "Manages channels.",
+            "extends": [
+                [
+                    ["Manager", "<"],
+                    ["Channel", ">"]
+                ]
+            ],
+            "construct": {
+                "name": "ChannelManager",
+                "description": "Creates a new channel manager.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "Client that instantiated this channel.",
+                        "type": [[["Client"]]]
+                    }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this channel.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 39, "file": "ChannelManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Fetches a channel from the Twitch API.",
+                    "params": [
+                        { "name": "id", "description": "ID to fetch.", "type": [[["string"]]] },
+                        {
+                            "name": "force",
+                            "description": "Skip cache check and request directly from the API.",
+                            "type": [[["boolean"]], [["undefined"]]]
+                        }
+                    ],
+                    "meta": { "line": 46, "file": "ChannelManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 14, "file": "ChannelManager.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "Emote",
+            "description": "Represents a global emote on Twitch.",
+            "extends": [[["Base"]]],
+            "construct": {
+                "name": "Emote",
+                "description": "Constructs a new global emote.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "The client that instantiated this emote.",
+                        "type": [[["Client"]]]
+                    },
+                    {
+                        "name": "data",
+                        "description": "The raw data provided by the Twitch API.",
+                        "type": [[["EmoteData"]]]
+                    }
+                ]
+            },
+            "props": [
+                {
+                    "name": "id",
+                    "description": "The emote's ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 29, "file": "Emote.js", "path": "dist/classes/emotes" }
+                },
+                {
+                    "name": "name",
+                    "description": "The emote's name.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 36, "file": "Emote.js", "path": "dist/classes/emotes" }
+                },
+                {
+                    "name": "images",
+                    "description": "The emote's image urls.",
+                    "type": [
+                        [
+                            ["Array", "<"],
+                            ["string", ">"]
+                        ]
+                    ],
+                    "meta": { "line": 43, "file": "Emote.js", "path": "dist/classes/emotes" }
+                },
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this entity.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 20, "file": "Base.js", "path": "dist/base" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates this emote's data with newly fetched data from the API.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 50, "file": "Emote.js", "path": "dist/classes/emotes" }
+                }
+            ],
+            "meta": { "line": 13, "file": "Emote.js", "path": "dist/classes/emotes" }
+        },
+        {
+            "name": "EmoteManager",
+            "description": "Manages global emotes.",
+            "extends": [
+                [
+                    ["Manager", "<"],
+                    ["Emote", ">"]
+                ]
+            ],
+            "construct": {
+                "name": "EmoteManager",
+                "description": "Constructs an EmoteManager for the client.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "The client that this manager belongs to",
+                        "type": [[["Client"]]]
+                    }
+                ]
+            },
+            "methods": [
+                {
+                    "name": "get",
+                    "description": "Returns the emote with the given ID in cache or undefined.",
+                    "params": [{ "name": "id", "description": "the ID of the emote to get", "type": [] }],
+                    "returns": {
+                        "types": [[["Emote"]], [["undefined"]]],
+                        "description": "the emote with the given ID"
+                    },
+                    "meta": { "line": 40, "file": "EmoteManager.js", "path": "dist/classes/emotes" }
+                },
+                {
+                    "name": "fetch",
+                    "description": "Fetches global emotes from Twitch.",
+                    "params": [
+                        {
+                            "name": "id",
+                            "description": "Fetches the emote with this ID.",
+                            "type": [[["string"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["Emote", ">"]
+                            ],
+                            [
+                                ["Promise", "<"],
+                                ["Collection", "<"],
+                                ["string", ", "],
+                                ["Emote", ">>"]
+                            ]
+                        ],
+                        "description": "The fetched emotes."
+                    },
+                    "meta": { "line": 48, "file": "EmoteManager.js", "path": "dist/classes/emotes" }
+                }
+            ],
+            "meta": { "line": 14, "file": "EmoteManager.js", "path": "dist/classes/emotes" }
+        },
+        {
+            "name": "User",
+            "description": "Represents a user on Twitch.",
+            "extends": [[["Base"]]],
+            "construct": {
+                "name": "User",
+                "description": "Creates a user from the given client and",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this user.", "type": [] },
+                    { "name": "data", "description": "The raw data provided by the Twitch API.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this user.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 29, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "id",
+                    "description": "The user's ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 36, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "login",
+                    "description": "The user's login name (username but all lowercase).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 43, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "displayName",
+                    "description": "The user's display name.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 50, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "type",
+                    "description": "The user's type (staff status).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 57, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "broadcasterType",
+                    "description": "The user's broadcaster type (partner program).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 64, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "viewCount",
+                    "description": "Total number of views on this user's channel.",
+                    "type": [[["number"]]],
+                    "meta": { "line": 71, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "email",
+                    "description": "Returns the email of the user (scope `user:read:email` is required).",
+                    "type": [[["string"]], [["undefined"]]],
+                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "description",
+                    "description": "The user's description.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "createdAt",
+                    "description": "The Date object when the user was created.",
+                    "type": [[["Date"]]],
+                    "meta": { "line": 92, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "createdTimestamp",
+                    "description": "The unix timestamp when the user was created.",
+                    "type": [[["number"]]],
+                    "meta": { "line": 99, "file": "User.js", "path": "dist/classes/users" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "avatarURL",
+                    "description": "Returns the user's avatar URL.\nIf `options.offline` is true, the offline avatar will be returned.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "Options for the avatar URL.",
+                            "type": [[["AvatarURLOptions"]]]
+                        }
+                    ],
+                    "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
+                    "meta": { "line": 108, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "update",
+                    "description": "Updates this user object to hold the newest data.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 115, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "block",
+                    "description": "Blocks the user. Requires the `user:manage:blocked_users` scope.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "User block options.",
+                            "type": [[["BlockOptions"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the user was unblocked."
+                    },
+                    "meta": { "line": 153, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "unblock",
+                    "description": "Unblocks the given user. Requires the `user:manage:blocked_users` scope.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the user was unblocked."
+                    },
+                    "meta": { "line": 182, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "fetchBlocks",
+                    "description": "Returns an array of users that are blocked by this user.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "Fetch options.",
+                            "type": [[["BlocksFetchOptions"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["Array", "<"],
+                                ["User", ">>"]
+                            ]
+                        ],
+                        "description": "An array of users that are blocked."
+                    },
+                    "meta": { "line": 207, "file": "User.js", "path": "dist/classes/users" }
+                }
+            ],
+            "meta": { "line": 14, "file": "User.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "UserManager",
+            "description": "Manages the client's users.",
+            "extends": [[["Manager"]]],
+            "construct": {
+                "name": "UserManager",
+                "description": "Constructs a new user manager.",
+                "params": [{ "name": "client", "description": "The client that insantiated this manager.", "type": [] }]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "The client that insantiated this manager.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 40, "file": "UserManager.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "options",
+                    "description": "Options given for the cache.",
+                    "type": [[["CacheOptions"]]],
+                    "meta": { "line": 30, "file": "Manager.js", "path": "dist/base" }
+                },
+                {
+                    "name": "cache",
+                    "description": "Data cached by the manager.",
+                    "type": [[["Cache"]]],
+                    "meta": { "line": 35, "file": "Manager.js", "path": "dist/base" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Fetch for users from the API with IDs or logins.",
+                    "params": [
+                        {
+                            "name": "query",
+                            "description": "Query for users on Twitch.",
+                            "type": [[["string"]], [["object"]]]
+                        },
+                        {
+                            "name": "options",
+                            "description": "Fetch options.",
+                            "type": [[["UserFetchOptions"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<("],
+                                ["User", "|"],
+                                ["undefined", ")>"]
+                            ],
+                            [
+                                ["Promise", "<"],
+                                ["Collection", "<"],
+                                ["string", ", "],
+                                ["user", ">>"]
+                            ]
+                        ],
+                        "description": "The fetched users."
+                    },
+                    "meta": { "line": 48, "file": "UserManager.js", "path": "dist/classes/users" }
+                }
+            ],
+            "meta": { "line": 15, "file": "UserManager.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "PubSub",
+            "description": "Creates a PubSub client with websockets.",
+            "construct": {
+                "name": "PubSub",
+                "description": "Creates a new PubSub client.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "Client that manages this PubSub client.",
+                        "type": [[["Client"]]]
+                    },
+                    { "name": "options", "description": "Options for the client.", "type": [[["PubSubOptions"]]] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that manages this PubSub client.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 26, "file": "index.js", "path": "dist/pubsub" }
+                },
+                {
+                    "name": "options",
+                    "description": "Options given to the client.",
+                    "readonly": true,
+                    "type": [[["PubSubOptions"]]],
+                    "meta": { "line": 32, "file": "index.js", "path": "dist/pubsub" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "ping",
+                    "description": "Pings the websocket server.",
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the ping was successful."
+                    },
+                    "meta": { "line": 108, "file": "index.js", "path": "dist/pubsub" }
+                },
+                {
+                    "name": "listen",
+                    "description": "Listens (or stop listening) to the provided topics.",
+                    "params": [
+                        { "name": "topics", "description": "Topics to listen to.", "type": [] },
+                        { "name": "unlisten", "description": "Stop listening to provided topics.", "type": [] }
+                    ],
+                    "meta": { "line": 136, "file": "index.js", "path": "dist/pubsub" }
+                }
+            ],
+            "meta": { "line": 10, "file": "index.js", "path": "dist/pubsub" }
+        }
+    ],
+    "interfaces": [],
+    "typedefs": [
+        {
+            "name": "CacheOptions",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "update", "description": "Milliseconds between each entity update.", "type": [[["number"]]] },
+                {
+                    "name": "ttl",
+                    "description": "Milliseconds for an entity to live in the cache.",
+                    "type": [[["number"]]]
+                }
+            ],
+            "meta": { "line": 131, "file": "Cache.js", "path": "dist/base" }
+        },
+        {
+            "name": "AvatarURLOptions",
+            "type": [[["object"]]],
+            "props": [
+                {
+                    "name": "offline",
+                    "description": "Fetch offline avatar instead.",
+                    "type": [[["boolean"]], [["undefined"]]]
+                }
+            ],
+            "meta": { "line": 233, "file": "User.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "BlockOptions",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "reason", "description": "Reason for the block.", "type": [[["string"]], [["undefined"]]] },
+                {
+                    "name": "sourceContext",
+                    "description": "Context for the block.",
+                    "type": [[["string"]], [["undefined"]]]
+                }
+            ],
+            "meta": { "line": 237, "file": "User.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "BlocksFetchOptions",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "first", "type": [[["number"]]] },
+                { "name": "after", "type": [[["string"]]] }
+            ],
+            "meta": { "line": 242, "file": "User.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "UserFetchOptions",
+            "type": [[["object"]]],
+            "props": [
+                {
+                    "name": "type",
+                    "description": "Either \"id\" or \"login\".",
+                    "type": [[["string"]], [["undefined"]]]
+                },
+                {
+                    "name": "force",
+                    "description": "Skip cache check and request directly from the API.",
+                    "type": [[["string"]], [["undefined"]]]
+                }
+            ],
+            "meta": { "line": 145, "file": "UserManager.js", "path": "dist/classes/users" }
+        },
+        {
+            "name": "ClientUpdateOptions",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "users", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
+                { "name": "channels", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
+                { "name": "emotes", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
+                { "name": "channelEmotes", "type": [[["boolean"]], [["number"]], [["undefined"]]] }
+            ],
+            "meta": { "line": 3, "file": "client.js", "path": "dist/types/base" }
+        },
+        {
+            "name": "ClientTTLOptions",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "users", "type": [[["number"]], [["undefined"]]] },
+                { "name": "channels", "type": [[["number"]], [["undefined"]]] },
+                { "name": "emotes", "type": [[["number"]], [["undefined"]]] },
+                { "name": "channelEmotes", "type": [[["number"]], [["undefined"]]] }
+            ],
+            "meta": { "line": 10, "file": "client.js", "path": "dist/types/base" }
+        },
+        {
+            "name": "ClientOptions",
+            "description": "OK",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "clientId", "type": [[["string"]]] },
+                { "name": "clientSecret", "type": [[["string"]]] },
+                { "name": "redirectUri", "type": [[["string"]], [["undefined"]]] },
+                { "name": "forceVerify", "type": [[["string"]], [["undefined"]]] },
+                { "name": "state", "type": [[["string"]], [["undefined"]]] },
+                {
+                    "name": "scope",
+                    "type": [
+                        [
+                            ["Array", "<"],
+                            ["string", ">"]
+                        ],
+                        [["undefined"]]
+                    ]
+                },
+                { "name": "update", "type": [[["ClientUpdateOptions"]]] },
+                { "name": "ttl", "type": [[["ClientTTLOptions"]]] },
+                { "name": "debug", "type": [[["boolean"]], [["undefined"]]] },
+                { "name": "suppressRejections", "type": [[["boolean"]], [["undefined"]]] }
+            ],
+            "meta": { "line": 17, "file": "client.js", "path": "dist/types/base" }
+        },
+        {
+            "name": "ChannelData",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "broadcaster_id", "type": [[["string"]]] },
+                { "name": "broadcaster_name", "type": [[["string"]]] },
+                { "name": "game_name", "type": [[["string"]]] },
+                { "name": "game_id", "type": [[["string"]]] },
+                { "name": "broadcaster_language", "type": [[["string"]]] },
+                { "name": "title", "type": [[["string"]]] },
+                { "name": "delay", "type": [[["number"]]] }
+            ],
+            "meta": { "line": 3, "file": "channel.js", "path": "dist/types/classes" }
+        },
+        {
+            "name": "ChannelEmoteData",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "id", "type": [[["string"]]] },
+                { "name": "name", "type": [[["string"]]] },
+                { "name": "images", "type": [[["Object"]]] },
+                { "name": "tier", "type": [[["string"]]] },
+                { "name": "emote_type", "type": [[["string"]]] },
+                { "name": "emote_set_id", "type": [[["string"]]] }
+            ],
+            "meta": { "line": 3, "file": "channelEmote.js", "path": "dist/types/classes" }
+        },
+        {
+            "name": "EmoteDataImages",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "url_1x", "type": [[["string"]]] },
+                { "name": "url_2x", "type": [[["string"]]] },
+                { "name": "url_4x", "type": [[["string"]]] }
+            ],
+            "meta": { "line": 3, "file": "emote.js", "path": "dist/types/classes" }
+        },
+        {
+            "name": "EmoteData",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "id", "type": [[["string"]]] },
+                { "name": "name", "type": [[["string"]]] },
+                { "name": "images", "type": [[["EmoteDataImages"]]] }
+            ],
+            "meta": { "line": 9, "file": "emote.js", "path": "dist/types/classes" }
+        },
+        {
+            "name": "UserData",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "id", "type": [[["string"]]] },
+                { "name": "login", "type": [[["string"]]] },
+                { "name": "display_name", "type": [[["string"]]] },
+                { "name": "type", "type": [[["string"]]] },
+                { "name": "broadcaster_type", "type": [[["string"]]] },
+                { "name": "description", "type": [[["string"]]] },
+                { "name": "profile_image_url", "type": [[["string"]]] },
+                { "name": "offline_image_url", "type": [[["string"]]] },
+                { "name": "view_count", "type": [[["number"]]] },
+                { "name": "email", "type": [[["string"]], [["undefined"]]] },
+                { "name": "created_at", "type": [[["string"]]] }
+            ],
+            "meta": { "line": 3, "file": "user.js", "path": "dist/types/classes" }
+        },
+        {
+            "name": "PubSubOptions",
+            "type": [[["object"]]],
+            "props": [
+                {
+                    "name": "suppressRejections",
+                    "description": "Suppresses any rejections coming from the PubSub instance.",
+                    "type": [[["boolean"]], [["undefined"]]]
+                },
+                {
+                    "name": "ws",
+                    "description": "Options for the websocket.",
+                    "type": [[["WebSocketClientOptions"]], [["undefined"]]]
+                }
+            ],
+            "meta": { "line": 3, "file": "index.js", "path": "dist/types/pubsub" }
+        }
+    ],
+    "externals": [
+        {
+            "name": "WebSocketClientOptions",
+            "description": "Options for the websocket.",
+            "see": [
+                "https://github.com/DefinitelyTyped/DefinitelyTyped/blob/69e29e847155bd4d845497319116281cb5a384a3/types/ws/index.d.ts#L171-L187"
+            ],
+            "meta": { "line": 8, "file": "index.js", "path": "dist/types/pubsub" }
+        }
+    ]
+}
