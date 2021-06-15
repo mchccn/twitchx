@@ -11,7 +11,7 @@ import type {
     ClientScope,
     ErrorResponse,
     LoginResponse,
-    ValidateResponse
+    ValidateResponse,
 } from "../types";
 
 /**
