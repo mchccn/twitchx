@@ -1,3 +1,257 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+    --purple: #9147ff;
+    --light-purple: #9c59ff;
+    --dark: #0f0f10;
+    --code-dark: #141416;
+
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    scroll-behavior: smooth;
+}
+
+.docs::-webkit-scrollbar {
+    display: none;
+}
+
+.docs {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.markdown h1 {
+    @apply font-light text-3xl py-2 border-b border-gray-300 dark:border-gray-400;
+}
+
+.markdown h2 {
+    @apply font-light text-2xl py-1 border-b border-gray-300 dark:border-gray-400;
+}
+
+.markdown h3 {
+    @apply font-light text-xl py-0.5;
+}
+
+.markdown h4 {
+    @apply font-light text-lg;
+}
+
+.markdown h5 {
+    @apply font-light text-base text-gray-700 dark:text-gray-300;
+}
+
+.markdown h6 {
+    @apply font-light text-base text-gray-500 dark:text-gray-400;
+}
+
+.markdown > p {
+    @apply font-light my-4;
+}
+
+.markdown > blockquote {
+    @apply border-l-4 border-gray-300 dark:border-gray-500 pl-4 py-2 bg-gray-50 dark:bg-codeDark my-4;
+}
+
+.markdown > p > code {
+    @apply text-sm bg-gray-50 rounded-sm p-0.5 dark:bg-codeDark;
+}
+
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+    @apply rounded my-4;
+}
+
+code.hljs {
+    padding: 3px 5px;
+}
+
+.hljs {
+    color: #333;
+    background: #fcfcfc;
+}
+
+.hljs-comment {
+    color: #969896;
+}
+
+.hljs-tag {
+    color: #e8e8e8;
+}
+
+.hljs-operator,
+.hljs-punctuation,
+.hljs-subst {
+    color: #333;
+}
+
+.hljs-operator {
+    opacity: 0.7;
+}
+
+.hljs-bullet,
+.hljs-deletion,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-template-variable,
+.hljs-variable {
+    color: #ed6a43;
+}
+
+.hljs-attr,
+.hljs-link,
+.hljs-literal,
+.hljs-number,
+.hljs-symbol,
+.hljs-variable.constant_ {
+    color: #0086b3;
+}
+
+.hljs-class .hljs-title,
+.hljs-title,
+.hljs-title.class_ {
+    color: #795da3;
+}
+
+.hljs-strong {
+    font-weight: 700;
+    color: #795da3;
+}
+
+.hljs-addition,
+.hljs-built_in,
+.hljs-code,
+.hljs-doctag,
+.hljs-keyword.hljs-atrule,
+.hljs-quote,
+.hljs-regexp,
+.hljs-string,
+.hljs-title.class_.inherited__ {
+    color: #183691;
+}
+
+.hljs-attribute,
+.hljs-function .hljs-title,
+.hljs-section,
+.hljs-title.function_,
+.ruby .hljs-property {
+    color: #795da3;
+}
+
+.diff .hljs-meta,
+.hljs-keyword,
+.hljs-template-tag,
+.hljs-type {
+    color: #a71d5d;
+}
+
+.hljs-emphasis {
+    color: #a71d5d;
+    font-style: italic;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-meta .hljs-string {
+    color: #333;
+}
+
+.hljs-meta .hljs-keyword,
+.hljs-meta-keyword {
+    font-weight: 700;
+}
+
+.dark .hljs {
+    color: #c9d1d9;
+    background: var(--code-dark);
+}
+
+.dark .hljs-doctag,
+.dark .hljs-keyword,
+.dark .hljs-meta .hljs-keyword,
+.dark .hljs-template-tag,
+.dark .hljs-template-variable,
+.dark .hljs-type,
+.dark .hljs-variable.language_ {
+    color: #ff7b72;
+}
+
+.dark .hljs-title,
+.dark .hljs-title.class_,
+.dark .hljs-title.class_.inherited__,
+.dark .hljs-title.function_ {
+    color: #d2a8ff;
+}
+
+.dark .hljs-attr,
+.dark .hljs-attribute,
+.dark .hljs-literal,
+.dark .hljs-meta,
+.dark .hljs-number,
+.dark .hljs-operator,
+.dark .hljs-variable,
+.dark .hljs-selector-attr,
+.dark .hljs-selector-class,
+.dark .hljs-selector-id {
+    color: #79c0ff;
+}
+
+.dark .hljs-regexp,
+.dark .hljs-string,
+.dark .hljs-meta .hljs-string {
+    color: #a5d6ff;
+}
+
+.dark .hljs-built_in,
+.dark .hljs-symbol {
+    color: #ffa657;
+}
+
+.dark .hljs-comment,
+.dark .hljs-code,
+.dark .hljs-formula {
+    color: #8b949e;
+}
+
+.dark .hljs-name,
+.dark .hljs-quote,
+.dark .hljs-selector-tag,
+.dark .hljs-selector-pseudo {
+    color: #7ee787;
+}
+
+.dark .hljs-subst {
+    color: #c9d1d9;
+}
+
+.dark .hljs-section {
+    color: #1f6feb;
+    font-weight: bold;
+}
+
+.dark .hljs-bullet {
+    color: #f2cc60;
+}
+
+.dark .hljs-emphasis {
+    color: #c9d1d9;
+    font-style: italic;
+}
+
+.dark .hljs-strong {
+    color: #c9d1d9;
+    font-weight: bold;
+}
+
+.dark .hljs-addition {
+    color: #aff5b4;
+    background-color: #033a16;
+}
+
+.dark .hljs-deletion {
+    color: #ffdcd7;
+    background-color: #67060c;
+}

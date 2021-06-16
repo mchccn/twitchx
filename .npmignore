@@ -1,4 +1,5 @@
 src/
 tests/
 assets/
+docs/
 tsconfig.json

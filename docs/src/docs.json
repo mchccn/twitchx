@@ -1,10 +1,13 @@
-[
-    {
-        "name": "General",
-        "pages": [
-            { "name": "Welcome", "content": "<h1>Welcome!</h1>\n" },
-            { "name": "Changelog", "content": "<h1>Changelog</h1>\n" },
-            { "name": "FAQ", "content": "<h1>Frequently Asked Questions</h1>\n" }
-        ]
-    }
-]
+{
+    "index": "<h1>twitchx</h1>\n",
+    "categories": [
+        {
+            "name": "General",
+            "pages": [
+                { "name": "Welcome", "slug": "welcome", "content": "<h1>Welcome!</h1>\n" },
+                { "name": "Changelog", "slug": "changelog", "content": "<h1>Changelog</h1>\n" },
+                { "name": "FAQ", "slug": "faq", "content": "<h1>Frequently Asked Questions</h1>\n" }
+            ]
+        }
+    ]
+}

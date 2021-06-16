@@ -7,21 +7,28 @@ import { BASE_URL } from "../../shared/";
 import type { UserData } from "../../types/classes";
 
 /**
- * Represents a user on twitch.
- *
+ * Represents a user on Twitch.
  * @class
- * @extends Base
+ * @extends {Base}
  */
 export default class User extends Base {
+    public readonly client;
+
     /**
      * Creates a user from the given client and
-     * @param client The Client instance that this user belongs to
-     * @param data The raw data provided by the Twitch API
-     *
+     * @param client  Client that instantiated this user.
+     * @param data The raw data provided by the Twitch API.
      * @constructor
      */
-    public constructor(public readonly client: Client, private data: UserData) {
+    public constructor(client: Client, private data: UserData) {
         super(client);
+
+        /**
+         * Client that instantiated this user.
+         * @type {Client}
+         * @readonly
+         */
+        this.client = client;
 
         this.client.emit("userCreate", this);
     }
@@ -76,7 +83,7 @@ export default class User extends Base {
 
     /**
      * Returns the email of the user (scope `user:read:email` is required).
-     * @type {string|undefined}
+     * @type {string | undefined}
      */
     public get email() {
         return this.data.email;
@@ -95,7 +102,7 @@ export default class User extends Base {
     }
 
     /**
-     * The Date when the user was created.
+     * The Date object when the user was created.
      * @type {Date}
      */
     public get createdAt() {
@@ -103,8 +110,7 @@ export default class User extends Base {
     }
 
     /**
-     * The timestamp of the user being created.
-     * Identical to calling `getTime()` on `createdAt`.
+     * The unix timestamp when the user was created.
      * @type {number}
      */
     public get createdTimestamp() {
@@ -112,15 +118,10 @@ export default class User extends Base {
     }
 
     /**
-     * @typedef {object} AvatarURLOptions
-     * @prop {boolean} offline fetch offline avatar?
-     */
-
-    /**
      * Returns the user's avatar URL.
      * If `options.offline` is true, the offline avatar will be returned.
-     * @param {AvatarURLOptions} options options for the avatar URL
-     * @returns {string} the user's avatar URL
+     * @param {AvatarURLOptions} options Options for the avatar URL.
+     * @returns {string} The user's avatar URL.
      */
     public avatarURL(options?: { offline?: boolean }): string {
         return options?.offline ? this.data.offline_image_url : this.data.profile_image_url;
@@ -128,14 +129,14 @@ export default class User extends Base {
 
     /**
      * Updates this user object to hold the newest data.
-     * @returns a promise that should resolve to undefined on success
+     * @returns {Promise<boolean>} True if the update was successful.
      */
     public async update() {
         if (!this.client.options.update.channels) {
             if (!this.client.options.suppressRejections)
                 throw new Error(`updating users was disabled but was still attempted`);
 
-            return;
+            return false;
         }
 
         if (!this.client.token) throw new Error("token is not available");
@@ -156,23 +157,23 @@ export default class User extends Base {
                 if (!this.client.options.suppressRejections)
                     throw new TwitchAPIError(`user was fetched but no data was returned`);
 
-                return;
+                return false;
             }
 
             this.data = data;
 
-            return;
+            return true;
         }
 
         if (!this.client.options.suppressRejections) throw new Error("unable to update user");
 
-        return;
+        return false;
     }
 
     /**
-     * Blocks the user. Requires `user:manage:blocked_users` scope on the client.
-     * @param options the options for blocking the user
-     * @returns A promise that resolves to a boolean, representing the success of the operation
+     * Blocks the user. Requires the `user:manage:blocked_users` scope.
+     * @param {BlockOptions | undefined} options User block options.
+     * @returns {Promise<boolean>} True if the user was unblocked.
      */
     public async block(options?: { reason?: "chat" | "whisper"; sourceContext?: "spam" | "harassment" | "other" }) {
         if (!this.client.scope.includes("user:manage:blocked_users"))
@@ -207,8 +208,8 @@ export default class User extends Base {
     }
 
     /**
-     * Unblocks the given user. Requires `user:manage:blocked_users` scope on the client.
-     * @returns {Promise<boolean>} a promise that is resolved to a boolean representing the success of the operation
+     * Unblocks the given user. Requires the `user:manage:blocked_users` scope.
+     * @returns {Promise<boolean>} True if the user was unblocked.
      */
     public async unblock(): Promise<boolean> {
         if (!this.client.scope.includes("user:manage:blocked_users"))
@@ -232,17 +233,13 @@ export default class User extends Base {
     }
 
     /**
-     * @typedef {object} BlockFetchOptions
-     * @prop {number} first
-     * @prop {string} after
+     * Returns an array of users that are blocked by this user.
+     * @param {BlocksFetchOptions | undefined} options Fetch options.
+     * @returns {Promise<User[]>} An array of users that are blocked.
      */
+    public async fetchBlocks(options?: { first: number; after: string }): Promise<User[]> {
+        const { first, after } = options ?? {};
 
-    /**
-     * Returns an array of users that were blocked by this user
-     * @param {BlockFetchOptions} param0 pagination options
-     * @returns {Promise<User[]>} an array of users that this user has blocked
-     */
-    public async fetchBlocks({ first, after }: { first: number; after: string }): Promise<User[]> {
         const res = await fetch(
             `${BASE_URL}/users/blocks?${new URLSearchParams(
                 snakeCasify({ broadcaster_id: this.id, after, first }).toString()
@@ -273,3 +270,20 @@ export default class User extends Base {
         return users;
     }
 }
+
+/**
+ * @typedef {object} AvatarURLOptions
+ * @prop {boolean | undefined} offline Fetch offline avatar instead.
+ */
+
+/**
+ * @typedef {object} BlockOptions
+ * @prop {string | undefined} reason Reason for the block.
+ * @prop {string | undefined} sourceContext Context for the block.
+ */
+
+/**
+ * @typedef {object} BlocksFetchOptions
+ * @prop {number} first
+ * @prop {string} after
+ */
