@@ -42,7 +42,6 @@ import * as Twitch from "twitchx";
 ```
 
 ### Example
-
 ```ts
 import * as Twitch from "twitchx";
 
@@ -73,7 +72,7 @@ import * as Twitch from "twitchx";
 
 Before opening an issue or contributing, make sure that it hasn't been opened or brought up already, or hasn't been done before/is being done.
 
-Read [CONTRIBUTING.md](./CONTRIBUTINIG.md) for information on contributing.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for information on contributing.
 
 Submit a PR to the GitHub repo and have a collaborator review the changes.
 
