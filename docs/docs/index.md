@@ -25,7 +25,7 @@
 
 # Installation and Usage
 
-Node.js v14 or newer is required.
+**Node.js v14 or newer is required.**
 
 ```bash
 # Install with NPM:

@@ -67,6 +67,10 @@ html {
     @apply font-light my-4;
 }
 
+.markdown strong {
+    @apply font-medium;
+}
+
 .markdown ul {
     list-style-type: disc;
     list-style-position: inside;
