@@ -20,7 +20,7 @@ export default class User extends Base {
      * @param data The raw data provided by the Twitch API.
      * @constructor
      */
-    public constructor(client: Client, private data: UserData) {
+    public constructor(client: Client, protected data: UserData) {
         super(client);
 
         /**
@@ -96,9 +96,9 @@ export default class User extends Base {
     public get description() {
         return this.data.description;
     }
-    
-    protected set description(des) {
-        this.description = des;
+
+    protected setDescription(desc: string) {
+        this.data.description = desc;
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623853072124 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623854360050 },
     "classes": [
         {
             "name": "Base",
@@ -98,14 +98,14 @@
                     "description": "Current token being used.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 240, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 259, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "type",
                     "description": "Authentication type; either `\"app\"` or `\"user\"`.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 248, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 267, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "methods": [
@@ -123,7 +123,7 @@
                         ],
                         "description": "The new access token or OAuth details object."
                     },
-                    "meta": { "line": 55, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 58, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "destroy",
@@ -137,27 +137,27 @@
                         ],
                         "description": "Nothing."
                     },
-                    "meta": { "line": 151, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 170, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setInterval",
                     "description": "Sets an interval to be managed by the client.",
-                    "meta": { "line": 254, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 273, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setTimeout",
                     "description": "Sets a timeout to be managed by the client.",
-                    "meta": { "line": 262, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 281, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearInterval",
                     "description": "Clears an interval managed by the client.",
-                    "meta": { "line": 270, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 289, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearTimeout",
                     "description": "Clears a timeout managed by the client.",
-                    "meta": { "line": 278, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 297, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "on",
@@ -167,7 +167,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 289, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 308, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "once",
@@ -177,7 +177,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 298, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 317, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "events": [
@@ -228,7 +228,7 @@
                     "meta": { "line": 58, "file": "client.js", "path": "dist/types/base" }
                 }
             ],
-            "meta": { "line": 17, "file": "Client.js", "path": "dist/base" }
+            "meta": { "line": 19, "file": "Client.js", "path": "dist/base" }
         },
         {
             "name": "Manager",
@@ -261,63 +261,63 @@
                     "name": "client",
                     "description": "Client that instantiated this channel.",
                     "type": [],
-                    "meta": { "line": 27, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 29, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emotes",
                     "description": "Manages this channel's emotes.",
                     "readonly": true,
                     "type": [[["ChannelEmoteManager"]]],
-                    "meta": { "line": 33, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 35, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emoteSets",
                     "description": "Manages this channel's emote sets.",
                     "readonly": true,
                     "type": [[["ChannelEmoteSetManager"]]],
-                    "meta": { "line": 39, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 41, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "id",
                     "description": "Broadcaster ID of the channel.",
                     "type": [[["string"]]],
-                    "meta": { "line": 46, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 48, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "language",
                     "description": "Main language of the channel.",
                     "type": [[["string"]]],
-                    "meta": { "line": 53, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 55, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "name",
                     "description": "Name of the channel.",
                     "type": [[["string"]]],
-                    "meta": { "line": 60, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 62, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameName",
                     "description": "Current game name.",
                     "type": [[["string"]]],
-                    "meta": { "line": 67, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 69, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameId",
                     "description": "Current game ID.",
                     "type": [[["string"]]],
-                    "meta": { "line": 74, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 76, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "title",
                     "description": "Title of the channel.",
                     "type": [[["string"]]],
-                    "meta": { "line": 81, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 83, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "delay",
                     "description": "Delay of the channel.",
                     "type": [[["number"]]],
-                    "meta": { "line": 88, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 90, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
             "methods": [
@@ -333,10 +333,10 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 95, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 97, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
-            "meta": { "line": 14, "file": "Channel.js", "path": "dist/classes/channels" }
+            "meta": { "line": 16, "file": "Channel.js", "path": "dist/classes/channels" }
         },
         {
             "name": "ChannelEmote",
@@ -765,6 +765,26 @@
             "meta": { "line": 14, "file": "EmoteManager.js", "path": "dist/classes/emotes" }
         },
         {
+            "name": "ClientUser",
+            "construct": {
+                "name": "ClientUser",
+                "description": "Creates a new user.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this user.", "type": [] },
+                    { "name": "data", "description": "User's data.", "type": [] }
+                ]
+            },
+            "methods": [
+                {
+                    "name": "setDescription",
+                    "description": "Updates the description of this user.",
+                    "params": [{ "name": "description", "description": "New description.", "type": [] }],
+                    "meta": { "line": 21, "file": "ClientUser.js", "path": "dist/classes/users" }
+                }
+            ],
+            "meta": { "line": 13, "file": "ClientUser.js", "path": "dist/classes/users" }
+        },
+        {
             "name": "User",
             "description": "Represents a user on Twitch.",
             "extends": [[["Base"]]],
@@ -836,13 +856,13 @@
                     "name": "createdAt",
                     "description": "The Date object when the user was created.",
                     "type": [[["Date"]]],
-                    "meta": { "line": 92, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 95, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdTimestamp",
                     "description": "The unix timestamp when the user was created.",
                     "type": [[["number"]]],
-                    "meta": { "line": 99, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 102, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "methods": [
@@ -857,7 +877,7 @@
                         }
                     ],
                     "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
-                    "meta": { "line": 108, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 111, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "update",
@@ -871,7 +891,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 115, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 118, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "block",
@@ -892,7 +912,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 153, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 156, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "unblock",
@@ -906,7 +926,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 182, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 185, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "fetchBlocks",
@@ -928,7 +948,7 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 207, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 210, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 14, "file": "User.js", "path": "dist/classes/users" }
@@ -1001,7 +1021,7 @@
                     "type": [[["boolean"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 233, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 236, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlockOptions",
@@ -1014,7 +1034,7 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 237, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 240, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlocksFetchOptions",
@@ -1023,7 +1043,7 @@
                 { "name": "first", "type": [[["number"]]] },
                 { "name": "after", "type": [[["string"]]] }
             ],
-            "meta": { "line": 242, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 245, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "UserFetchOptions",
