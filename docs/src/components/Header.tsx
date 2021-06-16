@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import useWindowWidth from "../lib/useWindowWidth";
 
-export default function Header() {
+export default function Header({ search, setSearch }: { search: string; setSearch: Dispatch<SetStateAction<string>> }) {
     const width = useWindowWidth(25);
 
     const [dark, setDark] = useState(localStorage.getItem("twitchx-theme") === "dark");
@@ -126,6 +126,22 @@ export default function Header() {
                             autoCorrect="off"
                             type="text"
                             name="search"
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+
+                                if (e.target.value && !window.location.hash.startsWith("#/search")) {
+                                    localStorage.setItem("twitchx-last", window.location.hash);
+                                } else if (!e.target.value) {
+                                    window.location.hash = localStorage.getItem("twitchx-last") ?? "#/docs";
+
+                                    return;
+                                }
+
+                                window.location.hash = `#/search?query=${e.target.value}`;
+
+                                return;
+                            }}
                         />
                     </div>
                 </nav>
