@@ -1,7 +1,9 @@
 import fetch from "node-fetch";
+import { URLSearchParams } from "url";
+import { User } from "..";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { BASE_URL, ExternalError, HTTPError, InternalError, TwitchAPIError } from "../../shared";
+import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchAPIError } from "../../shared";
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
