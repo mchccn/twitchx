@@ -41,8 +41,9 @@ const Twitch = require("twitchx");
 import * as Twitch from "twitchx";
 ```
 
-### Example
+### Examples
 
+#### Typescript
 ```ts
 import * as Twitch from "twitchx";
 
@@ -57,6 +58,23 @@ import * as Twitch from "twitchx";
     const user = await client.users.fetch("44445592");
 
     console.log(user);
+})();
+```
+#### Javascript
+```js
+const Twitch = require("twitchx");
+
+(async () => {
+    const client = new Twitch.Client({
+        clientId: "a-cool-id",
+        clientSecret: "dont-steal-pls",
+    });
+    
+    await client.login();
+    
+    const user = await client.users.fetch("44445592");
+
+    console.log(user); 
 })();
 ```
 
