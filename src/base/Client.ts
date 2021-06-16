@@ -22,7 +22,7 @@ import type {
  * Supports app and user access tokens and is configurable.
  * Delegates API endpoints to different managers.
  * @class
- * @extends EventEmitter
+ * @extends {EventEmitter}
  */
 export default class Client extends EventEmitter {
     private accessToken?: string;

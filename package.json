@@ -24,7 +24,6 @@
     "homepage": "https://github.com/cursorsdottsx/twitch#readme",
     "dependencies": {
         "abort-controller": "^3.0.0",
-        "highlight.js": "^11.0.1",
         "long-timeout": "^0.1.1",
         "node-fetch": "^2.6.1",
         "ws": "^7.4.6"

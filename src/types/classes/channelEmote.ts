@@ -7,15 +7,18 @@ export interface ChannelEmoteData extends EmoteData {
 }
 
 /**
+ * @typedef {object} ChannelEmoteDataImages
+ * @prop {string} url_1x
+ * @prop {string} url_2x
+ * @prop {string} url_4x
+ */
+
+/**
  * @typedef {object} ChannelEmoteData
- * @extends EmoteData
+ * @extends {EmoteData}
  * @prop {string} id
  * @prop {string} name
- * @prop {{
- *   url_1x: string,
- *   url_2x: string,
- *   url_4x: string
- * }} images
+ * @prop {ChannelEmoteDataImages} images
  * @prop {string} tier
  * @prop {string} emote_type
  * @prop {string} emote_set_id

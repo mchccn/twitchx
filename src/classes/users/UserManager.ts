@@ -10,7 +10,7 @@ import User from "./User";
 /**
  * Manages the client's users.
  * @class
- * @extends {Manager}
+ * @extends {Manager<User>}
  */
 export default class UserManager extends Manager<User> {
     public readonly client;

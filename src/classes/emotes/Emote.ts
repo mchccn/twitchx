@@ -8,7 +8,7 @@ import type { EmoteData } from "../../types";
 /**
  * Represents a global emote on Twitch.
  * @class
- * @extends Base
+ * @extends {Base}
  */
 export default class Emote extends Base {
     /**
