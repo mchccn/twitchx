@@ -19,7 +19,7 @@ export default function SidebarSection({
                 >
                     ▼
                 </button>
-                <h2 className="text-purple dark:text-lightPurple select-none">{name}</h2>
+                <h2 className="text-purple dark:text-lightestPurple select-none">{name}</h2>
             </div>
             <ul className={`pl-1 ${open ? "" : "h-0 overflow-hidden"}`}>
                 {pages.map((page) => (

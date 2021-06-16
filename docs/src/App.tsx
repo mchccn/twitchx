@@ -10,7 +10,10 @@ export default function App() {
     return (
         <div className="app flex flex-col min-h-screen dark:bg-dark">
             <Header search={search} setSearch={setSearch} />
-            <div className="content flex flex-1 justify-center">
+            <div
+                className="content flex flex-1 justify-center overflow-y-scroll"
+                style={{ maxHeight: "calc(100vh - 3rem)" }}
+            >
                 <main className="flex w-full max-w-4xl">
                     <HashRouter basename={process.env.PUBLIC_URL}>
                         <Switch>

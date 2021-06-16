@@ -42,6 +42,7 @@ import * as Twitch from "twitchx";
 ```
 
 ### Example
+
 ```ts
 import * as Twitch from "twitchx";
 
@@ -79,3 +80,12 @@ Submit a PR to the GitHub repo and have a collaborator review the changes.
 ### Help
 
 If you don't understand something or have trouble creating a feature with **twitchx**, hop in our [Discord](https://discord.gg/hMzQye6sWU) and ask away!
+
+### Package scripts
+
+-   `watch` – Compiles TypeScript source when a file is changed.
+-   `test` – Runs tests against the library.
+-   `docs` – Generates a `data.json` with all the gathered JSDoc (runs when a file is changed).
+-   `md` – Generates a `docs.json` with all the markdown files (runs when an markdown file is changed).
+-   `build` – Compiles TypeScript source.
+-   `deploy` – Update website.

@@ -5,6 +5,7 @@
 html {
     --purple: #9147ff;
     --light-purple: #9c59ff;
+    --lightest-purple: #a66bff;
     --dark: #0f0f10;
     --code-dark: #141416;
 
@@ -39,19 +40,19 @@ html {
 }
 
 .markdown h1 {
-    @apply font-light text-3xl py-2 border-b border-gray-300 dark:border-gray-400;
+    @apply my-4 font-light text-3xl py-2 border-b border-gray-300 dark:border-gray-400;
 }
 
 .markdown h2 {
-    @apply font-light text-2xl py-1 border-b border-gray-300 dark:border-gray-400;
+    @apply my-3 font-light text-2xl py-1 border-b border-gray-300 dark:border-gray-400;
 }
 
 .markdown h3 {
-    @apply font-light text-xl py-0.5;
+    @apply my-2 font-light text-xl py-0.5;
 }
 
 .markdown h4 {
-    @apply font-light text-lg;
+    @apply my-1 font-light text-lg;
 }
 
 .markdown h5 {
@@ -66,12 +67,52 @@ html {
     @apply font-light my-4;
 }
 
+.markdown ul {
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-left: 15px;
+    @apply my-4;
+}
+
+.markdown ol {
+    list-style-type: decimal;
+    list-style-position: inside;
+    margin-left: 15px;
+    @apply my-4;
+}
+
+.markdown ul ul,
+.markdown ol ul {
+    list-style-type: circle;
+    list-style-position: inside;
+    margin-left: 15px;
+}
+
+.markdown ol ol,
+.markdown ul ol {
+    list-style-type: lower-latin;
+    list-style-position: inside;
+    margin-left: 15px;
+}
+
+.markdown li {
+    display: list-item;
+}
+
 .markdown > blockquote {
     @apply border-l-4 border-gray-300 dark:border-gray-500 pl-4 py-2 bg-gray-50 dark:bg-codeDark my-4;
 }
 
+.markdown > pre {
+    @apply my-4;
+}
+
 .markdown > p > code {
     @apply text-sm bg-gray-50 rounded-sm p-0.5 dark:bg-codeDark;
+}
+
+.markdown a {
+    @apply text-purple dark:text-lightestPurple;
 }
 
 pre code.hljs {

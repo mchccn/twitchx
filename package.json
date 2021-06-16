@@ -5,7 +5,6 @@
     "main": "dist/index.js",
     "scripts": {
         "watch": "tsc -w",
-        "dev": "nodemon dist/index.js",
         "test": "env TS_NODE_PROJECT='./tsconfig.json' mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch .",
         "docs": "chokidar \"src/**/*.ts\" -c \"ts-docgen --source dist/ --output docs/src/data.json && prettier --write docs/src/data.json\"",
         "md": "chokidar \"docs/docs/**/*.md\" -c \"env TS_NODE_PROJECT='./tsconfig.json' ts-node docs/docs/index.ts && prettier --write docs/src/docs.json\"",

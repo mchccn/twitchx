@@ -8,6 +8,7 @@ module.exports = {
                 dark: "var(--dark)",
                 purple: "var(--purple)",
                 lightPurple: "var(--light-purple)",
+                lightestPurple: "var(--lightest-purple)",
             },
         },
     },
