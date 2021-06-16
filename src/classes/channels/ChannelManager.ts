@@ -7,8 +7,20 @@ import Channel from "./Channel";
 import { snakeCasify } from "../../shared/utils"
 import type { Awaited } from "../../types/utils"
 
+/**
+ * Manages channels.
+ * @class
+ * @extends {Manager<Channel>}
+ */
 export default class ChannelManager extends Manager<Channel> {
-    constructor(public readonly client: Client) {
+    public readonly client;
+
+    /**
+     * Creates a new channel manager.
+     * @param {Client} client Client that instantiated this channel.
+     * @constructor
+     */
+    constructor(client: Client) {
         super(client, {
             update:
                 typeof client.options.update.channels === "boolean"
@@ -23,9 +35,25 @@ export default class ChannelManager extends Manager<Channel> {
                         : MILLISECONDS.NEVER
                     : client.options.ttl.channels ?? MILLISECONDS.DAY,
         });
+
+        /**
+         * Client that instantiated this channel.
+         * @type {Client}
+         * @readonly
+         */
+        this.client = client;
     }
 
+<<<<<<< HEAD
     public async fetch(id: Readonly<string>, force?: Readonly<boolean>) {
+=======
+    /**
+     * Fetches a channel from the Twitch API.
+     * @param {string} id  ID to fetch.
+     * @param {boolean | undefined} force Skip cache check and request directly from the API.
+     */
+    public async fetch(id: string, force?: boolean) {
+>>>>>>> dab57bd724afeae0d4533c8822d54d12b58db7a9
         if (this.cache.has(id) && !force) return this.cache.get(id);
 
         const controller = new AbortController();

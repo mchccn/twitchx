@@ -7,8 +7,20 @@ import { BASE_URL, MILLISECONDS } from "../../shared";
 import type { SinglePartial, UserData } from "../../types";
 import User from "./User";
 
+/**
+ * Manages the client's users.
+ * @class
+ * @extends {Manager}
+ */
 export default class UserManager extends Manager<User> {
-    constructor(public readonly client: Client) {
+    public readonly client;
+
+    /**
+     * Constructs a new user manager.
+     * @param client The client that insantiated this manager.
+     * @constructor
+     */
+    constructor(client: Client) {
         super(client, {
             update:
                 typeof client.options.update.users === "boolean"
@@ -23,8 +35,21 @@ export default class UserManager extends Manager<User> {
                         : MILLISECONDS.NEVER
                     : client.options.ttl.users ?? MILLISECONDS.WEEK,
         });
+
+        /**
+         * The client that insantiated this manager.
+         * @type {Client}
+         * @readonly
+         */
+        this.client = client;
     }
 
+    /**
+     * Fetch for users from the API with ID or logins.
+     * @param {object} query Query for users on Twitch.
+     * @param {UserFetchOptions | undefined} options Fetch options.
+     * @returns {Promise<User | undefined>} The user fetched.
+     */
     public async fetch(
         query: SinglePartial<{
             ids: string[];
@@ -32,7 +57,19 @@ export default class UserManager extends Manager<User> {
         }>,
         options?: { force?: boolean }
     ): Promise<Collection<string, User>>;
+    /**
+     * Fetch for user from the API with an ID.
+     * @param {string} query Query for users on Twitch.
+     * @param {UserFetchOptions | undefined} options Fetch options.
+     * @returns {Promise<User | undefined>} The user fetched.
+     */
     public async fetch(query: string, options?: { type?: "id" | "login"; force?: boolean }): Promise<User | undefined>;
+    /**
+     * Fetch for users from the API with IDs or logins.
+     * @param {string | object} query Query for users on Twitch.
+     * @param {UserFetchOptions | undefined} options Fetch options.
+     * @returns {Promise<User | undefined> | Promise<Collection<string, user>>} The fetched users.
+     */
     public async fetch(
         query:
             | string
@@ -156,3 +193,9 @@ export default class UserManager extends Manager<User> {
         }
     }
 }
+
+/**
+ * @typedef {object} UserFetchOptions
+ * @prop {string | undefined} type Either "id" or "login".
+ * @prop {string | undefined} force Skip cache check and request directly from the API.
+ */

@@ -8,7 +8,7 @@ import type { Awaited } from "../types";
  * @class
  * @template Value
  */
-export default class Cache<Value extends { update(): Awaited<void> }> extends Map<string, Value> {
+export default class Cache<Value extends { update(): Awaited<unknown> }> extends Map<string, Value> {
     private timeouts = new Map<string, { timeout: lt.Timeout; timestamp: number }>();
     private intervals = new Map<string, { interval: lt.Interval; timestamp: number }>();
 

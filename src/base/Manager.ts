@@ -8,7 +8,7 @@ import type Client from "./Client";
  * @abstract
  * @class
  */
-export default abstract class Manager<V extends { update(): Awaited<void> }> extends Base {
+export default abstract class Manager<V extends { update(): Awaited<unknown> }> extends Base {
     /**
      * Data cached by the manager.
      */
