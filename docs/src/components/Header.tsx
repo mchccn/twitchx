@@ -22,7 +22,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
                         >
                             twitchx
                         </h1>
-                    ) : null}
+                    ) : undefined}
                     <div className="flex items-center gap-4 sm:-mb-0.5 mr-4">
                         <a className="cursor-pointer text-gray-700 dark:text-gray-50" href="#/docs">
                             {width > 640 ? (

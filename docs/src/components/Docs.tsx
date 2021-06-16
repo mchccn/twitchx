@@ -28,19 +28,16 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
             category: "classes",
             name,
             slug: name.toLowerCase(),
-            content: "",
         })),
         ...data.typedefs.map(({ name }) => ({
             category: "typedefs",
             name,
             slug: name.toLowerCase(),
-            content: "",
         })),
         ...data.externals.map(({ name }) => ({
             category: "externals",
             name,
             slug: name.toLowerCase(),
-            content: "",
         })),
     ];
 
@@ -94,14 +91,39 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                         }}
                     ></div>
                 ) : catalog.some(({ category, slug }) => route.startsWith(`${category.toLowerCase()}/${slug}`)) ? (
-                    <div
-                        className="markdown"
-                        dangerouslySetInnerHTML={{
-                            __html: catalog.find(({ category, slug }) =>
-                                route.startsWith(`${category.toLowerCase()}/${slug}`)
-                            )!.content,
-                        }}
-                    ></div>
+                    (() => {
+                        const name = catalog.find(({ category, slug }) =>
+                            route.startsWith(`${category.toLowerCase()}/${slug}`)
+                        )!.name;
+
+                        const info = data.classes.find((cls) => cls.name === name)
+                            ? ({ ...data.classes.find((cls) => cls.name === name)!, type: "class" } as const)
+                            : data.typedefs.find((t) => t.name === name)
+                            ? ({ ...data.typedefs.find((t) => t.name === name)!, type: "typedef" } as const)
+                            : data.externals.find((ext) => ext.name === name)
+                            ? ({ ...data.externals.find((ext) => ext.name === name), type: "external" } as const)
+                            : undefined;
+
+                        if (!info) {
+                            console.error(`error`);
+
+                            return;
+                        }
+
+                        if (info.type === "class") {
+                            return <div className="markdown"></div>;
+                        }
+
+                        if (info.type === "typedef") {
+                            return <div className="markdown"></div>;
+                        }
+
+                        if (info.type === "external") {
+                            return <div className="markdown"></div>;
+                        }
+
+                        return;
+                    })()
                 ) : (
                     <Redirect to="/docs/general/welcome" />
                 )}

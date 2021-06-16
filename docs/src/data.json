@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623854360050 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623861938784 },
     "classes": [
         {
             "name": "Base",
@@ -98,14 +98,14 @@
                     "description": "Current token being used.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 259, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 269, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "type",
                     "description": "Authentication type; either `\"app\"` or `\"user\"`.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 267, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 277, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "methods": [
@@ -123,7 +123,7 @@
                         ],
                         "description": "The new access token or OAuth details object."
                     },
-                    "meta": { "line": 58, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 57, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "destroy",
@@ -137,27 +137,27 @@
                         ],
                         "description": "Nothing."
                     },
-                    "meta": { "line": 170, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 179, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setInterval",
                     "description": "Sets an interval to be managed by the client.",
-                    "meta": { "line": 273, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 283, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setTimeout",
                     "description": "Sets a timeout to be managed by the client.",
-                    "meta": { "line": 281, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 291, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearInterval",
                     "description": "Clears an interval managed by the client.",
-                    "meta": { "line": 289, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 299, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearTimeout",
                     "description": "Clears a timeout managed by the client.",
-                    "meta": { "line": 297, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 307, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "on",
@@ -167,7 +167,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 308, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 318, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "once",
@@ -177,7 +177,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 317, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 327, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "events": [
@@ -766,6 +766,8 @@
         },
         {
             "name": "ClientUser",
+            "description": "User representing the client on Twitch.",
+            "extends": [[["User"]]],
             "construct": {
                 "name": "ClientUser",
                 "description": "Creates a new user.",
@@ -774,15 +776,178 @@
                     { "name": "data", "description": "User's data.", "type": [] }
                 ]
             },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this user.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 25, "file": "ClientUser.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "id",
+                    "description": "The user's ID.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 36, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "login",
+                    "description": "The user's login name (username but all lowercase).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 43, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "displayName",
+                    "description": "The user's display name.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 50, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "type",
+                    "description": "The user's type (staff status).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 57, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "broadcasterType",
+                    "description": "The user's broadcaster type (partner program).",
+                    "type": [[["string"]]],
+                    "meta": { "line": 64, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "viewCount",
+                    "description": "Total number of views on this user's channel.",
+                    "type": [[["number"]]],
+                    "meta": { "line": 71, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "email",
+                    "description": "Returns the email of the user (scope `user:read:email` is required).",
+                    "type": [[["string"]], [["undefined"]]],
+                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "description",
+                    "description": "The user's description.",
+                    "type": [[["string"]]],
+                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "createdAt",
+                    "description": "The Date object when the user was created.",
+                    "type": [[["Date"]]],
+                    "meta": { "line": 95, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "createdTimestamp",
+                    "description": "The unix timestamp when the user was created.",
+                    "type": [[["number"]]],
+                    "meta": { "line": 102, "file": "User.js", "path": "dist/classes/users" }
+                }
+            ],
             "methods": [
                 {
                     "name": "setDescription",
                     "description": "Updates the description of this user.",
                     "params": [{ "name": "description", "description": "New description.", "type": [] }],
-                    "meta": { "line": 21, "file": "ClientUser.js", "path": "dist/classes/users" }
+                    "meta": { "line": 31, "file": "ClientUser.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "avatarURL",
+                    "description": "Returns the user's avatar URL.\nIf `options.offline` is true, the offline avatar will be returned.",
+                    "inherits": "User#avatarURL",
+                    "inherited": true,
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "Options for the avatar URL.",
+                            "type": [[["AvatarURLOptions"]]]
+                        }
+                    ],
+                    "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
+                    "meta": { "line": 111, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "update",
+                    "description": "Updates this user object to hold the newest data.",
+                    "inherits": "User#update",
+                    "inherited": true,
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was successful."
+                    },
+                    "meta": { "line": 118, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "block",
+                    "description": "Blocks the user. Requires the `user:manage:blocked_users` scope.",
+                    "inherits": "User#block",
+                    "inherited": true,
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "User block options.",
+                            "type": [[["BlockOptions"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the user was unblocked."
+                    },
+                    "meta": { "line": 156, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "unblock",
+                    "description": "Unblocks the given user. Requires the `user:manage:blocked_users` scope.",
+                    "inherits": "User#unblock",
+                    "inherited": true,
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the user was unblocked."
+                    },
+                    "meta": { "line": 185, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "fetchBlocks",
+                    "description": "Returns an array of users that are blocked by this user.",
+                    "inherits": "User#fetchBlocks",
+                    "inherited": true,
+                    "params": [
+                        {
+                            "name": "options",
+                            "description": "Fetch options.",
+                            "type": [[["BlocksFetchOptions"]], [["undefined"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["Array", "<"],
+                                ["User", ">>"]
+                            ]
+                        ],
+                        "description": "An array of users that are blocked."
+                    },
+                    "meta": { "line": 210, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
-            "meta": { "line": 13, "file": "ClientUser.js", "path": "dist/classes/users" }
+            "meta": { "line": 12, "file": "ClientUser.js", "path": "dist/classes/users" }
         },
         {
             "name": "User",
