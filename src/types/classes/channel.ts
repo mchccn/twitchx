@@ -6,10 +6,9 @@ export interface ChannelData {
     broadcaster_language: string;
     title: string;
     delay: number;
+    editors?: { user_id: string, user_name: string, created_at: string }[]
 }
 
-<<<<<<< HEAD
-=======
 /**
  * @typedef {object} ChannelData
  * @prop {string} broadcaster_id
@@ -19,5 +18,5 @@ export interface ChannelData {
  * @prop {string} broadcaster_language
  * @prop {string} title
  * @prop {number} delay
+ * @prop {{ user_id: string, user_name: string, created_at: string }[]?} editors
  */
->>>>>>> dc02d1439ee56ded665423be213790adfcdf7c9b

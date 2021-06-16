@@ -5,6 +5,7 @@ import { Manager } from "../../base/internal";
 import { BASE_URL, MILLISECONDS } from "../../shared";
 import Channel from "./Channel";
 import { snakeCasify } from "../../shared/utils"
+
 import type { Awaited } from "../../types/utils"
 
 /**
@@ -51,6 +52,8 @@ export default class ChannelManager extends Manager<Channel> {
      */
     public async fetch(id: string, force?: boolean) {
         if (this.cache.has(id) && !force) return this.cache.get(id);
+        
+
 
         const controller = new AbortController();
 
@@ -122,7 +125,7 @@ export default class ChannelManager extends Manager<Channel> {
 
         const response = await fetch(`${BASE_URL}/channels?broadcaster_id=${id}`, {
             headers: {
-                authorization: `Bearer ${this.client.token}`,
+                authorization: `Bearer ${this.client.token!}`,
                 "client-id": this.client.options.clientId,
                 "Content-Type": 'application/json'
             },
@@ -136,12 +139,9 @@ export default class ChannelManager extends Manager<Channel> {
             }))
         });
 
-        if (!response) return undefined 
 
-        const data = await response.json();
-
-        if (!data) return undefined;
-        else return data;
+        const data = await response?.json();
+        return data;
 
     } catch (error) {
         if (!this.client.options.suppressRejections)

@@ -120,12 +120,5 @@ dist
 # OS X shit
 .DS_Store
 
-<<<<<<< HEAD
-# Ignore or else will destroy the TS percentage.
-docs/data.json
-
-*.js
-tests/cannon.ts
-=======
 build/
->>>>>>> dab57bd724afeae0d4533c8822d54d12b58db7a9
+cannon.ts

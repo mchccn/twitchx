@@ -7,6 +7,7 @@ import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchA
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
+import AbortController from "abort-controller";
 
 /**
  * Twitch API's channel entity represented in a class.
@@ -19,6 +20,7 @@ export default class Channel extends Base {
     public readonly emotes;
 
     public readonly emoteSets;
+    
 
     /**
      * Creates a new channel.
@@ -41,6 +43,8 @@ export default class Channel extends Base {
          */
         this.emotes = new ChannelEmoteManager(this.client, this);
 
+        
+
         /**
          * Manages this channel's emote sets.
          * @type {ChannelEmoteSetManager}
@@ -60,13 +64,17 @@ export default class Channel extends Base {
     }
 
     /**
+     * Makes a request to the api to get the editors
+     */    
+
+    /**
      * Main language of the channel.
      * @type {string}
      */
     public get language() {
         return this.data.broadcaster_language;
     }
-
+    
     /**
      * Name of the channel.
      * @type {string}
@@ -149,9 +157,6 @@ export default class Channel extends Base {
 
         return;
     }
-<<<<<<< HEAD
-}
-=======
 
     public async follow(user: User | string): Promise<this> {
         
@@ -172,5 +177,51 @@ export default class Channel extends Base {
         return this;
 
     }
+
+    public async editors(): Promise<User | undefined> {
+    
+        const controller = new AbortController();
+
+        const timeout = setTimeout(() => {
+            controller.abort();
+        }, 1000);
+
+
+
+        try {
+
+        const response = await fetch(`https://api.twitch.tv/helix/channels/editors?broadcaster_id=${this.data.broadcaster_id}`, {
+            headers: {
+                authorization: `Bearer ${this.client.token!}`,
+                "client-id": this.client.options.clientId,
+            },
+            signal: controller.signal
+        })
+
+        if (response.ok) {
+            
+            let data = (await response.json())?.data;
+
+            if (!data || !data[0]) return undefined;
+            data = data.map(async ({ user_id }: { user_id: string }) => (await this.client.users.fetch(user_id)));
+            return data;
+        };
+
+        if (!this.client.options.suppressRejections) throw new Error(`unable to fetch all users`);
+        return undefined;
+
+    } catch (error) {
+        if (!this.client.options.suppressRejections)
+            if (controller.signal.aborted) {
+                throw new Error(`request to fetch editors was aborted`);
+            } else {
+            
+                throw new Error(`failed to fetch editors`);
+            }
+
+        return undefined;
+    } finally {
+        clearTimeout(timeout);
+    }
+    }
 }
->>>>>>> dab57bd724afeae0d4533c8822d54d12b58db7a9
