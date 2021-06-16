@@ -1,4 +1,4 @@
-import { Channel } from "diagnostic_channel";
+import { Channel } from "../classes";
 import EventEmitter from "events";
 import lt from "long-timeout";
 import fetch from "node-fetch";
@@ -543,7 +543,7 @@ export default class Client extends EventEmitter {
 
     public async follow(user: User|string, channel: Channel|string): Promise<void>{
         const userId = (user instanceof User ? user.id : user);
-        const channelId = (channel instanceof Channel ? channel.subscribe : channel);
+        const channelId = (channel instanceof Channel ? channel.id : channel);
 
         if (!userId || !channelId) throw new Error("Both channel and user params are required.");
 
@@ -564,7 +564,7 @@ export default class Client extends EventEmitter {
 
     public async unfollow(user: User|string, channel: Channel|string) {
         const userId = (user instanceof User ? user.id : user);
-        const channelId = (channel instanceof Channel ? channel.subscribe : channel);
+        const channelId = (channel instanceof Channel ? channel.id : channel);
 
         if (!userId || !channelId) throw new Error("Both channel and user params are required.");
 
