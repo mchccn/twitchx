@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623879009393 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623881618921 },
     "classes": [
         {
             "name": "Base",
@@ -1121,7 +1121,12 @@
         {
             "name": "UserManager",
             "description": "Manages the client's users.",
-            "extends": [[["Manager"]]],
+            "extends": [
+                [
+                    ["Manager", "<"],
+                    ["User", ">"]
+                ]
+            ],
             "construct": {
                 "name": "UserManager",
                 "description": "Constructs a new user manager.",
@@ -1290,17 +1295,27 @@
             "meta": { "line": 3, "file": "channel.js", "path": "dist/types/classes" }
         },
         {
+            "name": "ChannelEmoteDataImages",
+            "type": [[["object"]]],
+            "props": [
+                { "name": "url_1x", "type": [[["string"]]] },
+                { "name": "url_2x", "type": [[["string"]]] },
+                { "name": "url_4x", "type": [[["string"]]] }
+            ],
+            "meta": { "line": 3, "file": "channelEmote.js", "path": "dist/types/classes" }
+        },
+        {
             "name": "ChannelEmoteData",
             "type": [[["object"]]],
             "props": [
                 { "name": "id", "type": [[["string"]]] },
                 { "name": "name", "type": [[["string"]]] },
-                { "name": "images", "type": [[["Object"]]] },
+                { "name": "images", "type": [[["ChannelEmoteDataImages"]]] },
                 { "name": "tier", "type": [[["string"]]] },
                 { "name": "emote_type", "type": [[["string"]]] },
                 { "name": "emote_set_id", "type": [[["string"]]] }
             ],
-            "meta": { "line": 3, "file": "channelEmote.js", "path": "dist/types/classes" }
+            "meta": { "line": 9, "file": "channelEmote.js", "path": "dist/types/classes" }
         },
         {
             "name": "EmoteDataImages",

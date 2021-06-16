@@ -1,5 +1,6 @@
 import Fuse from "fuse.js";
 import hljs from "highlight.js";
+import markdown from "markdown-it";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { Link, Redirect, useParams } from "react-router-dom";
 import data from "../data.json";
@@ -31,7 +32,19 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
         })),
     ];
 
+    const md = new markdown({
+        html: true,
+        linkify: true,
+        xhtmlOut: true,
+    });
+
     useEffect(() => {
+        const resolveType = (type: string[][][], many?: boolean) =>
+            type
+                .flat(1)
+                .map((type) => type.join(""))
+                .join(many ? "|" : "");
+
         setDocumentation(
             (() => {
                 if (
@@ -39,6 +52,17 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                     !catalog.find(({ category, slug }) => route.toLowerCase() === `${category}/${slug}`.toLowerCase())
                 )
                     return;
+
+                const REGEX = {
+                    IDENTIFIER: new RegExp(
+                        `(${[...catalog]
+                            .sort((a, b) => b.name.length - a.name.length)
+                            .map(({ name }) => name)
+                            .join("|")})`,
+                        "g"
+                    ),
+                    NODEJS: new RegExp(`(${["EventEmitter"].sort((a, b) => b.length - a.length).join("|")})`, "g"),
+                } as const;
 
                 const name = catalog.find(
                     ({ category, slug }) => route.toLowerCase() === `${category}/${slug}`.toLowerCase()
@@ -61,11 +85,48 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                 if (info.type === "class") {
                     return (
                         <div className="markdown">
-                            <h1>{info.name}</h1>
+                            <h1 className="flex flex-col justify-between">
+                                {info.abstract && <span className="text-sm">abstract</span>}
+                                <span>{info.name}</span>
+                                {info.extends && (
+                                    <span
+                                        className="text-base"
+                                        dangerouslySetInnerHTML={{
+                                            __html: `extends ${md.renderInline(
+                                                resolveType(info.extends).replace(
+                                                    REGEX.IDENTIFIER,
+                                                    (match) =>
+                                                        `[${match}](#/docs/${
+                                                            catalog.find(({ name }) => name === match)!.category
+                                                        }/${match})`
+                                                )
+                                            )}`,
+                                        }}
+                                    ></span>
+                                )}
+                            </h1>
+
+                            <p>{info.description}</p>
+
+                            <h2>Constructor</h2>
 
                             <pre>
-                                <code className="hljs code-javascript">{`new Twitch.${info.name}()`}</code>
+                                <code className="hljs code-javascript">{`new Twitch.${info.name}(${
+                                    info.construct.params
+                                        ? (
+                                              info.construct.params as {
+                                                  name: string;
+                                                  description: string;
+                                                  type: string[][][];
+                                              }[]
+                                          )
+                                              .map((param) => param.name)
+                                              .join(", ")
+                                        : ""
+                                })`}</code>
                             </pre>
+
+                            <p>{info.construct.description}</p>
                         </div>
                     );
                 }
