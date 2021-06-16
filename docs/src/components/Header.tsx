@@ -11,7 +11,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
     }, [dark]);
 
     return (
-        <div className="h-12 px-4 py-2 grid place-items-center shadow dark:bg-purple">
+        <div className="h-12 px-4 py-2 grid place-items-center shadow dark:bg-purple z-50">
             <header className="flex items-center justify-between w-full max-w-4xl">
                 <nav className="flex items-center gap-4 sm:gap-8">
                     {width > 440 ? (
@@ -57,6 +57,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
                 </nav>
                 <nav className="flex items-center gap-4">
                     <button
+                        aria-label="toggle theme"
                         className="outline-none focus:outline-none"
                         onClick={() => {
                             document.querySelector("html")?.classList.toggle("dark");
@@ -143,6 +144,9 @@ export default function Header({ search, setSearch }: { search: string; setSearc
                                 return;
                             }}
                         />
+                        <label className="sr-only" htmlFor="search">
+                            search documentation
+                        </label>
                     </div>
                 </nav>
             </header>

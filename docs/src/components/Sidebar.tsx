@@ -5,7 +5,7 @@ import SidebarSection from "./SidebarSection";
 export default function Sidebar({ active }: { active: string }) {
     return (
         <aside
-            className="transform -translate-x-full absolute sm:static sm:transform-none px-4 lg:px-0 py-3 w-60 flex-shrink-0 border-r border-gray-100 dark:border-gray-700 overflow-y-scroll"
+            className="sidebar transform -translate-x-full absolute sm:static sm:transform-none px-4 lg:px-0 py-3 w-60 flex-shrink-0 border-r border-gray-100 dark:border-gray-700 overflow-y-scroll"
             style={{ maxHeight: "calc(100vh - 3rem)" }}
         >
             <div>

@@ -19,7 +19,7 @@ export default function SidebarSection({
                 >
                     ▼
                 </button>
-                <h2 className="text-lightPurple select-none">{name}</h2>
+                <h2 className="text-purple dark:text-lightPurple select-none">{name}</h2>
             </div>
             <ul className={`pl-1 ${open ? "" : "h-0 overflow-hidden"}`}>
                 {pages.map((page) => (
@@ -34,7 +34,7 @@ export default function SidebarSection({
                         <Link
                             className={`block flex-1 text-sm ${
                                 active === `${name.toLowerCase()}/${page.slug}`
-                                    ? "text-gray-800 dark:text-gray-400"
+                                    ? "text-gray-900 dark:text-gray-100"
                                     : "text-gray-700 dark:text-gray-500"
                             }`}
                             to={{ pathname: `/docs/${name.toLowerCase()}/${page.slug}` }}
