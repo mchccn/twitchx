@@ -68,7 +68,7 @@ export default class Client extends EventEmitter {
      */
     public readonly emotes: EmoteManager;
 
-    public user: ClientUser|null;
+    public user: ClientUser | null;
 
     private authType?: "app" | "user";
 
@@ -106,7 +106,6 @@ export default class Client extends EventEmitter {
         this.users = new UserManager(this);
         this.emotes = new EmoteManager(this);
         this.user = null;
-
     }
 
     /**
@@ -205,9 +204,9 @@ export default class Client extends EventEmitter {
             this.validateInterval = lt.setInterval(this.validate.bind(this), 3600 * 1000 * 0.9);
 
             this.authType = "app";
-            
+
             this.emit("ready");
-            
+
             return this.accessToken;
         }
 
@@ -232,18 +231,19 @@ export default class Client extends EventEmitter {
                 ).toString()}`,
                 callback: async (token: string) => {
                     if (!(await this.validate({ token }))) throw new ExternalError(`invalid token provided`);
-                    
+
                     this.accessToken = token;
 
-                    if (this.token) {   
-                        const res = await fetch(`https://api.twitch.tv/helix/users`, { headers: { Authorization: `Bearer ${this.token}`, "Client-Id": this.options.clientId } });
+                    if (this.token) {
+                        const res = await fetch(`https://api.twitch.tv/helix/users`, {
+                            headers: { Authorization: `Bearer ${this.token}`, "Client-Id": this.options.clientId },
+                        });
                         if (res.ok) {
                             const data: UserData = (await res.json()).data[0];
-                            this.user = new ClientUser(this, data)
+                            this.user = new ClientUser(this, data);
                         }
                     }
                     this.emit("ready");
-
 
                     return;
                 },
@@ -299,20 +299,19 @@ export default class Client extends EventEmitter {
                     );
 
                     if (this.token) {
-                        const res = await fetch(`https://api.twitch.tv/helix/users`, { headers: { Authorization: `Bearer ${this.token}` , "Client-Id": this.options.clientId } });
+                        const res = await fetch(`https://api.twitch.tv/helix/users`, {
+                            headers: { Authorization: `Bearer ${this.token}`, "Client-Id": this.options.clientId },
+                        });
                         if (res.ok) {
                             const data: UserData = (await res.json()).data[0];
-                            this.user = new ClientUser(this, data)
+                            this.user = new ClientUser(this, data);
                         }
                     }
-                    
-                    this.emit("ready");
 
+                    this.emit("ready");
                 },
             };
         }
-
-
 
         throw new Error(`invalid oauth type; valid types are 'implicit' and 'authorization'`);
     }
@@ -541,20 +540,26 @@ export default class Client extends EventEmitter {
         return super.emit(event, ...args);
     }
 
-    public async follow(user: User|string, channel: Channel|string): Promise<void>{
-        const userId = (user instanceof User ? user.id : user);
-        const channelId = (channel instanceof Channel ? channel.id : channel);
+    public async follow(user: User | string, channel: Channel | string): Promise<void> {
+        const userId = user instanceof User ? user.id : user;
+        const channelId = channel instanceof Channel ? channel.id : channel;
 
         if (!userId || !channelId) throw new Error("Both channel and user params are required.");
 
         if (!this.token) throw new InternalError(`token is not available`);
 
-        const res = await fetch(`https://api.twitch.tv/helix/users/follows?${new URLSearchParams(snakeCasify({ from_id: userId, to_id: channelId }))}`, {
-            headers: {
-                authorization: `Bearer ${this.token}`,
-                "client-id": this.options.clientId,
-            }, method: 'post'
-        }).catch((e) => {
+        const res = await fetch(
+            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
+                snakeCasify({ from_id: userId, to_id: channelId })
+            )}`,
+            {
+                headers: {
+                    authorization: `Bearer ${this.token}`,
+                    "client-id": this.options.clientId,
+                },
+                method: "post",
+            }
+        ).catch((e) => {
             throw new HTTPError(e);
         });
 
@@ -562,20 +567,26 @@ export default class Client extends EventEmitter {
         return;
     }
 
-    public async unfollow(user: User|string, channel: Channel|string) {
-        const userId = (user instanceof User ? user.id : user);
-        const channelId = (channel instanceof Channel ? channel.id : channel);
+    public async unfollow(user: User | string, channel: Channel | string) {
+        const userId = user instanceof User ? user.id : user;
+        const channelId = channel instanceof Channel ? channel.id : channel;
 
         if (!userId || !channelId) throw new Error("Both channel and user params are required.");
 
         if (!this.token) throw new InternalError(`token is not available`);
 
-        const res = await fetch(`https://api.twitch.tv/helix/users/follows?${new URLSearchParams(snakeCasify({ from_id: userId, to_id: channelId }))}`, {
-            headers: {
-                authorization: `Bearer ${this.token}`,
-                "client-id": this.options.clientId,
-            }, method: 'delete'
-        }).catch((e) => {
+        const res = await fetch(
+            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
+                snakeCasify({ from_id: userId, to_id: channelId })
+            )}`,
+            {
+                headers: {
+                    authorization: `Bearer ${this.token}`,
+                    "client-id": this.options.clientId,
+                },
+                method: "delete",
+            }
+        ).catch((e) => {
             throw new HTTPError(e);
         });
 

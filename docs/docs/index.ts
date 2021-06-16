@@ -18,15 +18,13 @@ const config = yaml.load(fs.readFileSync(join(__dirname, "config.yml"), "utf8"))
 
 const result = {
     index: md.render(fs.readFileSync(join(__dirname, config[0].index), "utf8")),
-    categories: (
-        config.slice(1) as {
+    categories: (config.slice(1) as {
+        name: string;
+        files: {
             name: string;
-            files: {
-                name: string;
-                path: string;
-            }[];
-        }[]
-    ).map(({ name: category, files }) => ({
+            path: string;
+        }[];
+    }[]).map(({ name: category, files }) => ({
         name: category,
         pages: files.map(({ name, path }) => ({
             name,

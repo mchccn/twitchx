@@ -4,7 +4,6 @@ import { Client } from "../../base";
 import { HTTPError } from "../../shared";
 import { UserData } from "../../types/classes/user";
 
-
 class ClientUser extends User {
     constructor(client: Client, data: UserData) {
         super(client, data);
@@ -20,6 +19,5 @@ class ClientUser extends User {
         this.description = data.description;
     }
 }
-
 
 export default ClientUser;

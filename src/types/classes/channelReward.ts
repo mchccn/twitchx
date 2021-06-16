@@ -1,4 +1,4 @@
-export interface ChannelRewardData{
+export interface ChannelRewardData {
     broadcaster_id: string;
     broadcaster_login: string;
     broadcaster_name: string;

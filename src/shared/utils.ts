@@ -20,7 +20,7 @@ type KeysToHyphenCase<T> = {
 
 type StringValues<T> = {
     [K in keyof T]: string;
-}
+};
 
 /**
  * Amazingly useful to create readable code for parameterizing API requests.

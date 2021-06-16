@@ -17,7 +17,7 @@ class ChannelReward {
     public get broadcasterLogin() {
         return this.data.broadcaster_login;
     }
-    
+
     public get broadcasterName() {
         return this.data.broadcaster_name;
     }
@@ -90,6 +90,5 @@ class ChannelReward {
         return this.data.cooldown_expires_at;
     }
 }
-
 
 export default ChannelReward;
