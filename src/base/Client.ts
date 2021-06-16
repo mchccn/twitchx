@@ -3,6 +3,7 @@ import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 import { ChannelManager, EmoteManager, UserManager } from "../classes/";
+import ClientUser from "../classes/users/ClientUser";
 import { ExternalError, HTTPError, InternalError, MILLISECONDS, snakeCasify, TwitchAPIError } from "../shared";
 import type {
     Awaited,
@@ -11,6 +12,7 @@ import type {
     ClientScope,
     ErrorResponse,
     LoginResponse,
+    UserData,
     ValidateResponse,
 } from "../types";
 
@@ -65,6 +67,8 @@ export default class Client extends EventEmitter {
      */
     public readonly emotes: EmoteManager;
 
+    public user: ClientUser|null;
+
     private authType?: "app" | "user";
 
     /**
@@ -100,6 +104,8 @@ export default class Client extends EventEmitter {
         this.channels = new ChannelManager(this);
         this.users = new UserManager(this);
         this.emotes = new EmoteManager(this);
+        this.user = null;
+
     }
 
     /**
@@ -197,10 +203,10 @@ export default class Client extends EventEmitter {
             this.loginTimeout = lt.setTimeout(this.login.bind(this), (data.expires_in ?? 3600) * 1000 * 0.9);
             this.validateInterval = lt.setInterval(this.validate.bind(this), 3600 * 1000 * 0.9);
 
-            this.emit("ready");
-
             this.authType = "app";
-
+            
+            this.emit("ready");
+            
             return this.accessToken;
         }
 
@@ -225,8 +231,16 @@ export default class Client extends EventEmitter {
                 ).toString()}`,
                 callback: async (token: string) => {
                     if (!(await this.validate({ token }))) throw new ExternalError(`invalid token provided`);
-
+                    
                     this.accessToken = token;
+
+                    const res = await fetch(`https://api.twitch.tv/helix/users`, { headers: { Authorization: `Bearer ${token}`, "Client-Id": this.options.clientId } });
+                    if (res.ok) {
+                        const data: UserData = (await res.json()).data[0];
+                        this.user = new ClientUser(this, data)
+                    }
+                    this.emit("ready");
+
 
                     return;
                 },
@@ -280,9 +294,20 @@ export default class Client extends EventEmitter {
                         this.refresh.bind(this),
                         (data.expires_in ?? 3600) * 1000 * 0.9
                     );
+
+                    const res = await fetch(`https://api.twitch.tv/helix/users`, { headers: { Authorization: `Bearer ${this.accessToken}` , "Client-Id": this.options.clientId } });
+                    if (res.ok) {
+                        const data: UserData = (await res.json()).data[0];
+                        this.user = new ClientUser(this, data)
+                    }
+                    
+                    this.emit("ready");
+
                 },
             };
         }
+
+
 
         throw new Error(`invalid oauth type; valid types are 'implicit' and 'authorization'`);
     }
