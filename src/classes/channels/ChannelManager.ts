@@ -44,16 +44,12 @@ export default class ChannelManager extends Manager<Channel> {
         this.client = client;
     }
 
-<<<<<<< HEAD
-    public async fetch(id: Readonly<string>, force?: Readonly<boolean>) {
-=======
     /**
      * Fetches a channel from the Twitch API.
      * @param {string} id  ID to fetch.
      * @param {boolean | undefined} force Skip cache check and request directly from the API.
      */
     public async fetch(id: string, force?: boolean) {
->>>>>>> dab57bd724afeae0d4533c8822d54d12b58db7a9
         if (this.cache.has(id) && !force) return this.cache.get(id);
 
         const controller = new AbortController();
