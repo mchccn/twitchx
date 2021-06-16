@@ -7,6 +7,7 @@ import Emote from "./emotes/Emote";
 import EmoteManager from "./emotes/EmoteManager";
 import User from "./users/User";
 import UserManager from "./users/UserManager";
+import ClientUser from "./users/ClientUser";
 
 export {
     Channel,
@@ -18,4 +19,5 @@ export {
     ChannelEmoteSet,
     Emote,
     EmoteManager,
+    ClientUser
 };
