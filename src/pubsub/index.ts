@@ -1,9 +1,9 @@
-import ws from "ws";
+import ws, { EventEmitter } from "ws";
 import type { Client } from "../base/internal";
 import { ExternalError, InternalError, NONCE_CHARACTERS, TwitchAPIError, WebSocketError } from "../shared";
 import { Awaited, ClientPubSubEvent, PubSubOptions, ServerPubSubResponse } from "../types";
 
-export default class PubSub {
+export default class PubSub extends EventEmitter {
     private readonly ws: ws;
     private pingInterval?: NodeJS.Timer;
     private currentData = "";
@@ -15,14 +15,22 @@ export default class PubSub {
         callback: (data: any) => Awaited<void>;
     }[];
 
+    public readonly client;
+
     public readonly options: PubSubOptions;
 
-    constructor(public readonly client: Client, options?: PubSubOptions) {
+    constructor(client: Client, options?: PubSubOptions) {
+        super({
+            captureRejections: client.options.suppressRejections,
+        });
+
         this.options = {
             suppressRejections: false,
             ws: {},
             ...options,
         };
+
+        this.client = client;
 
         this.ws = new ws("wss://pubsub-edge.twitch.tv", this.options.ws);
 
@@ -48,9 +56,8 @@ export default class PubSub {
                     }
 
                     case "RESPONSE": {
-                        const listen = this.queue[
-                            this.queue.findIndex(({ event }) => event === "LISTEN" || event === "UNLISTEN")
-                        ];
+                        const listen =
+                            this.queue[this.queue.findIndex(({ event }) => event === "LISTEN" || event === "UNLISTEN")];
 
                         if (!listen) break;
 
