@@ -34,38 +34,18 @@ export default class Client extends EventEmitter {
     private timeouts = new Set<lt.Timeout>();
     private intervals = new Set<lt.Interval>();
 
-    /**
-     * Options given to the client.
-     * @readonly
-     */
     public readonly options: Required<Omit<ClientOptions, "redirectUri" | "forceVerify" | "state">> & {
         redirectUri?: string;
         forceVerify?: boolean;
         state?: string;
     };
 
-    /**
-     * Client's token's current scopes.
-     * @readonly
-     */
     public readonly scope: ClientScope[];
 
-    /**
-     * Client's channel manager.
-     * @readonly
-     */
     public readonly channels: ChannelManager;
 
-    /**
-     * Client's user manager.
-     * @readonly
-     */
     public readonly users: UserManager;
 
-    /**
-     * Client's emote manager.
-     * @readonly
-     */
     public readonly emotes: EmoteManager;
 
     public user?: ClientUser;
@@ -81,6 +61,11 @@ export default class Client extends EventEmitter {
             captureRejections: options.suppressRejections ?? false,
         });
 
+        /**
+         * Options given to the client.
+         * @type {ClientOptions}
+         * @readonly
+         */
         this.options = {
             debug: false,
             scope: [],
@@ -90,23 +75,46 @@ export default class Client extends EventEmitter {
                 channels: MILLISECONDS.HOUR,
                 emotes: MILLISECONDS.HOUR,
                 channelEmotes: MILLISECONDS.HOUR,
+                channelRewards: MILLISECONDS.HOUR,
             },
             ttl: {
                 users: MILLISECONDS.WEEK,
                 channels: MILLISECONDS.DAY,
                 emotes: MILLISECONDS.DAY,
                 channelEmotes: MILLISECONDS.DAY,
+                channelRewards: MILLISECONDS.DAY,
             },
             ...options,
         };
 
+        /**
+         * Client's token's current scopes.
+         * @type {string[]}
+         * @readonly
+         */
         this.scope = this.options.scope ?? [];
 
+        /**
+         * Client's channel manager.
+         * @type {ChannelManager}
+         * @readonly
+         */
         this.channels = new ChannelManager(this);
+
+        /**
+         * Client's user manager.
+         * @type {UserManager}
+         * @readonly
+         */
         this.users = new UserManager(this);
+
+        /**
+         * Client's emote manager.
+         * @type {EmoteManager}
+         * @readonly
+         */
         this.emotes = new EmoteManager(this);
-        this.user = null;
-   }
+    }
 
     /**
      * Logs in the client and retrieves an app access token.
@@ -303,7 +311,7 @@ export default class Client extends EventEmitter {
                     );
 
                     if (this.token) {
-                       const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,
@@ -329,7 +337,7 @@ export default class Client extends EventEmitter {
      * Destroys the client and revokes its access token.
      *
      * TODO: Add a destroy method on managers as well and call it here.
-     * @returns {Promise<void>} Nothing.
+     * @returns {Promise<undefined>} Nothing.
      */
     public async destroy() {
         if (this.accessToken)
@@ -459,6 +467,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Sets an interval to be managed by the client.
+     * @returns {Timeout}
+     * @private
      */
     public setInterval(...args: Parameters<typeof lt.setInterval>) {
         const interval = lt.setInterval(...args);
@@ -470,6 +480,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Sets a timeout to be managed by the client.
+     * @returns {Timeout}
+     * @private
      */
     public setTimeout(...args: Parameters<typeof lt.setTimeout>) {
         const timeout = lt.setTimeout(...args);
@@ -481,6 +493,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Clears an interval managed by the client.
+     * @returns {undefined}
+     * @private
      */
     public clearInterval(...args: Parameters<typeof lt.clearInterval>) {
         lt.clearInterval(...args);
@@ -492,6 +506,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Clears a timeout managed by the client.
+     * @returns {undefined}
+     * @private
      */
     public clearTimeout(...args: Parameters<typeof lt.clearTimeout>) {
         lt.clearTimeout(...args);
@@ -545,12 +561,18 @@ export default class Client extends EventEmitter {
      * Emits a new event on the client to be captured by its listeners.
      * @param {string} event Event to emit.
      * @param {any[]} args Data for the event.
+     * @returns {boolean} True if the emission was successful.
      */
     public emit<K extends keyof ClientEvents>(event: K, ...args: ClientEvents[K]): boolean;
     public emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean {
         return super.emit(event, ...args);
     }
 
+    /**
+     * 
+     * @param user Target user
+     * @param channel Channel to follow.
+     */
     public async follow(user: User | string, channel: Channel | string): Promise<void> {
         const userId = user instanceof User ? user.id : user;
         const channelId = channel instanceof Channel ? channel.id : channel;

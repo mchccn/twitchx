@@ -24,6 +24,7 @@ export default class Emote extends Base {
     /**
      * The emote's ID
      * @type {string}
+     * @readonly
      */
     public get id() {
         return this.data.id;
@@ -32,6 +33,7 @@ export default class Emote extends Base {
     /**
      * The emote's name
      * @type {string}
+     * @readonly
      */
     public get name() {
         return this.data.name;
@@ -39,7 +41,8 @@ export default class Emote extends Base {
 
     /**
      * The emote's images
-     * @type {string[]} [1x, 2x, 4x]
+     * @type {string[]}
+     * @readonly
      */
     public get images(): [string, string, string] {
         return [...(Object.values(this.data.images) as [string, string, string])];

@@ -15,7 +15,7 @@ export default abstract class Manager<Value extends { update(): Awaited<unknown>
     /**
      * Creates a new manager.
      * @param {Client} client Client that instantiated this manager.
-     * @param {CacheOptions} options Options for the cache,
+     * @param {CacheOptions} options Options for the cache.
      */
     constructor(
         public readonly client: Client,

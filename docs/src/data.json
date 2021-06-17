@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623894957105 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623958286221 },
     "classes": [
         {
             "name": "Base",
@@ -41,14 +41,17 @@
                 {
                     "name": "clear",
                     "description": "Clears the entire cache.",
-                    "returns": [[["void"]]],
+                    "returns": { "types": [[["void"]]], "description": "Nothing." },
                     "meta": { "line": 27, "file": "Cache.js", "path": "dist/base" }
                 },
                 {
                     "name": "get",
                     "description": "Retrieves a value from the cache.",
                     "params": [{ "name": "key", "description": "Key to retrieve.", "type": [[["string"]]] }],
-                    "returns": [[["Value"]], [["undefined"]]],
+                    "returns": {
+                        "types": [[["Value"]], [["undefined"]]],
+                        "description": "The retrieved value, if any."
+                    },
                     "meta": { "line": 41, "file": "Cache.js", "path": "dist/base" }
                 },
                 {
@@ -58,21 +61,21 @@
                         { "name": "key", "description": "Key to set or update.", "type": [[["string"]]] },
                         { "name": "value", "description": "New value to store.", "type": [[["Value"]]] }
                     ],
-                    "returns": [[["this"]]],
+                    "returns": { "types": [[["this"]]], "description": "The newly updated cache." },
                     "meta": { "line": 63, "file": "Cache.js", "path": "dist/base" }
                 },
                 {
                     "name": "delete",
                     "description": "Deletes a key from the cache.",
                     "params": [{ "name": "key", "description": "Key to delete", "type": [[["string"]]] }],
-                    "returns": [[["Value"]]],
+                    "returns": { "types": [[["Value"]]], "description": "The deleted value." },
                     "meta": { "line": 85, "file": "Cache.js", "path": "dist/base" }
                 },
                 {
                     "name": "has",
                     "description": "Returns true if the cache holds the key.",
                     "params": [{ "name": "key", "description": "Key to check.", "type": [[["string"]]] }],
-                    "returns": [[["boolean"]]],
+                    "returns": { "types": [[["boolean"]]], "description": "True if the cache has the key." },
                     "meta": { "line": 100, "file": "Cache.js", "path": "dist/base" }
                 },
                 {
@@ -90,7 +93,7 @@
                             "type": [[["any"]], [["undefined"]]]
                         }
                     ],
-                    "returns": [[["Value"]], [["undefined"]]],
+                    "returns": { "types": [[["Value"]], [["undefined"]]], "description": "The found value, if any." },
                     "meta": { "line": 109, "file": "Cache.js", "path": "dist/base" }
                 }
             ],
@@ -109,18 +112,58 @@
             },
             "props": [
                 {
+                    "name": "options",
+                    "description": "Options given to the client.",
+                    "readonly": true,
+                    "type": [[["ClientOptions"]]],
+                    "meta": { "line": 36, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "scope",
+                    "description": "Client's token's current scopes.",
+                    "readonly": true,
+                    "type": [
+                        [
+                            ["Array", "<"],
+                            ["string", ">"]
+                        ]
+                    ],
+                    "meta": { "line": 54, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "channels",
+                    "description": "Client's channel manager.",
+                    "readonly": true,
+                    "type": [[["ChannelManager"]]],
+                    "meta": { "line": 60, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "users",
+                    "description": "Client's user manager.",
+                    "readonly": true,
+                    "type": [[["UserManager"]]],
+                    "meta": { "line": 66, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "emotes",
+                    "description": "Client's emote manager.",
+                    "readonly": true,
+                    "type": [[["EmoteManager"]]],
+                    "meta": { "line": 72, "file": "Client.js", "path": "dist/base" }
+                },
+                {
                     "name": "token",
                     "description": "Current token being used.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 269, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 296, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "type",
                     "description": "Authentication type; either `\"app\"` or `\"user\"`.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 277, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 304, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "methods": [
@@ -138,7 +181,7 @@
                         ],
                         "description": "The new access token or OAuth details object."
                     },
-                    "meta": { "line": 57, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 84, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "destroy",
@@ -147,32 +190,40 @@
                         "types": [
                             [
                                 ["Promise", "<"],
-                                ["void", ">"]
+                                ["undefined", ">"]
                             ]
                         ],
                         "description": "Nothing."
                     },
-                    "meta": { "line": 179, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 206, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setInterval",
                     "description": "Sets an interval to be managed by the client.",
-                    "meta": { "line": 283, "file": "Client.js", "path": "dist/base" }
+                    "access": "private",
+                    "returns": [[["Timeout"]]],
+                    "meta": { "line": 312, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setTimeout",
                     "description": "Sets a timeout to be managed by the client.",
-                    "meta": { "line": 291, "file": "Client.js", "path": "dist/base" }
+                    "access": "private",
+                    "returns": [[["Timeout"]]],
+                    "meta": { "line": 322, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearInterval",
                     "description": "Clears an interval managed by the client.",
-                    "meta": { "line": 299, "file": "Client.js", "path": "dist/base" }
+                    "access": "private",
+                    "returns": [[["undefined"]]],
+                    "meta": { "line": 332, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearTimeout",
                     "description": "Clears a timeout managed by the client.",
-                    "meta": { "line": 307, "file": "Client.js", "path": "dist/base" }
+                    "access": "private",
+                    "returns": [[["undefined"]]],
+                    "meta": { "line": 342, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "on",
@@ -182,7 +233,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [[["function"]]] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 318, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 353, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "once",
@@ -192,14 +243,14 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [[["function"]]] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 327, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 362, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "events": [
                 {
                     "name": "ready",
                     "description": "Emitted when the client has been set up.",
-                    "meta": { "line": 30, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 32, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "debug",
@@ -207,24 +258,24 @@
                     "params": [
                         { "name": "info", "description": "Debugging information emitted.", "type": [[["string"]]] }
                     ],
-                    "meta": { "line": 34, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 36, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "destroy",
                     "description": "Emitted when the client has been destroyed.",
-                    "meta": { "line": 39, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 41, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "channelCreate",
                     "description": "Emitted when a new Channel instance has been created.",
                     "params": [{ "name": "channel", "description": "The new channel.", "type": [[["Channel"]]] }],
-                    "meta": { "line": 43, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 45, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "userCreate",
                     "description": "Emitted when a new User instance has been created.",
                     "params": [{ "name": "user", "description": "The new user.", "type": [[["User"]]] }],
-                    "meta": { "line": 48, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 50, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "channelEmoteCreate",
@@ -232,7 +283,7 @@
                     "params": [
                         { "name": "emote", "description": "The new channel emote.", "type": [[["ChannelEmote"]]] }
                     ],
-                    "meta": { "line": 53, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 55, "file": "client.js", "path": "dist/types/base" }
                 },
                 {
                     "name": "channelEmoteSetCreate",
@@ -240,7 +291,15 @@
                     "params": [
                         { "name": "set", "description": "The new channel emote set.", "type": [[["ChannelEmoteSet"]]] }
                     ],
-                    "meta": { "line": 58, "file": "client.js", "path": "dist/types/base" }
+                    "meta": { "line": 60, "file": "client.js", "path": "dist/types/base" }
+                },
+                {
+                    "name": "channelRewardCreate",
+                    "description": "Emitted when a new ChannelReward instance has been created.",
+                    "params": [
+                        { "name": "reward", "description": "The new channel reward.", "type": [[["ChannelReward"]]] }
+                    ],
+                    "meta": { "line": 65, "file": "client.js", "path": "dist/types/base" }
                 }
             ],
             "meta": { "line": 19, "file": "Client.js", "path": "dist/base" }
@@ -258,7 +317,7 @@
                         "description": "Client that instantiated this manager.",
                         "type": [[["Client"]]]
                     },
-                    { "name": "options", "description": "Options for the cache,", "type": [[["CacheOptions"]]] }
+                    { "name": "options", "description": "Options for the cache.", "type": [[["CacheOptions"]]] }
                 ]
             },
             "props": [
@@ -297,64 +356,79 @@
                 {
                     "name": "client",
                     "description": "Client that instantiated this channel.",
-                    "type": [],
-                    "meta": { "line": 29, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 32, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emotes",
                     "description": "Manages this channel's emotes.",
                     "readonly": true,
                     "type": [[["ChannelEmoteManager"]]],
-                    "meta": { "line": 35, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 38, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emoteSets",
                     "description": "Manages this channel's emote sets.",
                     "readonly": true,
                     "type": [[["ChannelEmoteSetManager"]]],
-                    "meta": { "line": 41, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 44, "file": "Channel.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "rewards",
+                    "description": "Manages this channel's rewards.",
+                    "readonly": true,
+                    "type": [[["ChannelRewardManager"]]],
+                    "meta": { "line": 50, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "id",
                     "description": "Broadcaster ID of the channel.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 48, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 58, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "language",
                     "description": "Main language of the channel.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 55, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 66, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "name",
                     "description": "Name of the channel.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 62, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 74, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameName",
                     "description": "Current game name.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 69, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 82, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameId",
                     "description": "Current game ID.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 76, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 90, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "title",
                     "description": "Title of the channel.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 83, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 98, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "delay",
                     "description": "Delay of the channel.",
+                    "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 90, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 106, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
             "methods": [
@@ -370,10 +444,10 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 97, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 113, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
-            "meta": { "line": 16, "file": "Channel.js", "path": "dist/classes/channels" }
+            "meta": { "line": 17, "file": "Channel.js", "path": "dist/classes/channels" }
         },
         {
             "name": "ChannelEmote",
@@ -399,43 +473,49 @@
                 {
                     "name": "id",
                     "description": "This emote's ID.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 36, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 37, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "name",
                     "description": "This emote's name.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 43, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 45, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "images",
                     "description": "This emote's image urls.",
+                    "readonly": true,
                     "type": [
                         [
                             ["Array", "<"],
                             ["string", ">"]
                         ]
                     ],
-                    "meta": { "line": 50, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 53, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "tier",
                     "description": "This emote's tier.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 57, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 61, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "type",
                     "description": "This emote's type.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 64, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 69, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "setId",
                     "description": "This emote's set's ID.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 71, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 77, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 }
             ],
             "methods": [
@@ -451,7 +531,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 78, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 84, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
                 }
             ],
             "meta": { "line": 12, "file": "ChannelEmote.js", "path": "dist/classes/channels" }
@@ -508,19 +588,22 @@
                             "type": [[["string"]], [["undefined"]]]
                         }
                     ],
-                    "returns": [
-                        [
-                            ["Promise", "<("],
-                            ["ChannelEmote", "|"],
-                            ["undefined", ")>"]
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<("],
+                                ["ChannelEmote", "|"],
+                                ["undefined", ")>"]
+                            ],
+                            [
+                                ["Promise", "<"],
+                                ["Collection", "<"],
+                                ["string", ", "],
+                                ["ChannelEmote", ">>"]
+                            ]
                         ],
-                        [
-                            ["Promise", "<"],
-                            ["Collection", "<"],
-                            ["string", ", "],
-                            ["ChannelEmote", ">>"]
-                        ]
-                    ],
+                        "description": "The fetched emotes."
+                    },
                     "meta": { "line": 47, "file": "ChannelEmoteManager.js", "path": "dist/classes/channels" }
                 }
             ],
@@ -707,6 +790,212 @@
             "meta": { "line": 14, "file": "ChannelManager.js", "path": "dist/classes/channels" }
         },
         {
+            "name": "ChannelReward",
+            "description": "A reward in a channel.",
+            "extends": [[["Base"]]],
+            "construct": {
+                "name": "ChannelReward",
+                "description": "Creates a new channel reward entity.",
+                "params": [
+                    { "name": "client", "description": "Client that instantiated this reward.", "type": [] },
+                    { "name": "data", "description": "Data for the reward.", "type": [] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this reward.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 23, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "broadcasterId",
+                    "description": "ID of the broadcaster.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 32, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "broadcasterLogin",
+                    "description": "Broadcaster's login.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 40, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "broadcasterName",
+                    "description": "Broadcaster's name.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 48, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "id",
+                    "description": "Reward's id.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 56, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "title",
+                    "description": "Reward's title.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 64, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "prompt",
+                    "description": "Reward's prompt.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 72, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "cost",
+                    "description": "Reward's cost.",
+                    "readonly": true,
+                    "type": [[["number"]]],
+                    "meta": { "line": 80, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "image",
+                    "description": "Reward's image URL.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 88, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "defaultImage",
+                    "description": "Reward's default image URL.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 96, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "backgroundColor",
+                    "description": "Reward's background color.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 104, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "isEnabled",
+                    "description": "If the reward is enabled.",
+                    "readonly": true,
+                    "type": [[["boolean"]]],
+                    "meta": { "line": 112, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "userInputRequired",
+                    "description": "If user input is required.",
+                    "readonly": true,
+                    "type": [[["boolean"]]],
+                    "meta": { "line": 120, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "maxPerStream",
+                    "description": "Max reward count per stream.",
+                    "readonly": true,
+                    "type": [[["object"]]],
+                    "meta": { "line": 128, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "maxPerUser",
+                    "description": "Max reward per user per stream.",
+                    "readonly": true,
+                    "type": [[["object"]]],
+                    "meta": { "line": 136, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "globalCooldown",
+                    "description": "Global cooldown.",
+                    "readonly": true,
+                    "type": [[["object"]]],
+                    "meta": { "line": 144, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "isPaused",
+                    "description": "If the reward is paused.",
+                    "readonly": true,
+                    "type": [[["boolean"]]],
+                    "meta": { "line": 152, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "isInStock",
+                    "description": "If the reward is in stock.",
+                    "readonly": true,
+                    "type": [[["boolean"]]],
+                    "meta": { "line": 160, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "redemptionsSkipQueue",
+                    "description": "Should redemptions skip the request queue?",
+                    "readonly": true,
+                    "type": [[["boolean"]]],
+                    "meta": { "line": 168, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "redemptionsRedeemed",
+                    "description": "Redemptions redeemed.",
+                    "readonly": true,
+                    "type": [[["number"]]],
+                    "meta": { "line": 176, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                },
+                {
+                    "name": "cooldownExpiresAt",
+                    "description": "When the cooldown expires.",
+                    "readonly": true,
+                    "type": [[["string"]]],
+                    "meta": { "line": 184, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 10, "file": "ChannelReward.js", "path": "dist/classes/channels" }
+        },
+        {
+            "name": "ChannelRewardManager",
+            "construct": {
+                "name": "ChannelRewardManager",
+                "description": "Creates a new channel reward manager.",
+                "params": [
+                    {
+                        "name": "client",
+                        "description": "Client that instantiated this manager.",
+                        "type": [[["Client"]]]
+                    },
+                    { "name": "channelId", "description": "Parent channel's id.", "type": [[["string"]]] }
+                ]
+            },
+            "props": [
+                {
+                    "name": "client",
+                    "description": "Client that instantiated this manager.",
+                    "readonly": true,
+                    "type": [[["Client"]]],
+                    "meta": { "line": 30, "file": "ChannelRewardManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Fetches a reward.\nTODO: Implement fetching.",
+                    "params": [{ "name": "id", "description": "ID to fetch.", "type": [[["string"]]] }],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<("],
+                                ["ChannelReward", "|"],
+                                ["undefined", ")>"]
+                            ]
+                        ],
+                        "description": "The fetched reward, if any."
+                    },
+                    "meta": { "line": 39, "file": "ChannelRewardManager.js", "path": "dist/classes/channels" }
+                }
+            ],
+            "meta": { "line": 11, "file": "ChannelRewardManager.js", "path": "dist/classes/channels" }
+        },
+        {
             "name": "Emote",
             "description": "Represents a global emote on Twitch.",
             "extends": [[["Base"]]],
@@ -722,25 +1011,28 @@
                 {
                     "name": "id",
                     "description": "The emote's ID",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 29, "file": "Emote.js", "path": "dist/classes/emotes" }
+                    "meta": { "line": 30, "file": "Emote.js", "path": "dist/classes/emotes" }
                 },
                 {
                     "name": "name",
                     "description": "The emote's name",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 36, "file": "Emote.js", "path": "dist/classes/emotes" }
+                    "meta": { "line": 38, "file": "Emote.js", "path": "dist/classes/emotes" }
                 },
                 {
                     "name": "images",
                     "description": "The emote's images",
+                    "readonly": true,
                     "type": [
                         [
                             ["Array", "<"],
                             ["string", ">"]
                         ]
                     ],
-                    "meta": { "line": 43, "file": "Emote.js", "path": "dist/classes/emotes" }
+                    "meta": { "line": 46, "file": "Emote.js", "path": "dist/classes/emotes" }
                 },
                 {
                     "name": "client",
@@ -763,7 +1055,7 @@
                         ],
                         "description": "True if the update was succesful."
                     },
-                    "meta": { "line": 50, "file": "Emote.js", "path": "dist/classes/emotes" }
+                    "meta": { "line": 53, "file": "Emote.js", "path": "dist/classes/emotes" }
                 }
             ],
             "meta": { "line": 13, "file": "Emote.js", "path": "dist/classes/emotes" }
@@ -852,62 +1144,72 @@
                 {
                     "name": "id",
                     "description": "The user's ID.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 36, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 37, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "login",
                     "description": "The user's login name (username but all lowercase).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 43, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 45, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "displayName",
                     "description": "The user's display name.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 50, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 53, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "type",
                     "description": "The user's type (staff status).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 57, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 61, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "broadcasterType",
                     "description": "The user's broadcaster type (partner program).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 64, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 69, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "viewCount",
                     "description": "Total number of views on this user's channel.",
+                    "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 71, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 77, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "email",
                     "description": "Returns the email of the user (scope `user:read:email` is required).",
+                    "readonly": true,
                     "type": [[["string"]], [["undefined"]]],
-                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "description",
                     "description": "The user's description.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 93, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdAt",
                     "description": "The Date object when the user was created.",
+                    "readonly": true,
                     "type": [[["Date"]]],
-                    "meta": { "line": 95, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 104, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdTimestamp",
                     "description": "The unix timestamp when the user was created.",
+                    "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 102, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 112, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "methods": [
@@ -915,7 +1217,16 @@
                     "name": "setDescription",
                     "description": "Updates the description of this user.",
                     "params": [{ "name": "description", "description": "New description.", "type": [[["string"]]] }],
-                    "meta": { "line": 31, "file": "ClientUser.js", "path": "dist/classes/users" }
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the update was succesful."
+                    },
+                    "meta": { "line": 32, "file": "ClientUser.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "avatarURL",
@@ -930,7 +1241,7 @@
                         }
                     ],
                     "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
-                    "meta": { "line": 111, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 121, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "update",
@@ -946,7 +1257,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 118, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 128, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "block",
@@ -969,7 +1280,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 156, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 166, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "unblock",
@@ -985,7 +1296,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 185, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 195, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "fetchBlocks",
@@ -1009,7 +1320,7 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 210, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 220, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 12, "file": "ClientUser.js", "path": "dist/classes/users" }
@@ -1041,62 +1352,72 @@
                 {
                     "name": "id",
                     "description": "The user's ID.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 36, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 37, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "login",
                     "description": "The user's login name (username but all lowercase).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 43, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 45, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "displayName",
                     "description": "The user's display name.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 50, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 53, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "type",
                     "description": "The user's type (staff status).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 57, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 61, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "broadcasterType",
                     "description": "The user's broadcaster type (partner program).",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 64, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 69, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "viewCount",
                     "description": "Total number of views on this user's channel.",
+                    "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 71, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 77, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "email",
                     "description": "Returns the email of the user (scope `user:read:email` is required).",
+                    "readonly": true,
                     "type": [[["string"]], [["undefined"]]],
-                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "description",
                     "description": "The user's description.",
+                    "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 93, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdAt",
                     "description": "The Date object when the user was created.",
+                    "readonly": true,
                     "type": [[["Date"]]],
-                    "meta": { "line": 95, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 104, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdTimestamp",
                     "description": "The unix timestamp when the user was created.",
+                    "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 102, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 112, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "methods": [
@@ -1111,7 +1432,7 @@
                         }
                     ],
                     "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
-                    "meta": { "line": 111, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 121, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "update",
@@ -1125,7 +1446,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 118, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 128, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "block",
@@ -1146,7 +1467,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 156, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 166, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "unblock",
@@ -1160,7 +1481,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 185, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 195, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "fetchBlocks",
@@ -1182,7 +1503,7 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 210, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 220, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 14, "file": "User.js", "path": "dist/classes/users" }
@@ -1278,6 +1599,7 @@
         },
         {
             "name": "AvatarURLOptions",
+            "description": "Options to retrieve an avatar url.",
             "type": [[["object"]]],
             "props": [
                 {
@@ -1286,10 +1608,11 @@
                     "type": [[["boolean"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 236, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 246, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlockOptions",
+            "description": "Options for blocking a user.",
             "type": [[["object"]]],
             "props": [
                 { "name": "reason", "description": "Reason for the block.", "type": [[["string"]], [["undefined"]]] },
@@ -1299,16 +1622,21 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 240, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 251, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlocksFetchOptions",
+            "description": "Options for fetching blocks.",
             "type": [[["object"]]],
             "props": [
-                { "name": "first", "type": [[["number"]]] },
-                { "name": "after", "type": [[["string"]]] }
+                { "name": "first", "description": "Offset the first result.", "type": [[["number"]], [["undefined"]]] },
+                {
+                    "name": "after",
+                    "description": "After this date represented as a string.",
+                    "type": [[["string"]], [["undefined"]]]
+                }
             ],
-            "meta": { "line": 245, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 257, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "UserFetchOptions",
@@ -1334,7 +1662,8 @@
                 { "name": "users", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
                 { "name": "channels", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
                 { "name": "emotes", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
-                { "name": "channelEmotes", "type": [[["boolean"]], [["number"]], [["undefined"]]] }
+                { "name": "channelEmotes", "type": [[["boolean"]], [["number"]], [["undefined"]]] },
+                { "name": "channelRewards", "type": [[["boolean"]], [["number"]], [["undefined"]]] }
             ],
             "meta": { "line": 3, "file": "client.js", "path": "dist/types/base" }
         },
@@ -1345,9 +1674,10 @@
                 { "name": "users", "type": [[["number"]], [["undefined"]]] },
                 { "name": "channels", "type": [[["number"]], [["undefined"]]] },
                 { "name": "emotes", "type": [[["number"]], [["undefined"]]] },
-                { "name": "channelEmotes", "type": [[["number"]], [["undefined"]]] }
+                { "name": "channelEmotes", "type": [[["number"]], [["undefined"]]] },
+                { "name": "channelRewards", "type": [[["number"]], [["undefined"]]] }
             ],
-            "meta": { "line": 10, "file": "client.js", "path": "dist/types/base" }
+            "meta": { "line": 11, "file": "client.js", "path": "dist/types/base" }
         },
         {
             "name": "ClientOptions",
@@ -1373,7 +1703,7 @@
                 { "name": "debug", "type": [[["boolean"]], [["undefined"]]] },
                 { "name": "suppressRejections", "type": [[["boolean"]], [["undefined"]]] }
             ],
-            "meta": { "line": 17, "file": "client.js", "path": "dist/types/base" }
+            "meta": { "line": 19, "file": "client.js", "path": "dist/types/base" }
         },
         {
             "name": "ChannelData",
@@ -1393,9 +1723,6 @@
             "name": "ChannelEmoteData",
             "type": [[["EmoteData"]]],
             "props": [
-                { "name": "id", "type": [[["string"]]] },
-                { "name": "name", "type": [[["string"]]] },
-                { "name": "images", "type": [[["EmoteDataImages"]]] },
                 { "name": "tier", "type": [[["string"]]] },
                 { "name": "emote_type", "type": [[["string"]]] },
                 { "name": "emote_set_id", "type": [[["string"]]] }
@@ -1468,6 +1795,12 @@
         }
     ],
     "externals": [
+        {
+            "name": "Collection",
+            "description": "An extended map with utility methods.",
+            "see": ["https://github.com/discordjs/collection/blob/master/src/index.ts#L15"],
+            "meta": { "line": 8, "file": "index.js", "path": "dist/types/classes" }
+        },
         {
             "name": "WebSocketClientOptions",
             "description": "Options for the websocket.",

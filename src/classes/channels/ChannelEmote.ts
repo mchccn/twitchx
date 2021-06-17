@@ -35,6 +35,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's ID.
      * @type {string}
+     * @readonly
      */
     public get id() {
         return this.data.id;
@@ -43,6 +44,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's name.
      * @type {string}
+     * @readonly
      */
     public get name() {
         return this.data.name;
@@ -51,6 +53,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's image urls.
      * @type {string[]}
+     * @readonly
      */
     public get images() {
         return [...Object.values(this.data.images)] as [string, string, string];
@@ -59,6 +62,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's tier.
      * @type {string}
+     * @readonly
      */
     public get tier() {
         return this.data.tier;
@@ -67,6 +71,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's type.
      * @type {string}
+     * @readonly
      */
     public get type() {
         return this.data.emote_type;
@@ -75,6 +80,7 @@ export default class ChannelEmote extends Emote {
     /**
      * This emote's set's ID.
      * @type {string}
+     * @readonly
      */
     public get setId() {
         return this.data.emote_set_id;

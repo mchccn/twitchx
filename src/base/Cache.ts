@@ -22,7 +22,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
 
     /**
      * Clears the entire cache.
-     * @returns {void}
+     * @returns {void} Nothing.
      */
     public clear() {
         super.clear();
@@ -37,7 +37,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
     /**
      * Retrieves a value from the cache.
      * @param {string} key Key to retrieve.
-     * @returns {Value | undefined}
+     * @returns {Value | undefined} The retrieved value, if any.
      */
     public get(key: string) {
         const value = super.get(key);
@@ -65,7 +65,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
      * Sets or updates a key to a new value.
      * @param {string} key Key to set or update.
      * @param {Value} value New value to store.
-     * @returns {this}
+     * @returns {this} The newly updated cache.
      */
     public set(key: string, value: Value) {
         super.set(key, value);
@@ -90,7 +90,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
     /**
      * Deletes a key from the cache.
      * @param {string} key Key to delete
-     * @returns {Value}
+     * @returns {Value} The deleted value.
      */
     public delete(key: string) {
         const value = super.delete(key);
@@ -109,7 +109,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
     /**
      * Returns true if the cache holds the key.
      * @param {string} key Key to check.
-     * @returns {boolean}
+     * @returns {boolean} True if the cache has the key.
      */
     public has(key: string) {
         return super.has(key);
@@ -119,7 +119,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
      * Performs a search operation on the cache's values.
      * @param {Function} predicate Callback function to execute.
      * @param {any | undefined} thisArg Optional `this` context for the callback.
-     * @returns {Value | undefined}
+     * @returns {Value | undefined} The found value, if any.
      */
     public find(predicate: (item: Value, index: number, array: Value[]) => unknown, thisArg?: any) {
         return [...this.values()].find(predicate, thisArg);

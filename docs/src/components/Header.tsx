@@ -134,7 +134,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
                                 if (e.target.value && !window.location.hash.startsWith("#/search")) {
                                     localStorage.setItem("twitchx-last", window.location.hash);
                                 } else if (!e.target.value) {
-                                    window.location.hash = localStorage.getItem("twitchx-last") ?? "#/docs";
+                                    window.location.hash = localStorage.getItem("twitchx-last") ?? "ERROR";
 
                                     return;
                                 }

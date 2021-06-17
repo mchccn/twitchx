@@ -5,6 +5,7 @@ import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 import { Link, Redirect, useParams } from "react-router-dom";
 import data from "../data.json";
 import docs from "../docs.json";
+import Class from "./Class";
 import Sidebar from "./Sidebar";
 
 export default function Docs({ search, setSearch }: { search: string; setSearch: Dispatch<SetStateAction<string>> }) {
@@ -39,34 +40,65 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
     });
 
     useEffect(() => {
-        const resolveType = (type: string[][][], many?: boolean) =>
-            type
-                .flat(1)
-                .map((type) => type.join(""))
-                .join(many ? "|" : "");
+        const NATIVE = {
+            string: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+            boolean: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+            number: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+            object: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+            function: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+            Array: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            Promise: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+            undefined: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+        } as const;
+
+        const NODEJS = {
+            EventEmitter: "https://nodejs.org/api/all.html#events_class_eventemitter",
+        } as const;
+
+        const REGEX = {
+            IDENTIFIER: new RegExp(
+                `(${[...catalog]
+                    .sort((a, b) => b.name.length - a.name.length)
+                    .map(({ name }) => name)
+                    .join("|")})`,
+                "g"
+            ),
+            NODEJS: new RegExp(
+                `(${Object.keys(NODEJS)
+                    .sort((a, b) => b.length - a.length)
+                    .join("|")})`,
+                "g"
+            ),
+            NATIVE: new RegExp(
+                `(${Object.keys(NATIVE)
+                    .sort((a, b) => b.length - a.length)
+                    .join("|")})`,
+                "g"
+            ),
+        } as const;
+
+        const resolveType = (type: string[][][], removeUndefined?: boolean) => type.flat(2).join("");
+
+        const applyStyles = (string: string) =>
+            md.renderInline(
+                string
+                    .replace(
+                        REGEX.IDENTIFIER,
+                        (match) => `[${match}](#/docs/${catalog.find(({ name }) => name === match)!.category}/${match})`
+                    )
+                    .replace(REGEX.NODEJS, (match) => `[${match}](${NODEJS[match as keyof typeof NODEJS]})`)
+                    .replace(REGEX.NATIVE, (match) => `[${match}](${NATIVE[match as keyof typeof NATIVE]})`)
+            );
 
         setDocumentation(
+            // ! Implement scrollTo query parameter.
+
             (() => {
                 if (
                     !route ||
                     !catalog.find(({ category, slug }) => route.toLowerCase() === `${category}/${slug}`.toLowerCase())
                 )
                     return;
-
-                const NODEJS = {
-                    EventEmitter: "https://nodejs.org/api/all.html#events_class_eventemitter",
-                } as const;
-
-                const REGEX = {
-                    IDENTIFIER: new RegExp(
-                        `(${[...catalog]
-                            .sort((a, b) => b.name.length - a.name.length)
-                            .map(({ name }) => name)
-                            .join("|")})`,
-                        "g"
-                    ),
-                    NODEJS: new RegExp(`(${["EventEmitter"].sort((a, b) => b.length - a.length).join("|")})`, "g"),
-                } as const;
 
                 const name = catalog.find(
                     ({ category, slug }) => route.toLowerCase() === `${category}/${slug}`.toLowerCase()
@@ -87,101 +119,7 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                 }
 
                 if (info.type === "class") {
-                    return (
-                        <div className="markdown">
-                            <h1 className="flex flex-col justify-between">
-                                {info.abstract && <span className="text-sm">abstract</span>}
-                                <span>{info.name}</span>
-                                {info.extends && (
-                                    <span
-                                        className="text-base"
-                                        dangerouslySetInnerHTML={{
-                                            __html: `extends ${md.renderInline(
-                                                resolveType(info.extends)
-                                                    .replace(
-                                                        REGEX.IDENTIFIER,
-                                                        (match) =>
-                                                            `[${match}](#/docs/${
-                                                                catalog.find(({ name }) => name === match)!.category
-                                                            }/${match})`
-                                                    )
-                                                    .replace(
-                                                        REGEX.NODEJS,
-                                                        (match) => `[${match}](${NODEJS[match as keyof typeof NODEJS]})`
-                                                    )
-                                            )}`,
-                                        }}
-                                    ></span>
-                                )}
-                            </h1>
-
-                            <p>{info.description}</p>
-
-                            <h2>Constructor</h2>
-
-                            <pre>
-                                <code className="hljs code-javascript">{`new Twitch.${info.name}(${
-                                    info.construct.params
-                                        ? (
-                                              info.construct.params as {
-                                                  name: string;
-                                                  description: string;
-                                                  type: string[][][];
-                                              }[]
-                                          )
-                                              .map((param) => param.name)
-                                              .join(", ")
-                                        : ""
-                                })`}</code>
-                            </pre>
-
-                            <p>{info.construct.description}</p>
-
-                            {info.construct.params.length && (
-                                <div className="flex flex-col border border-gray-300">
-                                    {(
-                                        info.construct.params as {
-                                            name: string;
-                                            description: string;
-                                            type: string[][][];
-                                        }[]
-                                    ).map((param) => (
-                                        <div className="flex">
-                                            <div className="w-40 py-1 px-1.5 grid items-center font-mono text-xs sm:text-sm flex-shrink-0 border border-gray-300">
-                                                {param.name}
-                                            </div>
-                                            <div
-                                                className="w-40 py-1 px-1.5 grid items-center flex-shrink-0 border border-gray-300"
-                                                dangerouslySetInnerHTML={{
-                                                    __html: md.renderInline(
-                                                        resolveType(param.type)
-                                                            .replace(
-                                                                REGEX.IDENTIFIER,
-                                                                (match) =>
-                                                                    `[${match}](#/docs/${
-                                                                        catalog.find(({ name }) => name === match)!
-                                                                            .category
-                                                                    }/${match})`
-                                                            )
-                                                            .replace(
-                                                                REGEX.NODEJS,
-                                                                (match) =>
-                                                                    `[${match}](${
-                                                                        NODEJS[match as keyof typeof NODEJS]
-                                                                    })`
-                                                            )
-                                                    ),
-                                                }}
-                                            ></div>
-                                            <div className="flex-1 py-1 px-1.5 grid items-center border border-gray-300">
-                                                {param.description}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    );
+                    return <Class info={info} applyStyles={applyStyles} resolveType={resolveType} md={md} />;
                 }
 
                 if (info.type === "typedef") {
@@ -215,13 +153,15 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
         });
     }, [route]);
 
-    if (!route && !search) return <Redirect to="/docs/general/welcome" />;
+    if (!route && typeof search === "undefined") return <Redirect to="/docs/general/welcome" />;
+
+    if (!route && !search) return null;
 
     return (
         <div className="flex flex-1">
             <Sidebar active={route} />
             <main
-                className="docs flex-1 px-4 py-3 dark:text-white overflow-y-scroll"
+                className="docs flex-1 pl-6 pr-4 py-3 lg:px-4 dark:text-white overflow-y-scroll"
                 style={{ maxHeight: "calc(100vh - 3rem)" }}
             >
                 {search ? (
@@ -242,7 +182,7 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                                                     classes: "🄲",
                                                     typedefs: "🅃",
                                                     externals: "🄴",
-                                                    interfaces: "🅸",
+                                                    interfaces: "🄸",
                                                     meta: "",
                                                 }[item.category as keyof typeof data]
                                             }

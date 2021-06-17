@@ -7,7 +7,7 @@ import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchA
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
-import ChannelRewardsManager from "./ChannelRewardsManager";
+import ChannelRewardManager from "./ChannelRewardManager";
 
 /**
  * Twitch API's channel entity represented in a class.
@@ -34,6 +34,8 @@ export default class Channel extends Base {
 
         /**
          * Client that instantiated this channel.
+         * @type {Client}
+         * @readonly
          */
         this.client = client;
 
@@ -51,14 +53,20 @@ export default class Channel extends Base {
          */
         this.emoteSets = new ChannelEmoteSetManager(this.client, this);
 
-        this.client.emit("channelCreate", this);
+        /**
+         * Manages this channel's rewards.
+         * @type {ChannelRewardManager}
+         * @readonly
+         */
+        this.rewards = new ChannelRewardManager(this.client, this);
 
-        this.rewards = new ChannelRewardsManager(this.client);
+        this.client.emit("channelCreate", this);
     }
 
     /**
      * Broadcaster ID of the channel.
      * @type {string}
+     * @readonly
      */
     public get id() {
         return this.data.broadcaster_id;
@@ -67,6 +75,7 @@ export default class Channel extends Base {
     /**
      * Main language of the channel.
      * @type {string}
+     * @readonly
      */
     public get language() {
         return this.data.broadcaster_language;
@@ -75,6 +84,7 @@ export default class Channel extends Base {
     /**
      * Name of the channel.
      * @type {string}
+     * @readonly
      */
     public get name() {
         return this.data.broadcaster_name;
@@ -83,6 +93,7 @@ export default class Channel extends Base {
     /**
      * Current game name.
      * @type {string}
+     * @readonly
      */
     public get gameName() {
         return this.data.game_name;
@@ -91,6 +102,7 @@ export default class Channel extends Base {
     /**
      * Current game ID.
      * @type {string}
+     * @readonly
      */
     public get gameId() {
         return this.data.game_id;
@@ -99,6 +111,7 @@ export default class Channel extends Base {
     /**
      * Title of the channel.
      * @type {string}
+     * @readonly
      */
     public get title() {
         return this.data.title;
@@ -107,6 +120,7 @@ export default class Channel extends Base {
     /**
      * Delay of the channel.
      * @type {number}
+     * @readonly
      */
     public get delay() {
         return this.data.delay;

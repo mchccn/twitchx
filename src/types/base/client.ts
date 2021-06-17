@@ -1,5 +1,4 @@
-import type { ChannelEmote, ChannelEmoteSet, User } from "../../classes";
-import type Channel from "../../classes/channels/Channel";
+import type { Channel, ChannelEmote, ChannelEmoteSet, ChannelReward, User } from "../../classes";
 
 export type ClientScope =
     | "analytics:read:extensions"
@@ -49,12 +48,14 @@ export interface ClientOptions {
         channels?: boolean | number;
         emotes?: boolean | number;
         channelEmotes?: boolean | number;
+        channelRewards?: boolean | number;
     };
     ttl?: {
         users?: number;
         channels?: number;
         emotes?: number;
         channelEmotes?: number;
+        channelRewards?: number;
     };
     debug?: boolean;
     suppressRejections?: boolean;
@@ -68,6 +69,7 @@ export interface ClientEvents {
     userCreate: [User];
     channelEmoteCreate: [ChannelEmote];
     channelEmoteSetCreate: [ChannelEmoteSet];
+    channelRewardCreate: [ChannelReward];
 }
 
 /**
@@ -76,6 +78,7 @@ export interface ClientEvents {
  * @prop {boolean | number | undefined} channels
  * @prop {boolean | number | undefined} emotes
  * @prop {boolean | number | undefined} channelEmotes
+ * @prop {boolean | number | undefined} channelRewards
  */
 
 /**
@@ -84,6 +87,7 @@ export interface ClientEvents {
  * @prop {number | undefined} channels
  * @prop {number | undefined} emotes
  * @prop {number | undefined} channelEmotes
+ * @prop {number | undefined} channelRewards
  */
 
 /**
@@ -138,4 +142,10 @@ export interface ClientEvents {
  * Emitted when a new ChannelEmoteSet instance has been created.
  * @event Client#channelEmoteSetCreate
  * @param {ChannelEmoteSet} set The new channel emote set.
+ */
+
+/**
+ * Emitted when a new ChannelReward instance has been created.
+ * @event Client#channelRewardCreate
+ * @param {ChannelReward} reward The new channel reward.
  */

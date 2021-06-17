@@ -4,7 +4,7 @@ import { Client } from "../../base";
 import { HTTPError } from "../../shared";
 import { UserData } from "../../types/classes/user";
 
-**
+/**
  * User representing the client on Twitch.
  * @class
  * @extends {User}
@@ -31,6 +31,7 @@ class ClientUser extends User {
     /**
      * Updates the description of this user.
      * @param {string} description New description.
+     * @returns {Promise<boolean>} True if the update was succesful.
      */
     public async setDescription(description: string) {
         const response = await fetch(

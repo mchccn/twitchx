@@ -9,7 +9,7 @@ html {
     --dark: #0f0f10;
     --code-dark: #141416;
 
-    overflow-x: hidden;
+    overflow: hidden;
     overscroll-behavior: none;
     scroll-behavior: smooth;
 }
@@ -64,7 +64,7 @@ html {
 }
 
 .markdown > p {
-    @apply font-light my-4;
+    @apply font-light text-sm sm:text-base my-4;
 }
 
 .markdown strong {
@@ -111,7 +111,8 @@ html {
     @apply my-4;
 }
 
-.markdown > p > code {
+.markdown > p > code,
+.markdown-p > code {
     @apply text-sm bg-gray-50 rounded-sm p-0.5 dark:bg-codeDark;
 }
 

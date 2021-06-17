@@ -1,7 +1,11 @@
 export { default as Channel } from "./channels/Channel";
 export { default as ChannelEmote } from "./channels/ChannelEmote";
 export { default as ChannelEmoteManager } from "./channels/ChannelEmoteManager";
+export { default as ChannelEmoteSet } from "./channels/ChannelEmoteSet";
+export { default as ChannelEmoteSetManager } from "./channels/ChannelEmoteSetManager";
 export { default as ChannelManager } from "./channels/ChannelManager";
+export { default as ChannelReward } from "./channels/ChannelReward";
+export { default as ChannelRewardManager } from "./channels/ChannelRewardManager";
 export { default as Emote } from "./emotes/Emote";
 export { default as EmoteManager } from "./emotes/EmoteManager";
 export { default as User } from "./users/User";

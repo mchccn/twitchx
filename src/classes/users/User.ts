@@ -36,6 +36,7 @@ export default class User extends Base {
     /**
      * The user's ID.
      * @type {string}
+     * @readonly
      */
     public get id() {
         return this.data.id;
@@ -44,6 +45,7 @@ export default class User extends Base {
     /**
      * The user's login name (username but all lowercase).
      * @type {string}
+     * @readonly
      */
     public get login() {
         return this.data.login;
@@ -52,6 +54,7 @@ export default class User extends Base {
     /**
      * The user's display name.
      * @type {string}
+     * @readonly
      */
     public get displayName() {
         return this.data.display_name;
@@ -60,6 +63,7 @@ export default class User extends Base {
     /**
      * The user's type (staff status).
      * @type {string}
+     * @readonly
      */
     public get type() {
         return this.data.type;
@@ -68,6 +72,7 @@ export default class User extends Base {
     /**
      * The user's broadcaster type (partner program).
      * @type {string}
+     * @readonly
      */
     public get broadcasterType() {
         return this.data.broadcaster_type;
@@ -76,6 +81,7 @@ export default class User extends Base {
     /**
      * Total number of views on this user's channel.
      * @type {number}
+     * @readonly
      */
     public get viewCount() {
         return this.data.view_count;
@@ -84,6 +90,7 @@ export default class User extends Base {
     /**
      * Returns the email of the user (scope `user:read:email` is required).
      * @type {string | undefined}
+     * @readonly
      */
     public get email() {
         return this.data.email;
@@ -92,18 +99,20 @@ export default class User extends Base {
     /**
      * The user's description.
      * @type {string}
+     * @readonly
      */
     public get description() {
         return this.data.description;
     }
 
-   protected set description(desc: string) {
+    protected updateDescription(desc: string) {
         this.data.description = desc;
     }
 
     /**
      * The Date object when the user was created.
      * @type {Date}
+     * @readonly
      */
     public get createdAt() {
         return new Date(this.data.created_at);
@@ -112,6 +121,7 @@ export default class User extends Base {
     /**
      * The unix timestamp when the user was created.
      * @type {number}
+     * @readonly
      */
     public get createdTimestamp() {
         return new Date(this.data.created_at).getTime();
@@ -237,7 +247,7 @@ export default class User extends Base {
      * @param {BlocksFetchOptions | undefined} options Fetch options.
      * @returns {Promise<User[]>} An array of users that are blocked.
      */
-    public async fetchBlocks(options?: { first: number; after: string }): Promise<User[]> {
+    public async fetchBlocks(options?: { first?: number; after?: string }): Promise<User[]> {
         const { first, after } = options ?? {};
 
         const res = await fetch(
@@ -272,18 +282,21 @@ export default class User extends Base {
 }
 
 /**
+ * Options to retrieve an avatar url.
  * @typedef {object} AvatarURLOptions
  * @prop {boolean | undefined} offline Fetch offline avatar instead.
  */
 
 /**
+ * Options for blocking a user.
  * @typedef {object} BlockOptions
  * @prop {string | undefined} reason Reason for the block.
  * @prop {string | undefined} sourceContext Context for the block.
  */
 
 /**
+ * Options for fetching blocks.
  * @typedef {object} BlocksFetchOptions
- * @prop {number} first
- * @prop {string} after
+ * @prop {number | undefined} first Offset the first result.
+ * @prop {string | undefined} after After this date represented as a string.
  */

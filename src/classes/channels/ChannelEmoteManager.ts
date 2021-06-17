@@ -45,19 +45,19 @@ export default class ChannelEmoteManager extends Manager<ChannelEmote> {
 
     /**
      * Fetches emotes from the channel.
-     * @returns {Promise<Collection<string, ChannelEmote>>}
+     * @returns {Promise<Collection<string, ChannelEmote>>} The fetched emotes.
      */
     public async fetch(): Promise<Collection<string, ChannelEmote>>;
     /**
      * Fetches an emote from the channel.
      * @param {string | undefined} id Optional ID to fetch.
-     * @returns {Promise<ChannelEmote | undefined>}
+     * @returns {Promise<ChannelEmote | undefined>} The fetched emote.
      */
     public async fetch(id: string): Promise<ChannelEmote | undefined>;
     /**
      * Fetches emotes from the channel.
      * @param {string | undefined} id Optional ID to fetch.
-     * @returns {Promise<ChannelEmote | undefined> | Promise<Collection<string, ChannelEmote>>}
+     * @returns {Promise<ChannelEmote | undefined> | Promise<Collection<string, ChannelEmote>>} The fetched emotes.
      */
     public async fetch(id?: string) {
         if (!this.client.token) throw new InternalError("token not available");
