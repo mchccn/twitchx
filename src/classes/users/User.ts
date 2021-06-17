@@ -1,8 +1,9 @@
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
+import { Channel } from "../..";
 import { Base } from "../../base";
 import type Client from "../../base/Client";
-import { ExternalError, HTTPError, snakeCasify, TwitchAPIError } from "../../shared";
+import { ExternalError, HTTPError, InternalError, snakeCasify, TwitchAPIError } from "../../shared";
 import { BASE_URL } from "../../shared/";
 import type { UserData } from "../../types/classes";
 
@@ -131,7 +132,7 @@ export default class User extends Base {
      * Updates this user object to hold the newest data.
      * @returns {Promise<boolean>} True if the update was successful.
      */
-    public async update() {
+    public async update(): Promise<boolean> {
         if (!this.client.options.update.channels) {
             if (!this.client.options.suppressRejections)
                 throw new Error(`updating users was disabled but was still attempted`);
@@ -175,7 +176,10 @@ export default class User extends Base {
      * @param {BlockOptions | undefined} options User block options.
      * @returns {Promise<boolean>} True if the user was unblocked.
      */
-    public async block(options?: { reason?: "chat" | "whisper"; sourceContext?: "spam" | "harassment" | "other" }) {
+    public async block(options?: {
+        reason?: "chat" | "whisper";
+        sourceContext?: "spam" | "harassment" | "other";
+    }): Promise<boolean> {
         if (!this.client.scope.includes("user:manage:blocked_users"))
             throw new ExternalError(`scope 'user:manage:blocked_users' is required to block users`);
 
@@ -268,6 +272,65 @@ export default class User extends Base {
         });
 
         return users;
+    }
+
+    public async follow(channel: Channel | string) {
+        const id = this.id;
+        const channelId = channel instanceof Channel ? channel.id : channel;
+
+        if (!id || !channelId) throw new Error("Both channel and user params are required.");
+
+        if (!this.client.token) throw new InternalError(`token is not available`);
+
+        const res = await fetch(
+            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
+                snakeCasify({ fromId: id, toId: channelId })
+            )}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.client.token}`,
+                    "Client-Id": this.client.options.clientId,
+                },
+                method: "post",
+            }
+        ).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (!res.ok) {
+            if (!this.client.options.suppressRejections) throw new HTTPError(res.statusText);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public async unfollow(channel: Channel | string) {
+        const id = this.id;
+        const channelId = channel instanceof Channel ? channel.id : channel;
+
+        if (!id || !channelId) throw new Error("Both channel and user params are required.");
+
+        if (!this.client.token) throw new InternalError(`token is not available`);
+
+        const res = await fetch(
+            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
+                snakeCasify({ fromId: id, toId: channelId })
+            )}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.client.token}`,
+                    "Client-Id": this.client.options.clientId,
+                },
+                method: "delete",
+            }
+        ).catch((e) => {
+            throw new HTTPError(e);
+        });
+
+        if (!res.ok) throw new HTTPError(res.statusText);
+        return;
     }
 }
 
