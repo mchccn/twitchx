@@ -7,17 +7,15 @@ import type Client from "./Client";
  * Manager superclass with a cache and method to fetch entities.
  * @abstract
  * @class
+ * @template Value
  */
-export default abstract class Manager<V extends { update(): Awaited<unknown> }> extends Base {
-    /**
-     * Data cached by the manager.
-     */
-    public readonly cache: Cache<V>;
+export default abstract class Manager<Value extends { update(): Awaited<unknown> }> extends Base {
+    public readonly cache: Cache<Value>;
 
     /**
      * Creates a new manager.
-     * @param client Client that instantiated this manager.
-     * @param options Options for the cache,
+     * @param {Client} client Client that instantiated this manager.
+     * @param {CacheOptions} options Options for the cache,
      */
     constructor(
         public readonly client: Client,
@@ -28,13 +26,18 @@ export default abstract class Manager<V extends { update(): Awaited<unknown> }> 
     ) {
         super(client);
 
+        /**
+         * Data cached by the manager.
+         * @readonly
+         * @type {Cache<Value>}
+         */
         this.cache = new Cache(options);
     }
 
     /**
      * Fetches an entity.
-     * @param id Id to fetch.
+     * @param {string} id Id to fetch.
      * @abstract
      */
-    abstract fetch(id: string): Awaited<V | undefined>;
+    abstract fetch(id: string): Awaited<Value | undefined>;
 }

@@ -14,8 +14,8 @@ class ClientUser extends User {
 
     /**
      * Creates a new user.
-     * @param client Client that instantiated this user.
-     * @param data User's data.
+     * @param {Client} client Client that instantiated this user.
+     * @param {UserData} data User's data.
      */
     constructor(client: Client, data: UserData) {
         super(client, data);
@@ -30,7 +30,7 @@ class ClientUser extends User {
 
     /**
      * Updates the description of this user.
-     * @param description New description.
+     * @param {string} description New description.
      */
     public async setDescription(description: string) {
         const response = await fetch(

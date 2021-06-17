@@ -12,7 +12,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
 
     return (
         <div className="h-12 px-4 py-2 grid place-items-center shadow dark:bg-purple z-50">
-            <header className="flex items-center justify-between w-full max-w-4xl">
+            <header className="flex items-center justify-between w-full max-w-6xl">
                 <nav className="flex items-center gap-4 sm:gap-8">
                     {width > 440 ? (
                         <h1
@@ -121,7 +121,7 @@ export default function Header({ search, setSearch }: { search: string; setSearc
                             </g>
                         </svg>
                         <input
-                            className="pl-8 pr-1.5 py-1 w-52 sm:w-64 text-sm border border-gray-200 rounded-sm outline-none focus:outline-none focus:border-gray-300 dark:bg-lightPurple dark:border-transparent dark:text-white"
+                            className="pl-8 pr-1.5 py-1 w-52 sm:w-64 lg:w-96 text-sm border border-gray-200 rounded-sm outline-none focus:outline-none focus:border-gray-300 dark:bg-lightPurple dark:border-transparent dark:text-white"
                             autoCapitalize="false"
                             autoComplete="off"
                             autoCorrect="off"

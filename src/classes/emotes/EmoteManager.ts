@@ -34,7 +34,7 @@ export default class EmoteManager extends Manager<Emote> {
 
     /**
      * Returns the emote with the given ID in cache or undefined.
-     * @param id the ID of the emote to get
+     * @param {string} id the ID of the emote to get
      * @returns {Emote|undefined} the emote with the given ID
      */
     public get(id: string): Emote | undefined {

@@ -53,6 +53,10 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                 )
                     return;
 
+                const NODEJS = {
+                    EventEmitter: "https://nodejs.org/api/all.html#events_class_eventemitter",
+                } as const;
+
                 const REGEX = {
                     IDENTIFIER: new RegExp(
                         `(${[...catalog]
@@ -93,13 +97,18 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                                         className="text-base"
                                         dangerouslySetInnerHTML={{
                                             __html: `extends ${md.renderInline(
-                                                resolveType(info.extends).replace(
-                                                    REGEX.IDENTIFIER,
-                                                    (match) =>
-                                                        `[${match}](#/docs/${
-                                                            catalog.find(({ name }) => name === match)!.category
-                                                        }/${match})`
-                                                )
+                                                resolveType(info.extends)
+                                                    .replace(
+                                                        REGEX.IDENTIFIER,
+                                                        (match) =>
+                                                            `[${match}](#/docs/${
+                                                                catalog.find(({ name }) => name === match)!.category
+                                                            }/${match})`
+                                                    )
+                                                    .replace(
+                                                        REGEX.NODEJS,
+                                                        (match) => `[${match}](${NODEJS[match as keyof typeof NODEJS]})`
+                                                    )
                                             )}`,
                                         }}
                                     ></span>
@@ -127,6 +136,50 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                             </pre>
 
                             <p>{info.construct.description}</p>
+
+                            {info.construct.params.length && (
+                                <div className="flex flex-col border border-gray-300">
+                                    {(
+                                        info.construct.params as {
+                                            name: string;
+                                            description: string;
+                                            type: string[][][];
+                                        }[]
+                                    ).map((param) => (
+                                        <div className="flex">
+                                            <div className="w-40 py-1 px-1.5 grid items-center font-mono text-xs sm:text-sm flex-shrink-0 border border-gray-300">
+                                                {param.name}
+                                            </div>
+                                            <div
+                                                className="w-40 py-1 px-1.5 grid items-center flex-shrink-0 border border-gray-300"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: md.renderInline(
+                                                        resolveType(param.type)
+                                                            .replace(
+                                                                REGEX.IDENTIFIER,
+                                                                (match) =>
+                                                                    `[${match}](#/docs/${
+                                                                        catalog.find(({ name }) => name === match)!
+                                                                            .category
+                                                                    }/${match})`
+                                                            )
+                                                            .replace(
+                                                                REGEX.NODEJS,
+                                                                (match) =>
+                                                                    `[${match}](${
+                                                                        NODEJS[match as keyof typeof NODEJS]
+                                                                    })`
+                                                            )
+                                                    ),
+                                                }}
+                                            ></div>
+                                            <div className="flex-1 py-1 px-1.5 grid items-center border border-gray-300">
+                                                {param.description}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     );
                 }
@@ -168,7 +221,7 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
         <div className="flex flex-1">
             <Sidebar active={route} />
             <main
-                className="docs flex-1 px-4 lg:pr-0 py-3 dark:text-white overflow-y-scroll"
+                className="docs flex-1 px-4 py-3 dark:text-white overflow-y-scroll"
                 style={{ maxHeight: "calc(100vh - 3rem)" }}
             >
                 {search ? (

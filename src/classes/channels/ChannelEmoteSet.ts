@@ -20,9 +20,9 @@ export default class ChannelEmoteSet extends Base {
 
     /**
      * Creates a new channel emote set.
-     * @param client Client that instantiated this set.
-     * @param data Data for the emote set.
-     * @param channel Channel the set is in.
+     * @param {Client} client Client that instantiated this set.
+     * @param {SetEmoteData[]} data Data for the emote set.
+     * @param {Channel} channel Channel the set is in.
      * @constructor
      */
     public constructor(client: Client, private data: SetEmoteData[], public channel: Channel) {

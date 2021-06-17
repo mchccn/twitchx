@@ -74,7 +74,7 @@ export default class Client extends EventEmitter {
 
     /**
      * Creates a new client to interact with the Twitch API.
-     * @param options Options for the client.
+     * @param {ClientOptions} options Options for the client.
      */
     public constructor(options: ClientOptions) {
         super({
@@ -118,7 +118,7 @@ export default class Client extends EventEmitter {
     public async login(): Promise<string>;
     /**
      * Uses the OAuth implicit credentials flow to generate a URL and callback.
-     * @param oauth Must be `"implicit"` to use the implicit credentials flow.
+     * @param {string} oauth Must be `"implicit"` to use the implicit credentials flow.
      *
      * @example
      * ```js
@@ -136,7 +136,7 @@ export default class Client extends EventEmitter {
     public async login(oauth: "implicit"): Promise<{ url: string; callback: (token: string) => Promise<void> }>;
     /**
      * Uses the OAuth authorization credentials flow to generate a URL and callback.
-     * @param oauth Must be `"authorization"` to use the authorization credentials flow.
+     * @param {string} oauth Must be `"authorization"` to use the authorization credentials flow.
      *
      * @example
      * ```js
@@ -502,15 +502,15 @@ export default class Client extends EventEmitter {
 
     /**
      * Adds an event listener to the client.
-     * @param event Event to listen to.
-     * @param listener Callback for the event.
+     * @param {string} event Event to listen to.
+     * @param {Function} listener Callback for the event.
      * @returns {Client} The client instance.
      */
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     /**
      * Adds an event listener to the client.
-     * @param event Event to listen to.
-     * @param listener Callback for the event.
+     * @param {string} event Event to listen to.
+     * @param {Function} listener Callback for the event.
      * @returns {Client} The client instance.
      */
     public on<S extends string | symbol>(
@@ -522,15 +522,15 @@ export default class Client extends EventEmitter {
 
     /**
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
-     * @param event Event to listen to.
-     * @param listener Callback for the event.
+     * @param {string} event Event to listen to.
+     * @param {Function} listener Callback for the event.
      * @returns {Client} The client instance.
      */
     public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => Awaited<unknown>): this;
     /**
      * Adds an event listener to the client, but the listener gets removed as soon as an event is received.
-     * @param event Event to listen to.
-     * @param listener Callback for the event.
+     * @param {string} event Event to listen to.
+     * @param {Function} listener Callback for the event.
      * @returns {Client} The client instance.
      */
     public once<S extends string | symbol>(
@@ -542,8 +542,8 @@ export default class Client extends EventEmitter {
 
     /**
      * Emits a new event on the client to be captured by its listeners.
-     * @param event Event to emit.
-     * @param args Data for the event.
+     * @param {string} event Event to emit.
+     * @param {any[]} args Data for the event.
      */
     public emit<K extends keyof ClientEvents>(event: K, ...args: ClientEvents[K]): boolean;
     public emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean {

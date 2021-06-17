@@ -14,7 +14,7 @@ export default function App() {
                 className="content flex flex-1 justify-center overflow-y-scroll"
                 style={{ maxHeight: "calc(100vh - 3rem)" }}
             >
-                <main className="flex w-full max-w-4xl">
+                <main className="flex w-full max-w-6xl">
                     <HashRouter basename={process.env.PUBLIC_URL}>
                         <Switch>
                             <Route path="/" exact component={Home} />

@@ -20,11 +20,11 @@ type KeysToHyphenCase<T> = {
 
 type StringValues<T> = {
     [K in keyof T]: string;
-}
+};
 
 /**
  * Amazingly useful to create readable code for parameterizing API requests.
- * @param object Object to snake-casify.
+ * @param {object} object Object to snake-casify.
  */
 export function snakeCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToSnakeCase<StringValues<T>> {
     return Object.fromEntries(
@@ -43,7 +43,7 @@ export function snakeCasify<T extends Partial<Record<string, unknown>>>(object: 
 
 /**
  * Amazingly useful to create readable code for Twitch API events.
- * @param object Object to hyphen-casify.
+ * @param {object} object Object to hyphen-casify.
  */
 export function hyphenCasify<T extends Partial<Record<string, unknown>>>(object: T): KeysToHyphenCase<StringValues<T>> {
     return Object.fromEntries(
