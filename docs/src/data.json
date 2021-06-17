@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623893724808 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623894957105 },
     "classes": [
         {
             "name": "Base",
@@ -1271,6 +1271,12 @@
             "meta": { "line": 126, "file": "Cache.js", "path": "dist/base" }
         },
         {
+            "name": "SetEmoteData",
+            "type": [[["ChannelEmoteData"]]],
+            "props": [{ "name": "owner_id", "type": [[["string"]]] }],
+            "meta": { "line": 90, "file": "ChannelEmoteSet.js", "path": "dist/classes/channels" }
+        },
+        {
             "name": "AvatarURLOptions",
             "type": [[["object"]]],
             "props": [
@@ -1384,35 +1390,25 @@
             "meta": { "line": 3, "file": "channel.js", "path": "dist/types/classes" }
         },
         {
-            "name": "ChannelEmoteDataImages",
-            "type": [[["object"]]],
-            "props": [
-                { "name": "url_1x", "type": [[["string"]]] },
-                { "name": "url_2x", "type": [[["string"]]] },
-                { "name": "url_4x", "type": [[["string"]]] }
-            ],
-            "meta": { "line": 3, "file": "channelEmote.js", "path": "dist/types/classes" }
-        },
-        {
             "name": "ChannelEmoteData",
-            "type": [[["object"]]],
+            "type": [[["EmoteData"]]],
             "props": [
                 { "name": "id", "type": [[["string"]]] },
                 { "name": "name", "type": [[["string"]]] },
-                { "name": "images", "type": [[["ChannelEmoteDataImages"]]] },
+                { "name": "images", "type": [[["EmoteDataImages"]]] },
                 { "name": "tier", "type": [[["string"]]] },
                 { "name": "emote_type", "type": [[["string"]]] },
                 { "name": "emote_set_id", "type": [[["string"]]] }
             ],
-            "meta": { "line": 9, "file": "channelEmote.js", "path": "dist/types/classes" }
+            "meta": { "line": 3, "file": "channelEmote.js", "path": "dist/types/classes" }
         },
         {
             "name": "EmoteDataImages",
             "type": [[["object"]]],
             "props": [
-                { "name": "url_1x", "type": [[["string"]]] },
-                { "name": "url_2x", "type": [[["string"]]] },
-                { "name": "url_4x", "type": [[["string"]]] }
+                { "name": "url_1x", "description": "Emote's 1x image version.", "type": [[["string"]]] },
+                { "name": "url_2x", "description": "Emote's 2x image version.", "type": [[["string"]]] },
+                { "name": "url_4x", "description": "Emote's 4x image version.", "type": [[["string"]]] }
             ],
             "meta": { "line": 3, "file": "emote.js", "path": "dist/types/classes" }
         },
@@ -1420,9 +1416,9 @@
             "name": "EmoteData",
             "type": [[["object"]]],
             "props": [
-                { "name": "id", "type": [[["string"]]] },
-                { "name": "name", "type": [[["string"]]] },
-                { "name": "images", "type": [[["EmoteDataImages"]]] }
+                { "name": "id", "description": "Emote's id.", "type": [[["string"]]] },
+                { "name": "name", "description": "Emote's name.", "type": [[["string"]]] },
+                { "name": "images", "description": "Emote's images.", "type": [[["EmoteDataImages"]]] }
             ],
             "meta": { "line": 9, "file": "emote.js", "path": "dist/types/classes" }
         },
@@ -1430,22 +1426,31 @@
             "name": "UserData",
             "type": [[["object"]]],
             "props": [
-                { "name": "id", "type": [[["string"]]] },
-                { "name": "login", "type": [[["string"]]] },
-                { "name": "display_name", "type": [[["string"]]] },
-                { "name": "type", "type": [[["string"]]] },
-                { "name": "broadcaster_type", "type": [[["string"]]] },
-                { "name": "description", "type": [[["string"]]] },
-                { "name": "profile_image_url", "type": [[["string"]]] },
-                { "name": "offline_image_url", "type": [[["string"]]] },
-                { "name": "view_count", "type": [[["number"]]] },
-                { "name": "email", "type": [[["string"]], [["undefined"]]] },
-                { "name": "created_at", "type": [[["string"]]] }
+                { "name": "id", "description": "User's id.", "type": [[["string"]]] },
+                { "name": "login", "description": "User's login.", "type": [[["string"]]] },
+                { "name": "display_name", "description": "User's display name.", "type": [[["string"]]] },
+                { "name": "type", "description": "User's type.", "type": [[["string"]]] },
+                { "name": "broadcaster_type", "description": "User's broadcast type.", "type": [[["string"]]] },
+                { "name": "description", "description": "User's description.", "type": [[["string"]]] },
+                { "name": "profile_image_url", "description": "User's profile picture URL.", "type": [[["string"]]] },
+                {
+                    "name": "offline_image_url",
+                    "description": "User's offline profile picure URL.",
+                    "type": [[["string"]]]
+                },
+                { "name": "view_count", "description": "User's view count.", "type": [[["number"]]] },
+                { "name": "email", "description": "User's email.", "type": [[["string"]], [["undefined"]]] },
+                {
+                    "name": "created_at",
+                    "description": "User's unix timestamp of when they joined Twitch.",
+                    "type": [[["string"]]]
+                }
             ],
             "meta": { "line": 3, "file": "user.js", "path": "dist/types/classes" }
         },
         {
             "name": "PubSubOptions",
+            "description": "Options for Twitch's PubSub feature.",
             "type": [[["object"]]],
             "props": [
                 {
@@ -1469,7 +1474,7 @@
             "see": [
                 "https://github.com/DefinitelyTyped/DefinitelyTyped/blob/69e29e847155bd4d845497319116281cb5a384a3/types/ws/index.d.ts#L171-L187"
             ],
-            "meta": { "line": 8, "file": "index.js", "path": "dist/types/pubsub" }
+            "meta": { "line": 9, "file": "index.js", "path": "dist/types/pubsub" }
         }
     ]
 }

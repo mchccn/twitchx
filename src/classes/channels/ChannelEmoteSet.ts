@@ -101,3 +101,8 @@ export default class ChannelEmoteSet extends Base {
         return false;
     }
 }
+
+/**
+ * @typedef {ChannelEmoteData} SetEmoteData
+ * @prop {string} owner_id
+ */
