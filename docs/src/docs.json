@@ -4,13 +4,21 @@
         {
             "name": "General",
             "pages": [
-                { "name": "Welcome", "slug": "welcome", "content": "<h1>Welcome!</h1>\n" },
+                {
+                    "name": "Welcome",
+                    "slug": "welcome",
+                    "content": "<p><img src=\"../assets/twitchx.png\" alt=\"Banner\" /></p>\n<div align=\"center\">\n    <h1>twitchx</h1>\n    <p style=\"margin: 0.5rem 0;\">Super-powered TypeScript Twitch REST API wrapper.</p>\n    <img style=\"display: inline-block; margin: 0.25rem;\" src=\"https://forthebadge.com/images/badges/fuck-it-ship-it.svg\" />\n    <img style=\"display: inline-block; margin: 0.25rem;\" src=\"https://forthebadge.com/images/badges/made-with-typescript.svg\" />\n    <img style=\"display: inline-block; margin: 0.25rem;\" src=\"https://forthebadge.com/images/badges/powered-by-black-magic.svg\" />\n    <img style=\"display: inline-block; margin: 0.25rem;\" src=\"https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg\" />\n    <img style=\"display: inline-block; margin: 0.25rem;\" src=\"https://forthebadge.com/images/badges/fixed-bugs.svg\" />\n</div>\n<h1>Welcome</h1>\n<p>Welcome to the <strong>Twitchx</strong> v1 documentation.</p>\n<h1>About</h1>\n<blockquote>\n<p><strong>twitchx</strong> is a versatile <a href=\"http://nodejs.org/\">Node.js</a> library that lets you use the Twitch API with little overhead.\nWritten completely in TypeScript with accurate typings, thoroughly maintained and tested to bring you the best developer experience.\nIt's versatile, performant, and lightweight, with few depedencies. Zero overhead, full potential.</p>\n</blockquote>\n<ul>\n<li>Object-oriented</li>\n<li>Low overhead</li>\n<li>Fast</li>\n<li>API like <a href=\"https://www.npmjs.com/package/discord.js\">discord.js</a></li>\n<li>99.99% coverage</li>\n<li>Extremely lightweight</li>\n</ul>\n<h1>Links</h1>\n<ul>\n<li><a href=\"https://cursorsdottsx.github.io/twitchx/#/\">Website</a></li>\n<li><a href=\"https://discord.gg/RygQpd3jBG\">Support Server</a></li>\n</ul>\n<h1>Example Usage</h1>\n<pre><code class=\"language-ts\">import * as Twitch from &quot;twitchx&quot;;\n\n(async () =&gt; {\n    const client = new Twitch.Client({\n        clientId: &quot;a-cool-id&quot;,\n        clientSecret: &quot;dont-steal-pls&quot;,\n    });\n\n    await client.login();\n\n    const user = await client.users.fetch(&quot;44445592&quot;);\n\n    console.log(user);\n})();\n</code></pre>\n"
+                },
                 {
                     "name": "Changelog",
                     "slug": "changelog",
-                    "content": "<h1>Changelog</h1>\n<h3>twitchx v1.0.0 – [Date]</h3>\n<p>[Info]</p>\n"
+                    "content": "<h1>Changelog</h1>\n<h3>twitchx v1.0.0 – <strong>6.16.2021</strong></h3>\n<p>Initial release.</p>\n"
                 },
-                { "name": "FAQ", "slug": "faq", "content": "<h1>Frequently Asked Questions</h1>\n" }
+                {
+                    "name": "FAQ",
+                    "slug": "faq",
+                    "content": "<h1>Frequently Asked Questions</h1>\n<p>Encountering challenges with <strong>Twitchx</strong> is difficult. But here are some questions and answers to common questions we get.</p>\n<h2>How do I login?</h2>\n"
+                }
             ]
         }
     ]

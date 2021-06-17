@@ -1,5 +1,5 @@
 # Changelog
 
-### twitchx v1.0.0 – [Date]
+### twitchx v1.0.0 – **6.16.2021**
 
-[Info]
+Initial release.
