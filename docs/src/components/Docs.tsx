@@ -233,7 +233,9 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
 
     if (!route && typeof search === "undefined") return <Redirect to="/docs/general/welcome" />;
 
-    if (!route && !search) return null;
+    if (!route && !search && window.location.hash === localStorage.getItem("twitchx-last")) return null;
+
+    if (!route && !search) return <Redirect to="/docs/general/welcome" />;
 
     return (
         <div className="flex flex-1">
@@ -252,8 +254,8 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                                 keys: ["name"],
                             })
                                 .search(search)
-                                .map(({ item }) => (
-                                    <li className="flex items-center gap-2">
+                                .map(({ item }, i) => (
+                                    <li className="flex items-center gap-2" key={i}>
                                         <span className="text-xl text-purple dark:text-lightPurple select-none">
                                             {
                                                 {
