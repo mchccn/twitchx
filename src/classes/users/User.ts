@@ -97,7 +97,7 @@ export default class User extends Base {
         return this.data.description;
     }
 
-    protected setDescription(desc: string) {
+    protected set description(desc: string) {
         this.data.description = desc;
     }
 
