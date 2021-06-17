@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { User } from "..";
 import { Client } from "../../base";
-import { HTTPError } from "../../shared";
+import { BASE_URL, HTTPError } from "../../shared";
 import { UserData } from "../../types/classes/user";
 
 /**
@@ -34,16 +34,13 @@ class ClientUser extends User {
      * @returns {Promise<boolean>} True if the update was succesful.
      */
     public async setDescription(description: string) {
-        const response = await fetch(
-            `https://api.twitch.tv/helix/users?description=${encodeURIComponent(description)}`,
-            {
-                method: "PUT",
-                headers: {
-                    authorization: `Bearer ${this.client.token}`,
-                    "client-id": this.client.options.clientId,
-                },
-            }
-        );
+        const response = await fetch(`${BASE_URL}/users?description=${encodeURIComponent(description)}`, {
+            method: "PUT",
+            headers: {
+                authorization: `Bearer ${this.client.token}`,
+                "client-id": this.client.options.clientId,
+            },
+        });
 
         if (!response.ok) {
             if (!this.client.options.suppressRejections) throw new HTTPError(response.statusText);

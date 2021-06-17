@@ -2,10 +2,17 @@ import EventEmitter from "events";
 import lt from "long-timeout";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
-import { Channel } from "../classes";
-import { ChannelManager, EmoteManager, User, UserManager } from "../classes/";
+import { ChannelManager, EmoteManager, UserManager } from "../classes/";
 import ClientUser from "../classes/users/ClientUser";
-import { ExternalError, HTTPError, InternalError, MILLISECONDS, snakeCasify, TwitchAPIError } from "../shared";
+import {
+    BASE_URL,
+    ExternalError,
+    HTTPError,
+    InternalError,
+    MILLISECONDS,
+    snakeCasify,
+    TwitchAPIError,
+} from "../shared";
 import type {
     Awaited,
     ClientEvents,
@@ -114,6 +121,13 @@ export default class Client extends EventEmitter {
          * @readonly
          */
         this.emotes = new EmoteManager(this);
+
+        /**
+         * Client's current authenticated user.
+         * @type {ClientUser}
+         * @readonly
+         */
+        this.user = undefined;
     }
 
     /**
@@ -243,7 +257,7 @@ export default class Client extends EventEmitter {
                     this.accessToken = token;
 
                     if (this.token) {
-                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                        const response = await fetch(`${BASE_URL}/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,
@@ -311,7 +325,7 @@ export default class Client extends EventEmitter {
                     );
 
                     if (this.token) {
-                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                        const response = await fetch(`${BASE_URL}/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,
@@ -566,64 +580,5 @@ export default class Client extends EventEmitter {
     public emit<K extends keyof ClientEvents>(event: K, ...args: ClientEvents[K]): boolean;
     public emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean {
         return super.emit(event, ...args);
-    }
-
-    /**
-     * 
-     * @param user Target user
-     * @param channel Channel to follow.
-     */
-    public async follow(user: User | string, channel: Channel | string): Promise<void> {
-        const userId = user instanceof User ? user.id : user;
-        const channelId = channel instanceof Channel ? channel.id : channel;
-
-        if (!userId || !channelId) throw new Error("Both channel and user params are required.");
-
-        if (!this.token) throw new InternalError(`token is not available`);
-
-        const res = await fetch(
-            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
-                snakeCasify({ from_id: userId, to_id: channelId })
-            )}`,
-            {
-                headers: {
-                    authorization: `Bearer ${this.token}`,
-                    "client-id": this.options.clientId,
-                },
-                method: "post",
-            }
-        ).catch((e) => {
-            throw new HTTPError(e);
-        });
-
-        if (!res.ok) throw new HTTPError(res.statusText);
-        return;
-    }
-
-    public async unfollow(user: User | string, channel: Channel | string) {
-        const userId = user instanceof User ? user.id : user;
-        const channelId = channel instanceof Channel ? channel.id : channel;
-
-        if (!userId || !channelId) throw new Error("Both channel and user params are required.");
-
-        if (!this.token) throw new InternalError(`token is not available`);
-
-        const res = await fetch(
-            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
-                snakeCasify({ from_id: userId, to_id: channelId })
-            )}`,
-            {
-                headers: {
-                    authorization: `Bearer ${this.token}`,
-                    "client-id": this.options.clientId,
-                },
-                method: "delete",
-            }
-        ).catch((e) => {
-            throw new HTTPError(e);
-        });
-
-        if (!res.ok) throw new HTTPError(res.statusText);
-        return;
     }
 }

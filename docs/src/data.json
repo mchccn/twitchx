@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623958286221 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623958548879 },
     "classes": [
         {
             "name": "Base",
@@ -116,7 +116,7 @@
                     "description": "Options given to the client.",
                     "readonly": true,
                     "type": [[["ClientOptions"]]],
-                    "meta": { "line": 36, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 35, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "scope",
@@ -128,42 +128,49 @@
                             ["string", ">"]
                         ]
                     ],
-                    "meta": { "line": 54, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 53, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "channels",
                     "description": "Client's channel manager.",
                     "readonly": true,
                     "type": [[["ChannelManager"]]],
-                    "meta": { "line": 60, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 59, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "users",
                     "description": "Client's user manager.",
                     "readonly": true,
                     "type": [[["UserManager"]]],
-                    "meta": { "line": 66, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 65, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "emotes",
                     "description": "Client's emote manager.",
                     "readonly": true,
                     "type": [[["EmoteManager"]]],
-                    "meta": { "line": 72, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 71, "file": "Client.js", "path": "dist/base" }
+                },
+                {
+                    "name": "user",
+                    "description": "Client's current authenticated user.",
+                    "readonly": true,
+                    "type": [[["ClientUser"]]],
+                    "meta": { "line": 77, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "token",
                     "description": "Current token being used.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 296, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 301, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "type",
                     "description": "Authentication type; either `\"app\"` or `\"user\"`.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 304, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 309, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "methods": [
@@ -181,7 +188,7 @@
                         ],
                         "description": "The new access token or OAuth details object."
                     },
-                    "meta": { "line": 84, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 89, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "destroy",
@@ -195,35 +202,35 @@
                         ],
                         "description": "Nothing."
                     },
-                    "meta": { "line": 206, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 211, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setInterval",
                     "description": "Sets an interval to be managed by the client.",
                     "access": "private",
                     "returns": [[["Timeout"]]],
-                    "meta": { "line": 312, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 317, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "setTimeout",
                     "description": "Sets a timeout to be managed by the client.",
                     "access": "private",
                     "returns": [[["Timeout"]]],
-                    "meta": { "line": 322, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 327, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearInterval",
                     "description": "Clears an interval managed by the client.",
                     "access": "private",
                     "returns": [[["undefined"]]],
-                    "meta": { "line": 332, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 337, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "clearTimeout",
                     "description": "Clears a timeout managed by the client.",
                     "access": "private",
                     "returns": [[["undefined"]]],
-                    "meta": { "line": 342, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 347, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "on",
@@ -233,7 +240,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [[["function"]]] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 353, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 358, "file": "Client.js", "path": "dist/base" }
                 },
                 {
                     "name": "once",
@@ -243,7 +250,7 @@
                         { "name": "listener", "description": "Callback for the event.", "type": [[["function"]]] }
                     ],
                     "returns": { "types": [[["Client"]]], "description": "The client instance." },
-                    "meta": { "line": 362, "file": "Client.js", "path": "dist/base" }
+                    "meta": { "line": 367, "file": "Client.js", "path": "dist/base" }
                 }
             ],
             "events": [
@@ -302,7 +309,7 @@
                     "meta": { "line": 65, "file": "client.js", "path": "dist/types/base" }
                 }
             ],
-            "meta": { "line": 19, "file": "Client.js", "path": "dist/base" }
+            "meta": { "line": 18, "file": "Client.js", "path": "dist/base" }
         },
         {
             "name": "Manager",
@@ -1146,70 +1153,70 @@
                     "description": "The user's ID.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 37, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 38, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "login",
                     "description": "The user's login name (username but all lowercase).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 45, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 46, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "displayName",
                     "description": "The user's display name.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 53, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 54, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "type",
                     "description": "The user's type (staff status).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 61, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 62, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "broadcasterType",
                     "description": "The user's broadcaster type (partner program).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 69, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 70, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "viewCount",
                     "description": "Total number of views on this user's channel.",
                     "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 77, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "email",
                     "description": "Returns the email of the user (scope `user:read:email` is required).",
                     "readonly": true,
                     "type": [[["string"]], [["undefined"]]],
-                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 86, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "description",
                     "description": "The user's description.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 93, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 94, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdAt",
                     "description": "The Date object when the user was created.",
                     "readonly": true,
                     "type": [[["Date"]]],
-                    "meta": { "line": 104, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 105, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdTimestamp",
                     "description": "The unix timestamp when the user was created.",
                     "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 112, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 113, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "methods": [
@@ -1241,7 +1248,7 @@
                         }
                     ],
                     "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
-                    "meta": { "line": 121, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 122, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "update",
@@ -1257,7 +1264,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 128, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 129, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "block",
@@ -1280,7 +1287,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 166, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 167, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "unblock",
@@ -1296,7 +1303,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 195, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 196, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "fetchBlocks",
@@ -1320,7 +1327,7 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 220, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 221, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 12, "file": "ClientUser.js", "path": "dist/classes/users" }
@@ -1347,77 +1354,77 @@
                     "description": "Client that instantiated this user.",
                     "readonly": true,
                     "type": [[["Client"]]],
-                    "meta": { "line": 29, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 30, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "id",
                     "description": "The user's ID.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 37, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 38, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "login",
                     "description": "The user's login name (username but all lowercase).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 45, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 46, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "displayName",
                     "description": "The user's display name.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 53, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 54, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "type",
                     "description": "The user's type (staff status).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 61, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 62, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "broadcasterType",
                     "description": "The user's broadcaster type (partner program).",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 69, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 70, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "viewCount",
                     "description": "Total number of views on this user's channel.",
                     "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 77, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 78, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "email",
                     "description": "Returns the email of the user (scope `user:read:email` is required).",
                     "readonly": true,
                     "type": [[["string"]], [["undefined"]]],
-                    "meta": { "line": 85, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 86, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "description",
                     "description": "The user's description.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 93, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 94, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdAt",
                     "description": "The Date object when the user was created.",
                     "readonly": true,
                     "type": [[["Date"]]],
-                    "meta": { "line": 104, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 105, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "createdTimestamp",
                     "description": "The unix timestamp when the user was created.",
                     "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 112, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 113, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "methods": [
@@ -1432,7 +1439,7 @@
                         }
                     ],
                     "returns": { "types": [[["string"]]], "description": "The user's avatar URL." },
-                    "meta": { "line": 121, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 122, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "update",
@@ -1446,7 +1453,7 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 128, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 129, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "block",
@@ -1467,7 +1474,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 166, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 167, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "unblock",
@@ -1481,7 +1488,7 @@
                         ],
                         "description": "True if the user was unblocked."
                     },
-                    "meta": { "line": 195, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 196, "file": "User.js", "path": "dist/classes/users" }
                 },
                 {
                     "name": "fetchBlocks",
@@ -1503,10 +1510,10 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 220, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 221, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
-            "meta": { "line": 14, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 15, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "UserManager",
@@ -1608,7 +1615,7 @@
                     "type": [[["boolean"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 246, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 301, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlockOptions",
@@ -1622,7 +1629,7 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 251, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 306, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlocksFetchOptions",
@@ -1636,7 +1643,7 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 257, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 312, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "UserFetchOptions",
