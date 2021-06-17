@@ -105,7 +105,8 @@ export default class Client extends EventEmitter {
         this.channels = new ChannelManager(this);
         this.users = new UserManager(this);
         this.emotes = new EmoteManager(this);
-    }
+        this.user = null;
+   }
 
     /**
      * Logs in the client and retrieves an app access token.
@@ -302,7 +303,7 @@ export default class Client extends EventEmitter {
                     );
 
                     if (this.token) {
-                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                       const response = await fetch(`https://api.twitch.tv/helix/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,

@@ -7,6 +7,7 @@ import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchA
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
+import ChannelRewardsManager from "./ChannelRewardsManager";
 
 /**
  * Twitch API's channel entity represented in a class.
@@ -19,6 +20,8 @@ export default class Channel extends Base {
     public readonly emotes;
 
     public readonly emoteSets;
+
+    public readonly rewards;
 
     /**
      * Creates a new channel.
@@ -49,6 +52,8 @@ export default class Channel extends Base {
         this.emoteSets = new ChannelEmoteSetManager(this.client, this);
 
         this.client.emit("channelCreate", this);
+
+        this.rewards = new ChannelRewardsManager(this.client);
     }
 
     /**

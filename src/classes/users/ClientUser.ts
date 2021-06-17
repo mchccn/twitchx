@@ -4,7 +4,7 @@ import { Client } from "../../base";
 import { HTTPError } from "../../shared";
 import { UserData } from "../../types/classes/user";
 
-/**
+**
  * User representing the client on Twitch.
  * @class
  * @extends {User}
