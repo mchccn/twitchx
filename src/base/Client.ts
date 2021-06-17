@@ -5,7 +5,7 @@ import { URLSearchParams } from "url";
 import { Channel } from "../classes";
 import { ChannelManager, EmoteManager, User, UserManager } from "../classes/";
 import ClientUser from "../classes/users/ClientUser";
-import { ExternalError, HTTPError, InternalError, MILLISECONDS, snakeCasify, TwitchAPIError } from "../shared";
+import { BASE_URL, ExternalError, HTTPError, InternalError, MILLISECONDS, snakeCasify, TwitchAPIError } from "../shared";
 import type {
     Awaited,
     ClientEvents,
@@ -234,7 +234,7 @@ export default class Client extends EventEmitter {
                     this.accessToken = token;
 
                     if (this.token) {
-                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                        const response = await fetch(`${BASE_URL}/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,
@@ -302,7 +302,7 @@ export default class Client extends EventEmitter {
                     );
 
                     if (this.token) {
-                        const response = await fetch(`https://api.twitch.tv/helix/users`, {
+                        const response = await fetch(`${BASE_URL}/users`, {
                             headers: {
                                 authorization: `Bearer ${this.token}`,
                                 "client-id": this.options.clientId,

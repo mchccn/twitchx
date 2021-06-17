@@ -98,10 +98,6 @@ export default class User extends Base {
         return this.data.description;
     }
 
-    protected set description(desc: string) {
-        this.data.description = desc;
-    }
-
     /**
      * The Date object when the user was created.
      * @type {Date}
@@ -278,27 +274,28 @@ export default class User extends Base {
         const id = this.id;
         const channelId = channel instanceof Channel ? channel.id : channel;
 
-        if (!id || !channelId) throw new Error("Both channel and user params are required.");
+        if (!channelId) throw new Error("Channel param is required.");
 
         if (!this.client.token) throw new InternalError(`token is not available`);
 
-        const res = await fetch(
-            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
-                snakeCasify({ fromId: id, toId: channelId })
-            )}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${this.client.token}`,
-                    "Client-Id": this.client.options.clientId,
-                },
-                method: "post",
-            }
-        ).catch((e) => {
+        const res = await fetch(`${BASE_URL}/users/follows?`, {
+            headers: {
+                Authorization: `Bearer ${this.client.token}`,
+                "Client-Id": this.client.options.clientId,
+            },
+            body: JSON.stringify(
+                snakeCasify({
+                    fromId: id,
+                    toId: channelId,
+                })
+            ),
+            method: "POST",
+        }).catch((e) => {
             throw new HTTPError(e);
         });
 
         if (!res.ok) {
-            if (!this.client.options.suppressRejections) throw new HTTPError(res.statusText);
+            if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to follow user");
 
             return false;
         }
@@ -310,27 +307,30 @@ export default class User extends Base {
         const id = this.id;
         const channelId = channel instanceof Channel ? channel.id : channel;
 
-        if (!id || !channelId) throw new Error("Both channel and user params are required.");
+        if (!channelId) throw new Error("Channel param is required.");
 
         if (!this.client.token) throw new InternalError(`token is not available`);
 
         const res = await fetch(
-            `https://api.twitch.tv/helix/users/follows?${new URLSearchParams(
-                snakeCasify({ fromId: id, toId: channelId })
-            )}`,
+            `${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ fromId: id, toId: channelId }))}`,
             {
                 headers: {
                     Authorization: `Bearer ${this.client.token}`,
                     "Client-Id": this.client.options.clientId,
                 },
-                method: "delete",
+                method: "DELETE",
             }
         ).catch((e) => {
             throw new HTTPError(e);
         });
 
-        if (!res.ok) throw new HTTPError(res.statusText);
-        return;
+        if (!res.ok) {
+            if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to unfollow user");
+
+            return false;
+        }
+
+        return true;
     }
 }
 
