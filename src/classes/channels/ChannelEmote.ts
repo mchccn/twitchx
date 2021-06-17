@@ -14,9 +14,9 @@ export default class ChannelEmote extends Emote {
 
     /**
      * Creates a new channel emote.
-     * @param client Client that instantiated this emote.
-     * @param data Emote data to consume.
-     * @param broadcasterId ID of the broadcaster.
+     * @param {Client} client Client that instantiated this emote.
+     * @param {ChannelEmoteData} data Emote data to consume.
+     * @param {string} broadcasterId ID of the broadcaster.
      * @constructor
      */
     public constructor(client: Client, protected data: ChannelEmoteData, private readonly broadcasterId: string) {

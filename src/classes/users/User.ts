@@ -17,8 +17,8 @@ export default class User extends Base {
 
     /**
      * Creates a user from the given client and
-     * @param client  Client that instantiated this user.
-     * @param data The raw data provided by the Twitch API.
+     * @param {Client} client  Client that instantiated this user.
+     * @param {UserData} data The raw data provided by the Twitch API.
      * @constructor
      */
     public constructor(client: Client, protected data: UserData) {
@@ -96,6 +96,10 @@ export default class User extends Base {
      */
     public get description() {
         return this.data.description;
+    }
+
+    protected set description(desc: string) {
+        this.data.description = desc;
     }
 
     /**

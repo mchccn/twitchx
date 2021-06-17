@@ -14,7 +14,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
 
     /**
      * Creates a new cache.
-     * @param options Options to configure the caching behaviour.
+     * @param {CacheOptions} options Options to configure the caching behaviour.
      */
     constructor(public readonly options: { update: number; ttl: number }) {
         super();
@@ -89,7 +89,7 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
 
     /**
      * Deletes a key from the cache.
-     * @param key Key to delete
+     * @param {string} key Key to delete
      * @returns {Value}
      */
     public delete(key: string) {
@@ -141,3 +141,10 @@ export default class Cache<Value extends { update(): Awaited<unknown> }> extends
         return lt.clearTimeout(...args);
     }
 }
+
+/**
+ * Options to configure the cache.
+ * @typedef {object} CacheOptions
+ * @prop {number} update How long in milliseconds until each update.
+ * @prop {number} ttl How long the entity will last in the cache.
+ */

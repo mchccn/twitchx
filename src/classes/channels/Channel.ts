@@ -7,6 +7,7 @@ import { BASE_URL, ExternalError, HTTPError, InternalError, snakeCasify, TwitchA
 import type { ChannelData } from "../../types/classes";
 import ChannelEmoteManager from "./ChannelEmoteManager";
 import ChannelEmoteSetManager from "./ChannelEmoteSetManager";
+import ChannelRewardsManager from "./ChannelRewardsManager";
 
 /**
  * Twitch API's channel entity represented in a class.
@@ -20,10 +21,12 @@ export default class Channel extends Base {
 
     public readonly emoteSets;
 
+    public readonly rewards;
+
     /**
      * Creates a new channel.
-     * @param client Client that instantiated this channel.
-     * @param data Channel data.
+     * @param {Client} client Client that instantiated this channel.
+     * @param {ChannelData} data Channel data.
      * @constructor
      */
     public constructor(client: Client, private data: ChannelData) {
@@ -49,6 +52,8 @@ export default class Channel extends Base {
         this.emoteSets = new ChannelEmoteSetManager(this.client, this);
 
         this.client.emit("channelCreate", this);
+
+        this.rewards = new ChannelRewardsManager(this.client);
     }
 
     /**
@@ -151,22 +156,24 @@ export default class Channel extends Base {
     }
 
     public async follow(user: User | string): Promise<this> {
-        
         if (!this.client.token) throw new InternalError(`token is not available`);
         const id = (user instanceof User ? user.id : user) ?? this.client.user?.id;
 
-        const res = await fetch(`${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ from_id: id, to_id: this.id }))}`, {
-            headers: {
-                authorization: `Bearer ${this.client.token}`,
-                "client-id": this.client.options.clientId,
-            }, method: 'post'
-        }).catch((e) => {
+        const res = await fetch(
+            `${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ from_id: id, to_id: this.id }))}`,
+            {
+                headers: {
+                    authorization: `Bearer ${this.client.token}`,
+                    "client-id": this.client.options.clientId,
+                },
+                method: "post",
+            }
+        ).catch((e) => {
             throw new HTTPError(e);
         });
 
         if (!res.ok) throw new HTTPError(res.statusText);
 
         return this;
-
     }
 }

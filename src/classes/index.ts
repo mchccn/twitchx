@@ -19,5 +19,5 @@ export {
     ChannelEmoteSet,
     Emote,
     EmoteManager,
-    ClientUser
+    ClientUser,
 };

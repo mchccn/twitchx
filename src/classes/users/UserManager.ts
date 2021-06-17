@@ -17,7 +17,7 @@ export default class UserManager extends Manager<User> {
 
     /**
      * Constructs a new user manager.
-     * @param client The client that insantiated this manager.
+     * @param {Client} client The client that insantiated this manager.
      * @constructor
      */
     constructor(client: Client) {

@@ -1,23 +1,23 @@
-repo: 
-- ./*
+repo:
+    - ./*
 
 tests:
-- ./tests/*
+    - ./tests/*
 
 docs:
-- ./docs/**/*
+    - ./docs/**/*
 
 base:
-- ./src/base/**/*
+    - ./src/base/**/*
 
 classes:
-- ./src/classes/**/*
+    - ./src/classes/**/*
 
 pubsub:
-- ./src/pubsub/**/*
+    - ./src/pubsub/**/*
 
 events:
-- ./src/events/**/*
+    - ./src/events/**/*
 
 types:
-- ./src/types/**/*
+    - ./src/types/**/*
