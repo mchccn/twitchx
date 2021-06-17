@@ -30,6 +30,12 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <script>
+            if (!localStorage.getItem("twitchx-theme"))
+                localStorage.setItem(
+                    "twitchx-theme",
+                    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+                );
+
             if (localStorage.getItem("twitchx-theme") === "dark") document.querySelector("html").classList.add("dark");
         </script>
         <div id="root"></div>
