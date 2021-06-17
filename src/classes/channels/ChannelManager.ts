@@ -46,6 +46,7 @@ export default class ChannelManager extends Manager<Channel> {
      * Fetches a channel from the Twitch API.
      * @param {string} id  ID to fetch.
      * @param {boolean | undefined} force Skip cache check and request directly from the API.
+     * @returns {Promise<Channel | undefined>} The fetched channel.
      */
     public async fetch(id: string, force?: boolean) {
         if (this.cache.has(id) && !force) return this.cache.get(id);

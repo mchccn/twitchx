@@ -77,7 +77,37 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
             ),
         } as const;
 
-        const resolveType = (type: string[][][], removeUndefined?: boolean) => type.flat(2).join("");
+        const resolveType = (type: string[][][], removeUndefined?: boolean) => {
+            const stack = [] as boolean[];
+
+            return type
+                .flat(2)
+                .filter((t) => (removeUndefined ? t !== "undefined" : true))
+                .reduce((result, type, index, array) => {
+                    const next = array[index + 1] ?? "";
+
+                    if (next.endsWith(">")) {
+                        if (typeof stack.pop() === "undefined") throw new Error(`improper generic`);
+
+                        return result + type;
+                    }
+
+                    if (next.startsWith("<")) {
+                        stack.push(true);
+
+                        return result + type;
+                    }
+
+                    if (stack.length || !result) return result + type;
+
+                    return result + " | " + type;
+                }, "")
+                .replace(/\)>/g, ">")
+                .replace(/<\(/g, "<")
+                .replace(/(?<!\s)\|(?!\s)/g, " | ")
+                .replace(/>(\w)/g, "> | $1")
+                .replace(/\s*\|\s*>/, ">");
+        };
 
         const applyStyles = (string: string) =>
             md.renderInline(

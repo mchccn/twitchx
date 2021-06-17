@@ -94,8 +94,8 @@ export default function Class({
                             ...(info.props as {
                                 name: string;
                                 description: string;
-                                readonly: boolean;
-                                type: string[][][];
+                                readonly?: boolean;
+                                type?: string[][][];
                                 meta: {
                                     line: number;
                                     file: string;
@@ -124,13 +124,13 @@ export default function Class({
                             ...(info.methods as {
                                 name: string;
                                 description: string;
-                                params: {
+                                params?: {
                                     name: string;
                                     description: string;
                                     type: string[][][];
                                 }[];
                                 access?: "private";
-                                returns: string[][][];
+                                returns?: string[][][];
                                 meta: {
                                     line: number;
                                     file: string;
@@ -155,22 +155,7 @@ export default function Class({
                 <div>
                     <h2>Events</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                        {[
-                            ...(info.events as {
-                                name: string;
-                                description: string;
-                                meta: {
-                                    line: number;
-                                    file: string;
-                                    path: string;
-                                };
-                                params?: {
-                                    name: string;
-                                    description: string;
-                                    type: string[][][];
-                                }[];
-                            }[]),
-                        ]
+                        {[...info.events]
                             .sort((a, b) => (a.name > b.name ? 1 : -1))
                             .map((evt) => (
                                 <div key={evt.name}>
@@ -191,8 +176,8 @@ export default function Class({
                             ...(info.props as {
                                 name: string;
                                 description: string;
-                                readonly: boolean;
-                                type: string[][][];
+                                readonly?: boolean;
+                                type?: string[][][];
                                 meta: {
                                     line: number;
                                     file: string;
@@ -219,7 +204,7 @@ export default function Class({
                                     <p
                                         className="text-sm"
                                         dangerouslySetInnerHTML={{
-                                            __html: `Type: ${applyStyles(resolveType(prop.type))}`,
+                                            __html: `Type: ${applyStyles(resolveType(prop.type ?? [[["NO TYPES"]]]))}`,
                                         }}
                                     ></p>
                                 </div>
@@ -236,13 +221,13 @@ export default function Class({
                             ...(info.methods as {
                                 name: string;
                                 description: string;
-                                params: {
+                                params?: {
                                     name: string;
                                     description: string;
                                     type: string[][][];
                                 }[];
                                 access?: "private";
-                                returns:
+                                returns?:
                                     | string[][][]
                                     | {
                                           description: string;
@@ -309,7 +294,7 @@ export default function Class({
                                                     <div
                                                         className="w-40 sm:w-52 py-1 px-1.5 flex text-sm sm:text-base items-center flex-shrink-0 border border-gray-300 dark:border-gray-700"
                                                         dangerouslySetInnerHTML={{
-                                                            __html: applyStyles(resolveType(param.type)),
+                                                            __html: applyStyles(resolveType(param.type, true)),
                                                         }}
                                                     ></div>
                                                     <div className="flex-1 py-1 px-1.5 text-sm sm:text-base flex items-center border border-gray-300 dark:border-gray-700">
@@ -325,11 +310,13 @@ export default function Class({
                                             __html: md.renderInline(
                                                 applyStyles(
                                                     `Returns: ${resolveType(
-                                                        Array.isArray(meth.returns) ? meth.returns : meth.returns.types
+                                                        Array.isArray(meth.returns)
+                                                            ? meth.returns
+                                                            : meth.returns?.types ?? [[["NO TYPES"]]]
                                                     )}${
                                                         Array.isArray(meth.returns)
                                                             ? ""
-                                                            : ` ${meth.returns.description}`
+                                                            : ` ${meth.returns?.description ?? "NO DESCRIPTION"}`
                                                     }`
                                                 )
                                             ),
@@ -337,6 +324,61 @@ export default function Class({
                                     ></p>
                                 </div>
                             ))}
+                    </div>
+                </>
+            )}
+
+            {info.events && (
+                <>
+                    <h2>Events</h2>
+                    <div className="flex flex-col gap-8">
+                        {info.events.map((evt) => (
+                            <div>
+                                <p
+                                    className="text-lg text-lightPurple dark:text-lightestPurple cursor-pointer"
+                                    onClick={() => goto(evt.name)}
+                                >
+                                    {evt.name}
+                                </p>
+                                <p
+                                    className="markdown markdown-p my-1"
+                                    dangerouslySetInnerHTML={{
+                                        __html: md.renderInline(evt.description),
+                                    }}
+                                ></p>
+                                {evt.params && (
+                                    <div className="flex flex-col border border-gray-300 dark:border-gray-700 my-2">
+                                        <div className="flex">
+                                            <div className="bg-purple text-white text-sm w-32 sm:w-40 py-1 px-1.5 flex items-center flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                                Parameter
+                                            </div>
+                                            <div className="bg-purple text-white text-sm w-40 sm:w-52 py-1 px-1.5 flex items-center flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                                Type
+                                            </div>
+                                            <div className="bg-purple text-white text-sm flex-1 py-1 px-1.5 flex items-center border border-gray-300 dark:border-gray-700">
+                                                Description
+                                            </div>
+                                        </div>
+                                        {evt.params.map((param) => (
+                                            <div className="flex" key={param.name}>
+                                                <div className="w-32 sm:w-40 py-1 px-1.5 flex items-center font-mono text-sm flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                                    {param.name}
+                                                </div>
+                                                <div
+                                                    className="w-40 sm:w-52 py-1 px-1.5 flex text-sm items-center flex-shrink-0 border border-gray-300 dark:border-gray-700"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: applyStyles(resolveType(param.type, true)),
+                                                    }}
+                                                ></div>
+                                                <div className="flex-1 py-1 px-1.5 text-sm flex items-center border border-gray-300 dark:border-gray-700">
+                                                    {param.description}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </>
             )}

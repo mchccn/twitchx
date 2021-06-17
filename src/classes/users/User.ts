@@ -225,11 +225,13 @@ export default class User extends Base {
      * Unblocks the given user. Requires the `user:manage:blocked_users` scope.
      * @returns {Promise<boolean>} True if the user was unblocked.
      */
-    public async unblock(): Promise<boolean> {
+    public async unblock(user: User | string): Promise<boolean> {
+        const id = typeof user === "string" ? user : user.id;
+
         if (!this.client.scope.includes("user:manage:blocked_users"))
             throw new ExternalError(`scope 'user:manage:blocked_users' is required to unblock users`);
 
-        const response = await fetch(`${BASE_URL}/users/blocks?target_user_id=${this.id}`, {
+        const response = await fetch(`${BASE_URL}/users/blocks?target_user_id=${id}`, {
             method: "DELETE",
             headers: {
                 authorization: `Bearer ${this.client.token}`,
@@ -254,7 +256,7 @@ export default class User extends Base {
     public async fetchBlocks(options?: { first?: number; after?: string }): Promise<User[]> {
         const { first, after } = options ?? {};
 
-        const res = await fetch(
+        const response = await fetch(
             `${BASE_URL}/users/blocks?${new URLSearchParams(
                 snakeCasify({ broadcaster_id: this.id, after, first }).toString()
             )}`,
@@ -269,9 +271,9 @@ export default class User extends Base {
             throw new HTTPError(e);
         });
 
-        if (!res.ok) throw new HTTPError(res.statusText);
+        if (!response.ok) throw new HTTPError(response.statusText);
 
-        const { data }: { data: any[] } = await res.json();
+        const { data }: { data: any[] } = await response.json();
 
         let users: User[] = [];
 
@@ -284,15 +286,18 @@ export default class User extends Base {
         return users;
     }
 
+    /**
+     * Follows a channel.
+     * @param {Channel | string} channel Channel to follow.
+     * @returns {Promise<boolean>} True if the follow was successful.
+     */
     public async follow(channel: Channel | string) {
         const id = this.id;
         const channelId = channel instanceof Channel ? channel.id : channel;
 
-        if (!channelId) throw new Error("Channel param is required.");
-
         if (!this.client.token) throw new InternalError(`token is not available`);
 
-        const res = await fetch(`${BASE_URL}/users/follows?`, {
+        const response = await fetch(`${BASE_URL}/users/follows?`, {
             headers: {
                 Authorization: `Bearer ${this.client.token}`,
                 "Client-Id": this.client.options.clientId,
@@ -308,7 +313,7 @@ export default class User extends Base {
             throw new HTTPError(e);
         });
 
-        if (!res.ok) {
+        if (!response.ok) {
             if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to follow user");
 
             return false;
@@ -317,15 +322,18 @@ export default class User extends Base {
         return true;
     }
 
+    /**
+     * Stops following a channel.
+     * @param {Channel | string} channel Channel to stop following.
+     * @returns {Promise<boolean>} True if the unfollow was successful.
+     */
     public async unfollow(channel: Channel | string) {
         const id = this.id;
         const channelId = channel instanceof Channel ? channel.id : channel;
 
-        if (!channelId) throw new Error("Channel param is required.");
-
         if (!this.client.token) throw new InternalError(`token is not available`);
 
-        const res = await fetch(
+        const response = await fetch(
             `${BASE_URL}/users/follows?${new URLSearchParams(snakeCasify({ fromId: id, toId: channelId }))}`,
             {
                 headers: {
@@ -338,7 +346,7 @@ export default class User extends Base {
             throw new HTTPError(e);
         });
 
-        if (!res.ok) {
+        if (!response.ok) {
             if (!this.client.options.suppressRejections) throw new TwitchAPIError("Unable to unfollow user");
 
             return false;

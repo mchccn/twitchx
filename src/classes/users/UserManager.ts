@@ -68,7 +68,7 @@ export default class UserManager extends Manager<User> {
      * Fetch for users from the API with IDs or logins.
      * @param {string | object} query Query for users on Twitch.
      * @param {UserFetchOptions | undefined} options Fetch options.
-     * @returns {Promise<User | undefined> | Promise<Collection<string, user>>} The fetched users.
+     * @returns {Promise<User | undefined> | Promise<Collection<string, User>>} The fetched users.
      */
     public async fetch(
         query:

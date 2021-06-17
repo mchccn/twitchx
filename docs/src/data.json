@@ -1,5 +1,5 @@
 {
-    "meta": { "generator": "1.0.0", "format": 20, "date": 1623958548879 },
+    "meta": { "generator": "1.0.0", "format": 20, "date": 1623962216517 },
     "classes": [
         {
             "name": "Base",
@@ -365,77 +365,77 @@
                     "description": "Client that instantiated this channel.",
                     "readonly": true,
                     "type": [[["Client"]]],
-                    "meta": { "line": 32, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 30, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emotes",
                     "description": "Manages this channel's emotes.",
                     "readonly": true,
                     "type": [[["ChannelEmoteManager"]]],
-                    "meta": { "line": 38, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 36, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "emoteSets",
                     "description": "Manages this channel's emote sets.",
                     "readonly": true,
                     "type": [[["ChannelEmoteSetManager"]]],
-                    "meta": { "line": 44, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 42, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "rewards",
                     "description": "Manages this channel's rewards.",
                     "readonly": true,
                     "type": [[["ChannelRewardManager"]]],
-                    "meta": { "line": 50, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 48, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "id",
                     "description": "Broadcaster ID of the channel.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 58, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 56, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "language",
                     "description": "Main language of the channel.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 66, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 64, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "name",
                     "description": "Name of the channel.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 74, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 72, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameName",
                     "description": "Current game name.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 82, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 80, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "gameId",
                     "description": "Current game ID.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 90, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 88, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "title",
                     "description": "Title of the channel.",
                     "readonly": true,
                     "type": [[["string"]]],
-                    "meta": { "line": 98, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 96, "file": "Channel.js", "path": "dist/classes/channels" }
                 },
                 {
                     "name": "delay",
                     "description": "Delay of the channel.",
                     "readonly": true,
                     "type": [[["number"]]],
-                    "meta": { "line": 106, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 104, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
             "methods": [
@@ -451,10 +451,10 @@
                         ],
                         "description": "True if the update was successful."
                     },
-                    "meta": { "line": 113, "file": "Channel.js", "path": "dist/classes/channels" }
+                    "meta": { "line": 111, "file": "Channel.js", "path": "dist/classes/channels" }
                 }
             ],
-            "meta": { "line": 17, "file": "Channel.js", "path": "dist/classes/channels" }
+            "meta": { "line": 15, "file": "Channel.js", "path": "dist/classes/channels" }
         },
         {
             "name": "ChannelEmote",
@@ -791,7 +791,17 @@
                             "type": [[["boolean"]], [["undefined"]]]
                         }
                     ],
-                    "meta": { "line": 46, "file": "ChannelManager.js", "path": "dist/classes/channels" }
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<("],
+                                ["Channel", "|"],
+                                ["undefined", ")>"]
+                            ]
+                        ],
+                        "description": "The fetched channel."
+                    },
+                    "meta": { "line": 47, "file": "ChannelManager.js", "path": "dist/classes/channels" }
                 }
             ],
             "meta": { "line": 14, "file": "ChannelManager.js", "path": "dist/classes/channels" }
@@ -1327,7 +1337,53 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 221, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 222, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "follow",
+                    "description": "Follows a channel.",
+                    "inherits": "User#follow",
+                    "inherited": true,
+                    "params": [
+                        {
+                            "name": "channel",
+                            "description": "Channel to follow.",
+                            "type": [[["Channel"]], [["string"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the follow was successful."
+                    },
+                    "meta": { "line": 251, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "unfollow",
+                    "description": "Stops following a channel.",
+                    "inherits": "User#unfollow",
+                    "inherited": true,
+                    "params": [
+                        {
+                            "name": "channel",
+                            "description": "Channel to stop following.",
+                            "type": [[["Channel"]], [["string"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the unfollow was successful."
+                    },
+                    "meta": { "line": 283, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 12, "file": "ClientUser.js", "path": "dist/classes/users" }
@@ -1510,7 +1566,49 @@
                         ],
                         "description": "An array of users that are blocked."
                     },
-                    "meta": { "line": 221, "file": "User.js", "path": "dist/classes/users" }
+                    "meta": { "line": 222, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "follow",
+                    "description": "Follows a channel.",
+                    "params": [
+                        {
+                            "name": "channel",
+                            "description": "Channel to follow.",
+                            "type": [[["Channel"]], [["string"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the follow was successful."
+                    },
+                    "meta": { "line": 251, "file": "User.js", "path": "dist/classes/users" }
+                },
+                {
+                    "name": "unfollow",
+                    "description": "Stops following a channel.",
+                    "params": [
+                        {
+                            "name": "channel",
+                            "description": "Channel to stop following.",
+                            "type": [[["Channel"]], [["string"]]]
+                        }
+                    ],
+                    "returns": {
+                        "types": [
+                            [
+                                ["Promise", "<"],
+                                ["boolean", ">"]
+                            ]
+                        ],
+                        "description": "True if the unfollow was successful."
+                    },
+                    "meta": { "line": 283, "file": "User.js", "path": "dist/classes/users" }
                 }
             ],
             "meta": { "line": 15, "file": "User.js", "path": "dist/classes/users" }
@@ -1571,7 +1669,7 @@
                                 ["Promise", "<"],
                                 ["Collection", "<"],
                                 ["string", ", "],
-                                ["user", ">>"]
+                                ["User", ">>"]
                             ]
                         ],
                         "description": "The fetched users."
@@ -1615,7 +1713,7 @@
                     "type": [[["boolean"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 301, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 308, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlockOptions",
@@ -1629,7 +1727,7 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 306, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 313, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "BlocksFetchOptions",
@@ -1643,7 +1741,7 @@
                     "type": [[["string"]], [["undefined"]]]
                 }
             ],
-            "meta": { "line": 312, "file": "User.js", "path": "dist/classes/users" }
+            "meta": { "line": 319, "file": "User.js", "path": "dist/classes/users" }
         },
         {
             "name": "UserFetchOptions",
