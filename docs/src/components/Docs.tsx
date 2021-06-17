@@ -135,11 +135,11 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                 )!.name;
 
                 const info = data.classes.find((cls) => cls.name === name)
-                    ? ({ ...data.classes.find((cls) => cls.name === name)!, type: "class" } as const)
+                    ? ({ ...data.classes.find((cls) => cls.name === name)!, docType: "class" } as const)
                     : data.typedefs.find((t) => t.name === name)
-                    ? ({ ...data.typedefs.find((t) => t.name === name)!, type: "typedef" } as const)
+                    ? ({ ...data.typedefs.find((t) => t.name === name)!, docType: "typedef" } as const)
                     : data.externals.find((ext) => ext.name === name)
-                    ? ({ ...data.externals.find((ext) => ext.name === name), type: "external" } as const)
+                    ? ({ ...data.externals.find((ext) => ext.name === name), docType: "external" } as const)
                     : undefined;
 
                 if (!info) {
@@ -148,22 +148,70 @@ export default function Docs({ search, setSearch }: { search: string; setSearch:
                     return;
                 }
 
-                if (info.type === "class") {
+                if (info.docType === "class") {
                     return <Class info={info} applyStyles={applyStyles} resolveType={resolveType} md={md} />;
                 }
 
-                if (info.type === "typedef") {
+                if (info.docType === "typedef") {
                     return (
                         <div className="markdown">
-                            <h1>{info.name}</h1>
+                            <h1 className="flex flex-col justify-between">
+                                <span>{info.name}</span>
+                                {resolveType(info.type).toLowerCase() !== "object" && (
+                                    <span
+                                        className="text-base"
+                                        dangerouslySetInnerHTML={{
+                                            __html: `extends ${applyStyles(resolveType(info.type))}`,
+                                        }}
+                                    ></span>
+                                )}
+                            </h1>
+                            <p>{info.description}</p>
+                            <div className="flex flex-col border border-gray-300 dark:border-gray-700 my-2">
+                                <div className="flex">
+                                    <div className="bg-purple text-white text-sm w-32 sm:w-40 py-1 px-1.5 flex items-center flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                        Parameter
+                                    </div>
+                                    <div className="bg-purple text-white text-sm w-40 sm:w-52 py-1 px-1.5 flex items-center flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                        Type
+                                    </div>
+                                    <div className="bg-purple text-white text-sm flex-1 py-1 px-1.5 flex items-center border border-gray-300 dark:border-gray-700">
+                                        Description
+                                    </div>
+                                </div>
+                                {(
+                                    info.props as {
+                                        name: string;
+                                        description: string;
+                                        type: string[][][];
+                                    }[]
+                                ).map((prop) => (
+                                    <div className="flex" key={prop.name}>
+                                        <div className="w-32 sm:w-40 py-1 px-1.5 flex items-center font-mono text-sm flex-shrink-0 border border-gray-300 dark:border-gray-700">
+                                            {prop.name}
+                                        </div>
+                                        <div
+                                            className="w-40 sm:w-52 py-1 px-1.5 flex text-sm items-center flex-shrink-0 border border-gray-300 dark:border-gray-700"
+                                            dangerouslySetInnerHTML={{
+                                                __html: applyStyles(resolveType(prop.type, true)),
+                                            }}
+                                        ></div>
+                                        <div className="flex-1 py-1 px-1.5 text-sm flex items-center border border-gray-300 dark:border-gray-700">
+                                            {prop.description}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     );
                 }
 
-                if (info.type === "external") {
+                if (info.docType === "external") {
                     return (
                         <div className="markdown">
                             <h1>{info.name}</h1>
+                            <p>{info.description}</p>
+                            {info.see && <a href={info.see[0]}>External definition</a>}
                         </div>
                     );
                 }
