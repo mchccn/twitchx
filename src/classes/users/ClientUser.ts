@@ -52,7 +52,7 @@ class ClientUser extends User {
 
         const data: UserData = (await response.json()).data[0];
 
-        this.description = data.description;
+        this.data = data;
 
         return true;
     }
